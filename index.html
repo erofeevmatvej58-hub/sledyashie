@@ -85,11 +85,13 @@ tbody tr:last-child td { border-bottom: none; }
 .badge.pay { background: rgba(79,172,254,0.15); color: #4facfe; font-size: 13px; border: 1px solid rgba(79,172,254,0.3); }
 
 /* --- СТИЛИ РАНГОВ --- */
-.rank { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 6px; }
+.rank-group { display: flex; flex-direction: column; gap: 4px; }
+.rank { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 8px; border-radius: 6px; display: inline-block; width: fit-content; }
 .rank-operator { color: #4facfe; text-shadow: 0 0 5px rgba(79,172,254,0.5); background: rgba(79,172,254,0.1); }
 .rank-admin { color: #a55eea; text-shadow: 0 0 8px rgba(165,94,234,0.6); background: rgba(165,94,234,0.1); }
 .rank-zam { color: #ff9f43; text-shadow: 0 0 10px rgba(255,159,67,0.7); background: rgba(255,159,67,0.1); border: 1px solid rgba(255,159,67,0.3); }
 .rank-glava { color: #ff4757; text-shadow: 0 0 15px rgba(255,71,87,0.9); background: rgba(255,71,87,0.15); border: 1px solid rgba(255,71,87,0.5); font-weight: 900; }
+.rank-post { font-size: 11px; color: #8b96ab; font-weight: 600; font-style: italic; letter-spacing: 0.5px; margin-left: 4px; }
 
 .steamid a { color: #7a8499; text-decoration: none; border-bottom: 1px dashed #4facfe; transition: all 0.2s; font-family: 'Consolas', monospace; }
 .steamid a:hover { color: #4facfe; border-bottom-color: #fff; text-shadow: 0 0 8px rgba(79,172,254,0.5); }
@@ -226,7 +228,7 @@ tbody tr:last-child td { border-bottom: none; }
         <table>
             <thead>
                 <tr>
-                    <th>ID</th><th>Следящий</th><th>Ранг</th><th>SteamID</th>
+                    <th>ID</th><th>Следящий</th><th>Ранг / Должность</th><th>SteamID</th>
                     <th>Отчёты об админах</th><th>Слежка по указ.</th>
                     <th>Норма за неделю</th>
                     <th>СП (пидормоты)</th><th>Зарплата</th><th>Действие</th>
@@ -262,13 +264,19 @@ tbody tr:last-child td { border-bottom: none; }
             <form id="addStaffForm">
                 <label>Ник</label>
                 <input type="text" name="nick" required placeholder="Например: Дед в чешках">
-                <label>Ранг</label>
+                
+                <label>Ранг (в отделе)</label>
                 <select name="rank" required>
+                    <option value="Следящий">Следящий</option>
+                    <option value="Мл. следящий">Мл. следящий</option>
                     <option value="Оператор">Оператор</option>
-                    <option value="Администратор">Администратор</option>
                     <option value="Зам. главы следящих">Зам. главы следящих</option>
                     <option value="Глава следящих">Глава следящих</option>
                 </select>
+                
+                <label>Должность (в игре)</label>
+                <input type="text" name="post" placeholder="Например: Администратор">
+                
                 <label>SteamID</label>
                 <input type="text" name="steamid" required placeholder="STEAM_0:1:12345678">
                 <label>Позиция в таблице (1, 2, 3...)</label>
@@ -293,13 +301,19 @@ tbody tr:last-child td { border-bottom: none; }
                 <input type="hidden" id="editStaffId">
                 <label>Ник</label>
                 <input type="text" id="editNick">
-                <label>Ранг</label>
+                
+                <label>Ранг (в отделе)</label>
                 <select id="editRank">
+                    <option value="Следящий">Следящий</option>
+                    <option value="Мл. следящий">Мл. следящий</option>
                     <option value="Оператор">Оператор</option>
-                    <option value="Администратор">Администратор</option>
                     <option value="Зам. главы следящих">Зам. главы следящих</option>
                     <option value="Глава следящих">Глава следящих</option>
                 </select>
+
+                <label>Должность (в игре)</label>
+                <input type="text" id="editPost">
+                
                 <label>SteamID</label>
                 <input type="text" id="editSteamid">
                 
@@ -399,8 +413,8 @@ tbody tr:last-child td { border-bottom: none; }
     </div>
 </div>
 
-<!-- СКРЫТАЯ МЕТКА ВЕРСИИ ДЛЯ ПРОВЕРКИ ОБНОВЛЕНИЯ -->
-<div style="text-align: center; color: #232a36; font-size: 10px; margin-top: 20px;">Версия 3.0 (Boss Update & Ranks)</div>
+<!-- СКРЫТАЯ МЕТКА ВЕРСИИ -->
+<div style="text-align: center; color: #232a36; font-size: 10px; margin-top: 20px;">Версия 4.1 (Swap Rank Update)</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -439,8 +453,8 @@ function getRankClass(rankStr) {
     if (!rankStr) return "rank-operator";
     if (rankStr.includes("Глава")) return "rank-glava";
     if (rankStr.includes("Зам")) return "rank-zam";
-    if (rankStr.includes("Администратор")) return "rank-admin";
-    return "rank-operator";
+    if (rankStr.includes("Администратор") || rankStr.includes("Оператор")) return "rank-admin";
+    return "rank-operator"; // Следящий по умолчанию
 }
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -515,7 +529,12 @@ function renderTable(staff) {
         tr.innerHTML = `
             <td class="id">#${displayId}</td>
             <td><div class="user"><div class="avatar ${isBoss ? 'boss' : ''}">${person.nick ? person.nick[0] : '?'}</div><span class="nick">${person.nick || 'Без ника'}</span></div></td>
-            <td><span class="rank ${rankClass}">${person.rank || '—'}</span></td>
+            <td>
+                <div class="rank-group">
+                    <span class="rank ${rankClass}">${person.rank || '—'}</span>
+                    ${person.post ? `<span class="rank-post">${person.post}</span>` : ''}
+                </div>
+            </td>
             <td class="steamid"><a href="${profileUrl}" target="_blank">${person.steamid || '—'}</a></td>
             <td>${admDisplay}</td>
             <td>${slDisplay}</td>
@@ -542,7 +561,7 @@ function renderStats(staff) {
         if (isBoss) {
             card.innerHTML = `
                 <h3><div class="avatar boss" style="width:24px;height:24px;font-size:12px;">${person.nick ? person.nick[0] : '?'}</div> ${person.nick}</h3>
-                <span class="sub">${person.rank} • ${person.steamid}</span>
+                <span class="sub">${person.rank} ${person.post ? ' / ' + person.post : ''} • ${person.steamid}</span>
                 <div class="stat-row" style="justify-content:center; padding: 20px 0;">
                     <span style="font-style:italic; color:#586174;">Руководящая должность. Отчёты не требуются.</span>
                 </div>
@@ -550,7 +569,7 @@ function renderStats(staff) {
         } else {
             card.innerHTML = `
                 <h3><div class="avatar" style="width:24px;height:24px;font-size:12px;">${person.nick ? person.nick[0] : '?'}</div> ${person.nick}</h3>
-                <span class="sub">${person.rank} • ${person.steamid}</span>
+                <span class="sub">${person.rank} ${person.post ? ' / ' + person.post : ''} • ${person.steamid}</span>
                 <div class="stat-row"><span>Отчёты об админах:</span><b>${person.adm || 0}</b></div>
                 <div class="stat-row"><span>Слежка по указаниям:</span><b>${person.sl || 0}</b></div>
                 <div class="stat-row"><span>Список пидормотов (СП):</span><b>${person.sp || 0}</b></div>
@@ -582,7 +601,8 @@ window.fillEditForm = () => {
     const person = globalStaff[id];
     document.getElementById('editStaffId').value = id;
     document.getElementById('editNick').value = person.nick || '';
-    document.getElementById('editRank').value = person.rank || 'Оператор';
+    document.getElementById('editRank').value = person.rank || 'Следящий';
+    document.getElementById('editPost').value = person.post || '';
     document.getElementById('editSteamid').value = person.steamid || '';
     document.getElementById('editOrder').value = person.order || 10;
     document.getElementById('editIsBoss').checked = person.isBoss || false;
@@ -608,6 +628,7 @@ window.saveEditStaff = () => {
     const updates = {
         nick: document.getElementById('editNick').value,
         rank: document.getElementById('editRank').value,
+        post: document.getElementById('editPost').value,
         steamid: document.getElementById('editSteamid').value,
         order: parseInt(document.getElementById('editOrder').value) || 10,
         isBoss: isBoss,
@@ -636,7 +657,10 @@ document.getElementById('addStaffForm').addEventListener('submit', function(e) {
     const isBoss = f.isBoss.checked;
     const newStaffRef = push(ref(db, 'staff'));
     set(newStaffRef, {
-        nick: f.nick.value, rank: f.rank.value, steamid: f.steamid.value,
+        nick: f.nick.value, 
+        rank: f.rank.value, 
+        post: f.post.value,
+        steamid: f.steamid.value,
         order: parseInt(f.order.value) || 10,
         isBoss: isBoss,
         adm: 0, sl: 0, sp: 0, week: 0, pay: 0
