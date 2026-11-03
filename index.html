@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Отдел Следящих | Garry's Mod</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #0f1115;
+    background-image: radial-gradient(circle at 20% 0%, #1a1f2b 0%, #0f1115 60%);
+    color: #e6e6e6; min-height: 100vh; padding: 40px 20px;
+}
+header { text-align: center; margin-bottom: 30px; }
+header h1 {
+    font-size: 32px; font-weight: 700;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+header p { color: #7a8499; margin-top: 8px; font-size: 15px; }
+.legend {
+    max-width: 1200px; margin: 0 auto 20px;
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+}
+.legend span {
+    background: #161b22; border: 1px solid #232a36;
+    border-radius: 20px; padding: 6px 14px; font-size: 12px; color: #8b96ab;
+}
+.legend b { color: #4facfe; }
+.table-wrapper {
+    max-width: 1200px; margin: 0 auto;
+    background: #161b22; border: 1px solid #232a36;
+    border-radius: 14px; overflow-x: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead th {
+    background: #1c2330; color: #8b96ab; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 1px;
+    padding: 16px 14px; text-align: left;
+    border-bottom: 2px solid #2a3241; white-space: nowrap;
+}
+tbody td {
+    padding: 14px; border-bottom: 1px solid #1e2531;
+    color: #c9d1d9; vertical-align: middle; white-space: nowrap;
+}
+tbody tr:hover { background: #1a2130; }
+tbody tr:last-child td { border-bottom: none; }
+.id { color: #586174; font-weight: 600; }
+.nick { font-weight: 600; color: #e6e6e6; }
+.badge {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+}
+.badge.adm { background: rgba(255,159,67,0.12); color: #ff9f43; }
+.badge.sp  { background: rgba(255,71,87,0.12); color: #ff4757; }
+.badge.sl  { background: rgba(46,213,115,0.12); color: #2ed573; }
+.badge.pay { background: rgba(79,172,254,0.12); color: #4facfe; font-size: 13px; }
+.rank { font-size: 12px; color: #a55eea; font-weight: 600; text-transform: uppercase; }
+.steamid { font-family: 'Consolas', monospace; font-size: 12px; color: #7a8499; }
+.user { display: flex; align-items: center; gap: 10px; }
+.avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: #0f1115; font-size: 14px; flex-shrink: 0;
+}
+.watch-btn, .report-btn, .btn-reset {
+    padding: 6px 12px; border-radius: 20px;
+    border: 1px solid #2a3241; background: transparent;
+    color: #8b96ab; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+}
+.watch-btn:hover, .report-btn:hover, .btn-reset:hover { border-color: #4facfe; color: #4facfe; }
+.watch-btn.active {
+    background: rgba(46,213,115,0.15); border-color: #2ed573;
+    color: #2ed573; box-shadow: 0 0 12px rgba(46,213,115,0.3);
+}
+.top-bar {
+    max-width: 1200px; margin: 0 auto 16px;
+    display: flex; justify-content: flex-end; gap: 10px;
+}
+.btn-reset {
+    background: rgba(255,71,87,0.1); border-color: rgba(255,71,87,0.3); color: #ff4757;
+}
+.btn-reset:hover { background: rgba(255,71,87,0.2); border-color: #ff4757; color: #ff4757; }
+.modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7); z-index: 1000;
+    justify-content: center; align-items: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+    background: #161b22; border: 1px solid #232a36;
+    border-radius: 14px; max-width: 600px; width: 100%;
+    max-height: 90vh; overflow-y: auto; padding: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.modal h2 {
+    font-size: 20px; margin-bottom: 20px;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.modal label {
+    display: block; font-size: 12px; color: #8b96ab;
+    margin-bottom: 6px; margin-top: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.modal input, .modal textarea {
+    width: 100%; padding: 10px 12px;
+    background: #0f1115; border: 1px solid #2a3241;
+    border-radius: 8px; color: #e6e6e6; font-size: 14px;
+    font-family: inherit; outline: none;
+}
+.modal input:focus, .modal textarea:focus { border-color: #4facfe; }
+.modal textarea { resize: vertical; min-height: 70px; }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+.modal-actions button {
+    flex: 1; padding: 12px; border-radius: 10px;
+    border: none; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;
+}
+.btn-cancel { background: #2a3241; color: #c9d1d9; }
+.btn-cancel:hover { background: #3a4457; }
+.btn-save { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #0f1115; }
+.btn-save:hover { opacity: 0.9; }
+.reports-section { max-width: 1200px; margin: 30px auto 0; }
+.reports-section h2 { font-size: 20px; margin-bottom: 16px; }
+.report-card {
+    background: #161b22; border: 1px solid #232a36;
+    border-radius: 12px; padding: 20px; margin-bottom: 14px;
+}
+.report-card.pending { border-color: rgba(255,159,67,0.4); }
+.report-card.approved { border-color: rgba(46,213,115,0.4); }
+.report-card.rejected { border-color: rgba(255,71,87,0.4); opacity: 0.7; }
+.report-card h3 { font-size: 15px; color: #4facfe; margin-bottom: 12px; }
+.report-card h3 .status {
+    font-size: 11px; padding: 3px 10px; border-radius: 10px; margin-left: 8px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.status.pending  { background: rgba(255,159,67,0.15); color: #ff9f43; }
+.status.approved { background: rgba(46,213,115,0.15); color: #2ed573; }
+.status.rejected { background: rgba(255,71,87,0.15); color: #ff4757; }
+.report-card p { font-size: 13px; color: #c9d1d9; margin-bottom: 6px; line-height: 1.5; }
+.report-card p b { color: #8b96ab; }
+.report-card .empty { color: #586174; font-style: italic; }
+.report-actions { display: flex; gap: 10px; margin-top: 14px; }
+.btn-approve, .btn-reject {
+    padding: 8px 16px; border-radius: 8px; border: none;
+    font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s;
+}
+.btn-approve { background: rgba(46,213,115,0.15); color: #2ed573; }
+.btn-approve:hover { background: rgba(46,213,115,0.3); }
+.btn-reject { background: rgba(255,71,87,0.15); color: #ff4757; }
+.btn-reject:hover { background: rgba(255,71,87,0.3); }
+@media (max-width: 900px) {
+    body { padding: 20px 10px; }
+    header h1 { font-size: 22px; }
+    thead th, tbody td { padding: 10px 8px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Отдел Следящих</h1>
+    <p>Garry's Mod • Отчёты и зарплата</p>
+</header>
+
+<div class="legend">
+    <span>Отчёт об админе: <b>+10 Д</b></span>
+    <span>Список пидормотов: <b>+5 Д</b></span>
+    <span>Слежка по указаниям: <b>+10 Д</b></span>
+</div>
+
+<div class="top-bar">
+    <button class="btn-reset" onclick="resetWeek()">Сбросить неделю (слежки)</button>
+</div>
+
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Следящий</th><th>Ранг</th><th>SteamID</th>
+                <th>Отчёты об админах</th><th>Список пидормотов</th>
+                <th>Слежка за неделю</th><th>Зарплата</th><th>Статус</th><th>Действие</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Данные будут загружаться из Firebase -->
+        </tbody>
+    </table>
+</div>
+
+<div class="reports-section">
+    <h2>Отчёты на проверке</h2>
+    <div id="pending-list"><p class="empty">Загрузка...</p></div>
+    <h2 style="margin-top:30px">История отчётов</h2>
+    <div id="history-list"><p class="empty">Загрузка...</p></div>
+</div>
+
+<div class="modal-overlay" id="reportModal">
+    <div class="modal">
+        <h2 id="modalTitle">Отчёт</h2>
+        <form id="reportForm">
+            <input type="hidden" name="type" id="reportType">
+            <input type="hidden" name="reporter" id="reportReporter">
+
+            <label>1. Ник админа</label>
+            <input type="text" name="adminNick" required>
+
+            <label>2. SteamID</label>
+            <input type="text" name="steamId" required>
+
+            <label>3. Ранг</label>
+            <input type="text" name="rank" required>
+
+            <label>4. Со скольки длилась слежка</label>
+            <input type="text" name="time" required placeholder="14:30 — 15:10">
+
+            <label>5. Нарушенный пункт правил (если есть)</label>
+            <textarea name="rule"></textarea>
+
+            <label>6. Сомнительные действия (не под правила)</label>
+            <textarea name="suspicious"></textarea>
+
+            <label>7. Продолжать ли слежку?</label>
+            <textarea name="continue"></textarea>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeReport()">Отмена</button>
+                <button type="submit" class="btn-save">Отправить на проверку</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ПОДКЛЮЧАЕМ FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+// Твой конфиг
+const firebaseConfig = {
+  apiKey: "AIzaSyA5nHxcCy2x-qs4LTYYTlgEdS2S5cfHs",
+  authDomain: "sledashie.firebaseapp.com",
+  databaseURL: "https://sledashie-default-rtdb.firebaseio.com",
+  projectId: "sledashie",
+  storageBucket: "sledashie.firebasestorage.app",
+  messagingSenderId: "736810121287",
+  appId: "1:736810121287:web:41d0bfcd667eb50c1d9962"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Начальные данные для таблицы (если база пустая, мы их туда зальем)
+const defaultStaff = {
+    "1": { nick: "Дед в чешках", rank: "Администратор", steamid: "STEAM_0:1:12345678", adm: 2, sp: 0, sl: 0, watch: false },
+    "2": { nick: "Ivan_Spec", rank: "Мл. следящий", steamid: "STEAM_0:0:87654321", adm: 3, sp: 6, sl: 1, watch: false },
+    "3": { nick: "Alex_Moder", rank: "Следящий", steamid: "STEAM_0:1:55555555", adm: 1, sp: 2, sl: 3, watch: false }
+};
+
+// Проверяем, есть ли данные. Если нет - заливаем начальные.
+const staffRef = ref(db, 'staff');
+onValue(staffRef, (snapshot) => {
+    if (!snapshot.exists()) {
+        set(staffRef, defaultStaff);
+    } else {
+        renderTable(snapshot.val());
+    }
+});
+
+// Отрисовка таблицы
+function renderTable(staff) {
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = '';
+    
+    for (const id in staff) {
+        const person = staff[id];
+        const pay = (person.adm * 10) + (person.sp * 5) + (person.sl * 10);
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="id">#${id}</td>
+            <td><div class="user"><div class="avatar">${person.nick[0]}</div><span class="nick">${person.nick}</span></div></td>
+            <td><span class="rank">${person.rank}</span></td>
+            <td class="steamid">${person.steamid}</td>
+            <td><span class="badge adm">${person.adm}</span></td>
+            <td><span class="badge sp">${person.sp}</span></td>
+            <td><span class="badge sl">${person.sl}</span></td>
+            <td><span class="badge pay">${pay} Д</span></td>
+            <td><button class="watch-btn ${person.watch ? 'active' : ''}" onclick="toggleWatch('${id}', ${person.watch})">${person.watch ? 'Следит...' : 'Следит'}</button></td>
+            <td>
+                <button class="report-btn" onclick="openReport('adm','${person.nick}')">Отчёт</button>
+                <button class="report-btn" onclick="openReport('sl','${person.nick}')">Слежка</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    }
+}
+
+// Кнопка "Следит"
+window.toggleWatch = (id, currentStatus) => {
+    update(ref(db, 'staff/' + id), { watch: !currentStatus });
+};
+
+// Модалка
+window.openReport = (type, nick) => {
+    document.getElementById('reportType').value = type;
+    document.getElementById('reportReporter').value = nick;
+    document.getElementById('modalTitle').textContent = type === 'adm' ? 'Отчёт: слежка за админом' : 'Слежка по указаниям';
+    document.getElementById('reportModal').classList.add('open');
+};
+window.closeReport = () => {
+    document.getElementById('reportModal').classList.remove('open');
+    document.getElementById('reportForm').reset();
+};
+
+// Отправка отчёта
+document.getElementById('reportForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const f = e.target;
+    const data = {
+        type: f.type.value,
+        reporter: f.reporter.value,
+        adminNick: f.adminNick.value,
+        steamId: f.steamId.value,
+        rank: f.rank.value,
+        time: f.time.value,
+        rule: f.rule.value || '—',
+        suspicious: f.suspicious.value || '—',
+        continue: f.continue.value || '—',
+        status: 'pending',
+        date: new Date().toLocaleString('ru-RU')
+    };
+    push(ref(db, 'reports'), data);
+    closeReport();
+});
+
+// Слушаем отчеты в реальном времени
+const reportsRef = ref(db, 'reports');
+onValue(reportsRef, (snapshot) => {
+    const reports = snapshot.val() || {};
+    const pendingList = document.getElementById('pending-list');
+    const historyList = document.getElementById('history-list');
+    
+    let pendingHtml = '';
+    let historyHtml = '';
+    let hasPending = false;
+    let hasHistory = false;
+
+    for (const key in reports) {
+        const r = reports[key];
+        
+        if (r.status === 'pending') {
+            hasPending = true;
+            pendingHtml += `
+                <div class="report-card pending">
+                    <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'}
+                        <span class="status pending">Ожидает решения</span></h3>
+                    <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
+                    <p><b>1. Ник админа:</b> ${r.adminNick}</p>
+                    <p><b>2. SteamID:</b> ${r.steamId}</p>
+                    <p><b>3. Ранг:</b> ${r.rank}</p>
+                    <p><b>4. Время:</b> ${r.time}</p>
+                    <p><b>5. Нарушение:</b> ${r.rule}</p>
+                    <p><b>6. Сомнительные действия:</b> ${r.suspicious}</p>
+                    <p><b>7. Продолжать:</b> ${r.continue}</p>
+                    <div class="report-actions">
+                        <button class="btn-approve" onclick="approveReport('${key}')">Одобрено (+10 Д)</button>
+                        <button class="btn-reject" onclick="rejectReport('${key}')">Отклонено</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            hasHistory = true;
+            historyHtml += `
+                <div class="report-card ${r.status}">
+                    <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'}
+                        <span class="status ${r.status}">${r.status === 'approved' ? 'Одобрено' : 'Отклонено'}</span></h3>
+                    <p><b>От:</b> ${r.reporter} • ${r.date}</p>
+                    <p><b>Админ:</b> ${r.adminNick} (${r.steamId}) • ${r.rank}</p>
+                    <p><b>Время:</b> ${r.time}</p>
+                </div>
+            `;
+        }
+    }
+
+    pendingList.innerHTML = hasPending ? pendingHtml : '<div class="report-card"><p class="empty">Нет отчётов на проверке.</p></div>';
+    historyList.innerHTML = hasHistory ? historyHtml : '<div class="report-card"><p class="empty">История пуста.</p></div>';
+});
+
+// Одобрение (транзакция в Firebase)
+window.approveReport = (key) => {
+    update(ref(db, 'reports/' + key), { status: 'approved' }).then(() => {
+        // Находим следящего и прибавляем ему баллы
+        const reportRef = ref(db, 'reports/' + key);
+        onValue(reportRef, (snap) => {
+            const r = snap.val();
+            if(!r) return;
+            // Получаем актуальные данные всех сотрудников
+            onValue(ref(db, 'staff'), (staffSnap) => {
+                const staff = staffSnap.val();
+                for (const id in staff) {
+                    if (staff[id].nick === r.reporter) {
+                        const updates = {};
+                        if (r.type === 'adm') updates[`staff/${id}/adm`] = staff[id].adm + 1;
+                        if (r.type === 'sl') updates[`staff/${id}/sl`] = staff[id].sl + 1;
+                        update(ref(db), updates);
+                        break;
+                    }
+                }
+            }, { onlyOnce: true });
+        }, { onlyOnce: true });
+    });
+};
+
+// Отклонение
+window.rejectReport = (key) => {
+    update(ref(db, 'reports/' + key), { status: 'rejected' });
+};
+
+// Сброс недели
+window.resetWeek = () => {
+    if (!confirm('Сбросить недельные счётчики слежек у всех? Зарплата (Д) останется.')) return;
+    onValue(ref(db, 'staff'), (snapshot) => {
+        const staff = snapshot.val();
+        const updates = {};
+        for (const id in staff) {
+            updates[`staff/${id}/sl`] = 0;
+        }
+        update(ref(db), updates);
+    }, { onlyOnce: true });
+};
+</script>
+
+</body>
+</html>
