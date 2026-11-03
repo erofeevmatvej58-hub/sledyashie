@@ -23,7 +23,7 @@ body {
 }
 .side-pattern.left { left: 0; border-right: 2px solid rgba(255, 71, 87, 0.2); }
 .side-pattern.right { right: 0; border-left: 2px solid rgba(255, 71, 87, 0.2); }
-@media (max-width: 1200px) { .side-pattern { display: none; } } 
+@media (max-width: 1200px) { .side-pattern { display: none; } }
 
 /* --- БАННЕР --- */
 .banner {
@@ -413,8 +413,8 @@ tbody tr:last-child td { border-bottom: none; }
     </div>
 </div>
 
-<!-- СКРЫТАЯ МЕТКА ВЕРСИИ -->
-<div style="text-align: center; color: #232a36; font-size: 10px; margin-top: 20px;">Версия 4.1 (Swap Rank Update)</div>
+<!-- СКРЫТАЯ МЕТКА ВЕРСИИ ДЛЯ ПРОВЕРКИ ОБНОВЛЕНИЯ -->
+<div style="text-align: center; color: #232a36; font-size: 10px; margin-top: 20px;">v4.2</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -454,7 +454,7 @@ function getRankClass(rankStr) {
     if (rankStr.includes("Глава")) return "rank-glava";
     if (rankStr.includes("Зам")) return "rank-zam";
     if (rankStr.includes("Администратор") || rankStr.includes("Оператор")) return "rank-admin";
-    return "rank-operator"; // Следящий по умолчанию
+    return "rank-operator";
 }
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
