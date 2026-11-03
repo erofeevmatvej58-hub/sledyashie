@@ -125,6 +125,15 @@ tbody tr:last-child td { border-bottom: none; }
 .stat-row b { color: #fff; }
 .stat-row .total-pay { color: #4facfe; font-size: 18px; text-shadow: 0 0 10px rgba(79,172,254,0.3); }
 
+/* --- ЖУРНАЛ ДЕЙСТВИЙ (ЛОГИ) --- */
+.log-list { display: flex; flex-direction: column; gap: 8px; }
+.log-item { background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(255,255,255,0.05); border-left: 3px solid #4facfe; border-radius: 8px; padding: 12px 16px; font-size: 14px; display: flex; gap: 15px; align-items: center; }
+.log-time { color: #586174; font-family: 'Consolas', monospace; font-size: 12px; white-space: nowrap; }
+.log-text { color: #c9d1d9; }
+.log-text b { color: #fff; }
+.log-text i { color: #ff4757; font-style: normal; text-decoration: line-through; }
+.log-text em { color: #2ed573; font-style: normal; }
+
 /* --- ИНСТРУМЕНТЫ --- */
 .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 @media(max-width: 768px) { .tools-grid { grid-template-columns: 1fr; } }
@@ -203,9 +212,10 @@ tbody tr:last-child td { border-bottom: none; }
 </div>
 
 <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('main', this)">📊 Таблица состава</button>
-    <button class="tab-btn" onclick="switchTab('stats', this)">📈 Статистика за месяц</button>
+    <button class="tab-btn active" onclick="switchTab('main', this)">📊 Таблица</button>
+    <button class="tab-btn" onclick="switchTab('stats', this)">📈 Статистика</button>
     <button class="tab-btn" onclick="switchTab('tools', this)">🛠️ Инструменты</button>
+    <button class="tab-btn" onclick="switchTab('logs', this)">📜 Журнал действий</button>
 </div>
 
 <!-- ВКЛАДКА 1: ТАБЛИЦА И ОТЧЕТЫ -->
@@ -346,6 +356,16 @@ tbody tr:last-child td { border-bottom: none; }
     </div>
 </div>
 
+<!-- ВКЛАДКА 4: ЖУРНАЛ ДЕЙСТВИЙ -->
+<div id="tab-logs" class="tab-content">
+    <div class="reports-section" style="margin-top:0;">
+        <h2>Журнал действий на сайте</h2>
+        <div id="log-list" class="log-list">
+            <p class="empty">Загрузка логов...</p>
+        </div>
+    </div>
+</div>
+
 <!-- МОДАЛКА 1: ОТЧЕТ ОБ АДМИНЕ / СЛЕЖКА -->
 <div class="modal-overlay" id="reportModal">
     <div class="modal">
@@ -413,8 +433,8 @@ tbody tr:last-child td { border-bottom: none; }
     </div>
 </div>
 
-<!-- СКРЫТАЯ МЕТКА ВЕРСИИ ДЛЯ ПРОВЕРКИ ОБНОВЛЕНИЯ -->
-<div style="text-align: center; color: #232a36; font-size: 10px; margin-top: 20px;">v4.2</div>
+<!-- СКРЫТАЯ МЕТКА ВЕРСИИ -->
+<div style="text-align: center; color: #232a36; font-size: 10px; margin-top: 20px;">v7.0 (Tab PIN & 6767)</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -433,7 +453,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const ADMIN_PIN = "1234"; 
+// НОВЫЙ ПИН-КОД
+const ADMIN_PIN = "6767"; 
 let globalStaff = {}; 
 
 function getSteamProfileUrl(steamIdStr) {
@@ -455,6 +476,15 @@ function getRankClass(rankStr) {
     if (rankStr.includes("Зам")) return "rank-zam";
     if (rankStr.includes("Администратор") || rankStr.includes("Оператор")) return "rank-admin";
     return "rank-operator";
+}
+
+function addLog(adminName, actionText) {
+    const logRef = push(ref(db, 'logs'));
+    set(logRef, {
+        time: new Date().toLocaleString('ru-RU'),
+        admin: adminName,
+        action: actionText
+    });
 }
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -489,7 +519,41 @@ onValue(staffRef, (snapshot) => {
     }
 });
 
+const logsRef = ref(db, 'logs');
+onValue(logsRef, (snapshot) => {
+    const logs = snapshot.val() || {};
+    const logList = document.getElementById('log-list');
+    const sortedKeys = Object.keys(logs).reverse();
+    let html = '';
+    
+    if (sortedKeys.length === 0) {
+        logList.innerHTML = '<p class="empty">Журнал пуст. Начните редактировать состав.</p>';
+        return;
+    }
+
+    for (const key of sortedKeys) {
+        const log = logs[key];
+        html += `
+            <div class="log-item">
+                <div class="log-time">${log.time}</div>
+                <div class="log-text"><b>${log.admin}</b>: ${log.action}</div>
+            </div>
+        `;
+    }
+    logList.innerHTML = html;
+});
+
+// ОБНОВЛЕННАЯ ФУНКЦИЯ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК (С ЗАЩИТОЙ ПИН-КОДОМ)
 window.switchTab = (tabId, btnElement) => {
+    // Если пытаемся зайти в Инструменты или Логи - спрашиваем ПИН
+    if (tabId === 'tools' || tabId === 'logs') {
+        const pin = prompt("Введите ПИН-код для доступа к этому разделу:");
+        if (pin !== ADMIN_PIN) {
+            playSound('hover'); // Звук ошибки (можно заменить)
+            return alert("Неверный ПИН-код! Доступ запрещен.");
+        }
+    }
+
     playSound('click');
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -624,11 +688,22 @@ document.getElementById('editIsBoss').addEventListener('change', function() {
 window.saveEditStaff = () => {
     const id = document.getElementById('editStaffId').value;
     if (!id) return;
+    
+    const pin = prompt("Введите ПИН-код для сохранения изменений:");
+    if (pin !== ADMIN_PIN) return alert("Неверный ПИН-код! Действие отменено.");
+
     const isBoss = document.getElementById('editIsBoss').checked;
+    const oldPerson = globalStaff[id];
+    const oldNick = oldPerson.nick;
+    
+    const newNick = document.getElementById('editNick').value;
+    const newRank = document.getElementById('editRank').value;
+    const newPost = document.getElementById('editPost').value;
+
     const updates = {
-        nick: document.getElementById('editNick').value,
-        rank: document.getElementById('editRank').value,
-        post: document.getElementById('editPost').value,
+        nick: newNick,
+        rank: newRank,
+        post: newPost,
         steamid: document.getElementById('editSteamid').value,
         order: parseInt(document.getElementById('editOrder').value) || 10,
         isBoss: isBoss,
@@ -638,17 +713,33 @@ window.saveEditStaff = () => {
         week: isBoss ? 0 : (parseInt(document.getElementById('editWeek').value) || 0),
         pay: isBoss ? 0 : (parseInt(document.getElementById('editPay').value) || 0)
     };
-    update(ref(db, 'staff/' + id), updates).then(() => { alert("Данные обновлены!"); });
+    
+    update(ref(db, 'staff/' + id), updates).then(() => { 
+        let actionText = `изменил данные <b>${oldNick}</b>`;
+        if (oldNick !== newNick) actionText = `изменил ник <i>${oldNick}</i> на <em>${newNick}</em>`;
+        else if (oldPerson.rank !== newRank) actionText = `изменил ранг <b>${oldNick}</b> на <em>${newRank}</em>`;
+        else if (oldPerson.post !== newPost) actionText = `изменил должность <b>${oldNick}</b> на <em>${newPost}</em>`;
+        else actionText = `отредактировал профиль <b>${oldNick}</b> (цифры/порядок)`;
+
+        addLog("Администратор (по ПИН-коду)", actionText);
+        alert("Данные обновлены!"); 
+    });
 };
 
 window.deleteStaff = () => {
     const id = document.getElementById('editStaffId').value;
     if (!id) return;
+    
     const pin = prompt("Введите ПИН-код для удаления:");
     if (pin !== ADMIN_PIN) return alert("Неверный ПИН-код!");
-    if (!confirm('Вы уверены, что хотите удалить этого следящего?')) return;
-    remove(ref(db, 'staff/' + id));
-    document.getElementById('editStaffForm').style.display = 'none';
+
+    const person = globalStaff[id];
+    if (!confirm(`Вы уверены, что хотите удалить следящего ${person.nick}?`)) return;
+    
+    remove(ref(db, 'staff/' + id)).then(() => {
+        addLog("Администратор (по ПИН-коду)", `удалил следящего <b>${person.nick}</b>`);
+        document.getElementById('editStaffForm').style.display = 'none';
+    });
 };
 
 document.getElementById('addStaffForm').addEventListener('submit', function(e) {
@@ -656,17 +747,22 @@ document.getElementById('addStaffForm').addEventListener('submit', function(e) {
     const f = e.target;
     const isBoss = f.isBoss.checked;
     const newStaffRef = push(ref(db, 'staff'));
+    
+    const newNick = f.nick.value;
+    
     set(newStaffRef, {
-        nick: f.nick.value, 
+        nick: newNick, 
         rank: f.rank.value, 
         post: f.post.value,
         steamid: f.steamid.value,
         order: parseInt(f.order.value) || 10,
         isBoss: isBoss,
         adm: 0, sl: 0, sp: 0, week: 0, pay: 0
+    }).then(() => {
+        addLog(newNick, `был добавлен в состав (${f.rank.value})`);
+        f.reset();
+        alert("Следящий добавлен!");
     });
-    f.reset();
-    alert("Следящий добавлен!");
 });
 
 window.openReport = (type, nick) => {
@@ -693,8 +789,10 @@ document.getElementById('reportForm').addEventListener('submit', function(e) {
         rule: f.rule.value || '—', suspicious: f.suspicious.value || '—', continue: f.continue.value || '—',
         status: 'pending', date: new Date().toLocaleString('ru-RU')
     };
-    push(ref(db, 'reports'), data);
-    closeModal('reportModal');
+    push(ref(db, 'reports'), data).then(() => {
+        addLog(f.reporter.value, `создал отчёт на админа <b>${f.adminNick.value}</b>`);
+        closeModal('reportModal');
+    });
 });
 
 document.getElementById('spForm').addEventListener('submit', function(e) {
@@ -708,8 +806,10 @@ document.getElementById('spForm').addEventListener('submit', function(e) {
             punishment: f.punishment.value, explanation: f.explanation.value, talk: f.talk.value,
             image: imageData || null, status: 'pending', date: new Date().toLocaleString('ru-RU')
         };
-        push(ref(db, 'reports'), data);
-        closeModal('spModal');
+        push(ref(db, 'reports'), data).then(() => {
+            addLog(f.reporter.value, `создал СП на админа <b>${f.adminNick.value}</b>`);
+            closeModal('spModal');
+        });
     };
 
     if (fileInput.files.length > 0) {
@@ -798,10 +898,7 @@ window.approveReport = (key) => {
     const pin = prompt("Введите ПИН-код для одобрения отчёта:");
     if (pin !== ADMIN_PIN) return alert("Неверный ПИН-код!");
 
-    const checkedBy = prompt("Кто одобрил отчёт? (Введите ваш ник):");
-    if (!checkedBy) return alert("Имя обязательно для подтверждения!");
-
-    update(ref(db, 'reports/' + key), { status: 'approved', checkedBy: checkedBy }).then(() => {
+    update(ref(db, 'reports/' + key), { status: 'approved', checkedBy: "Администратор (по ПИН-коду)" }).then(() => {
         onValue(ref(db, 'reports/' + key), (snap) => {
             const r = snap.val();
             if(!r) return;
@@ -830,6 +927,7 @@ window.approveReport = (key) => {
                 }
             }, { onlyOnce: true });
         }, { onlyOnce: true });
+        addLog("Администратор (по ПИН-коду)", `одобрил отчёт автора <b>${r.reporter}</b>`);
     });
 };
 
@@ -837,15 +935,18 @@ window.rejectReport = (key) => {
     const pin = prompt("Введите ПИН-код для отклонения отчёта:");
     if (pin !== ADMIN_PIN) return alert("Неверный ПИН-код!");
     
-    const checkedBy = prompt("Кто отклонил отчёт? (Введите ваш ник):");
-    if (!checkedBy) return alert("Имя обязательно для подтверждения!");
-    
-    update(ref(db, 'reports/' + key), { status: 'rejected', checkedBy: checkedBy });
+    update(ref(db, 'reports/' + key), { status: 'rejected', checkedBy: "Администратор (по ПИН-коду)" }).then(() => {
+        onValue(ref(db, 'reports/' + key), (snap) => {
+            const r = snap.val();
+            if(r) addLog("Администратор (по ПИН-коду)", `отклонил отчёт автора <b>${r.reporter}</b>`);
+        }, { onlyOnce: true });
+    });
 };
 
 window.resetWeek = () => {
     const pin = prompt("Введите ПИН-код для сброса НЕДЕЛИ:");
     if (pin !== ADMIN_PIN) return alert("Неверный ПИН-код!");
+    
     if (!confirm('Сбросить недельные счётчики и очистить историю отчётов? Зарплата (ДВ) останется.')) return;
     onValue(ref(db, 'staff'), (snapshot) => {
         const staff = snapshot.val();
@@ -858,7 +959,9 @@ window.resetWeek = () => {
                 updates[`staff/${id}/week`] = 0;
             }
         }
-        update(ref(db), updates);
+        update(ref(db), updates).then(() => {
+            addLog("Администратор (по ПИН-коду)", `сбросил недельные счётчики`);
+        });
     }, { onlyOnce: true });
     remove(ref(db, 'reports'));
 };
@@ -866,6 +969,7 @@ window.resetWeek = () => {
 window.resetMonth = () => {
     const pin = prompt("Введите ПИН-код для ПОЛНОГО сброса:");
     if (pin !== ADMIN_PIN) return alert("Неверный ПИН-код!");
+    
     if (!confirm('ВНИМАНИЕ! Это обнулит ВСЁ, включая зарплату и всю историю. Продолжить?')) return;
     onValue(ref(db, 'staff'), (snapshot) => {
         const staff = snapshot.val();
@@ -879,7 +983,9 @@ window.resetMonth = () => {
                 updates[`staff/${id}/pay`] = 0;
             }
         }
-        update(ref(db), updates);
+        update(ref(db), updates).then(() => {
+            addLog("Администратор (по ПИН-коду)", `выполнил ПОЛНЫЙ сброс всех данных`);
+        });
     }, { onlyOnce: true });
     remove(ref(db, 'reports'));
 };
