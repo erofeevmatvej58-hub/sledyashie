@@ -84,7 +84,7 @@ tbody tr:last-child td { border-bottom: none; }
 .badge.sl  { background: rgba(46,213,115,0.15); color: #2ed573; border: 1px solid rgba(46,213,115,0.3); }
 .badge.pay { background: rgba(79,172,254,0.15); color: #4facfe; font-size: 13px; border: 1px solid rgba(79,172,254,0.3); }
 
-/* --- СТИЛИ РАНГОВ (ЦВЕТА И СВЕЧЕНИЕ) --- */
+/* --- СТИЛИ РАНГОВ --- */
 .rank { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 6px; }
 .rank-operator { color: #4facfe; text-shadow: 0 0 5px rgba(79,172,254,0.5); background: rgba(79,172,254,0.1); }
 .rank-admin { color: #a55eea; text-shadow: 0 0 8px rgba(165,94,234,0.6); background: rgba(165,94,234,0.1); }
@@ -399,6 +399,9 @@ tbody tr:last-child td { border-bottom: none; }
     </div>
 </div>
 
+<!-- СКРЫТАЯ МЕТКА ВЕРСИИ ДЛЯ ПРОВЕРКИ ОБНОВЛЕНИЯ -->
+<div style="text-align: center; color: #232a36; font-size: 10px; margin-top: 20px;">Версия 3.0 (Boss Update & Ranks)</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
@@ -419,7 +422,6 @@ const db = getDatabase(app);
 const ADMIN_PIN = "1234"; 
 let globalStaff = {}; 
 
-// --- ФУНКЦИЯ STEAMID ---
 function getSteamProfileUrl(steamIdStr) {
     const str = steamIdStr.trim();
     if (/^7656\d{13}$/.test(str)) return `https://steamcommunity.com/profiles/${str}`;
@@ -433,22 +435,20 @@ function getSteamProfileUrl(steamIdStr) {
     return `https://steamcommunity.com/search/users/#text=${encodeURIComponent(str)}`;
 }
 
-// --- ЦВЕТА РАНГОВ ---
 function getRankClass(rankStr) {
+    if (!rankStr) return "rank-operator";
     if (rankStr.includes("Глава")) return "rank-glava";
     if (rankStr.includes("Зам")) return "rank-zam";
     if (rankStr.includes("Администратор")) return "rank-admin";
-    return "rank-operator"; // По умолчанию оператор
+    return "rank-operator";
 }
 
-// --- ЗВУКИ ---
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playSound(type) {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const oscillator = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
+    oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
     if (type === 'hover') {
         oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
         oscillator.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.05);
@@ -464,7 +464,6 @@ function playSound(type) {
     }
 }
 
-// --- БАЗА ДАННЫХ ---
 const staffRef = ref(db, 'staff');
 onValue(staffRef, (snapshot) => {
     if (!snapshot.exists()) { set(staffRef, {}); } 
@@ -487,16 +486,11 @@ window.switchTab = (tabId, btnElement) => {
 function renderTable(staff) {
     const tbody = document.getElementById('table-body');
     tbody.innerHTML = '';
-    
-    // Сортировка по order
-    const sortedStaff = Object.entries(staff).sort((a, b) => {
-        return (a[1].order || 99) - (b[1].order || 99);
-    });
-
+    const sortedStaff = Object.entries(staff).sort((a, b) => (a[1].order || 99) - (b[1].order || 99));
     let displayId = 1;
 
     for (const [id, person] of sortedStaff) {
-        const profileUrl = getSteamProfileUrl(person.steamid);
+        const profileUrl = getSteamProfileUrl(person.steamid || "");
         const rankClass = getRankClass(person.rank);
         const isBoss = person.isBoss;
         
@@ -505,11 +499,10 @@ function renderTable(staff) {
         if (normSum >= 5) normClass = 'norm-green';
         else if (normSum >= 3) normClass = 'norm-yellow';
         
-        // Если это руководство, показываем прочерки вместо цифр
-        const admDisplay = isBoss ? '<span class="disabled-text">—</span>' : `<span class="badge adm">${person.adm}</span>`;
-        const slDisplay = isBoss ? '<span class="disabled-text">—</span>' : `<span class="badge sl">${person.sl}</span>`;
-        const spDisplay = isBoss ? '<span class="disabled-text">—</span>' : `<span class="badge sp">${person.sp}</span>`;
-        const payDisplay = isBoss ? '<span class="disabled-text">—</span>' : `<span class="badge pay">${person.pay} ДВ</span>`;
+        const admDisplay = isBoss ? '<span class="disabled-text">—</span>' : `<span class="badge adm">${person.adm || 0}</span>`;
+        const slDisplay = isBoss ? '<span class="disabled-text">—</span>' : `<span class="badge sl">${person.sl || 0}</span>`;
+        const spDisplay = isBoss ? '<span class="disabled-text">—</span>' : `<span class="badge sp">${person.sp || 0}</span>`;
+        const payDisplay = isBoss ? '<span class="disabled-text">—</span>' : `<span class="badge pay">${person.pay || 0} ДВ</span>`;
         const normDisplay = isBoss ? '<span class="disabled-text">—</span>' : `<div class="norm-block ${normClass}"><span class="norm-text">${normSum} / 5</span></div>`;
         
         const actionsDisplay = isBoss ? '<span class="disabled-text">—</span>' : `
@@ -521,9 +514,9 @@ function renderTable(staff) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="id">#${displayId}</td>
-            <td><div class="user"><div class="avatar ${isBoss ? 'boss' : ''}">${person.nick[0]}</div><span class="nick">${person.nick}</span></div></td>
-            <td><span class="rank ${rankClass}">${person.rank}</span></td>
-            <td class="steamid"><a href="${profileUrl}" target="_blank">${person.steamid}</a></td>
+            <td><div class="user"><div class="avatar ${isBoss ? 'boss' : ''}">${person.nick ? person.nick[0] : '?'}</div><span class="nick">${person.nick || 'Без ника'}</span></div></td>
+            <td><span class="rank ${rankClass}">${person.rank || '—'}</span></td>
+            <td class="steamid"><a href="${profileUrl}" target="_blank">${person.steamid || '—'}</a></td>
             <td>${admDisplay}</td>
             <td>${slDisplay}</td>
             <td>${normDisplay}</td>
@@ -539,19 +532,16 @@ function renderTable(staff) {
 function renderStats(staff) {
     const grid = document.getElementById('stats-grid');
     grid.innerHTML = '';
-    
     const sortedStaff = Object.entries(staff).sort((a, b) => (a[1].order || 99) - (b[1].order || 99));
 
     for (const [id, person] of sortedStaff) {
-        const rankClass = getRankClass(person.rank);
         const isBoss = person.isBoss;
-        
         const card = document.createElement('div');
         card.className = 'stat-card';
         
         if (isBoss) {
             card.innerHTML = `
-                <h3><div class="avatar boss" style="width:24px;height:24px;font-size:12px;">${person.nick[0]}</div> ${person.nick}</h3>
+                <h3><div class="avatar boss" style="width:24px;height:24px;font-size:12px;">${person.nick ? person.nick[0] : '?'}</div> ${person.nick}</h3>
                 <span class="sub">${person.rank} • ${person.steamid}</span>
                 <div class="stat-row" style="justify-content:center; padding: 20px 0;">
                     <span style="font-style:italic; color:#586174;">Руководящая должность. Отчёты не требуются.</span>
@@ -559,12 +549,12 @@ function renderStats(staff) {
             `;
         } else {
             card.innerHTML = `
-                <h3><div class="avatar" style="width:24px;height:24px;font-size:12px;">${person.nick[0]}</div> ${person.nick}</h3>
+                <h3><div class="avatar" style="width:24px;height:24px;font-size:12px;">${person.nick ? person.nick[0] : '?'}</div> ${person.nick}</h3>
                 <span class="sub">${person.rank} • ${person.steamid}</span>
-                <div class="stat-row"><span>Отчёты об админах:</span><b>${person.adm}</b></div>
-                <div class="stat-row"><span>Слежка по указаниям:</span><b>${person.sl}</b></div>
-                <div class="stat-row"><span>Список пидормотов (СП):</span><b>${person.sp}</b></div>
-                <div class="stat-row"><span>Зарплата за месяц:</span><b class="total-pay">${person.pay} ДВ</b></div>
+                <div class="stat-row"><span>Отчёты об админах:</span><b>${person.adm || 0}</b></div>
+                <div class="stat-row"><span>Слежка по указаниям:</span><b>${person.sl || 0}</b></div>
+                <div class="stat-row"><span>Список пидормотов (СП):</span><b>${person.sp || 0}</b></div>
+                <div class="stat-row"><span>Зарплата за месяц:</span><b class="total-pay">${person.pay || 0} ДВ</b></div>
             `;
         }
         grid.appendChild(card);
@@ -577,7 +567,7 @@ function renderToolsSelect(staff) {
     for (const id in staff) {
         const option = document.createElement('option');
         option.value = id;
-        option.textContent = staff[id].nick + ' (' + staff[id].rank + ')';
+        option.textContent = staff[id].nick + ' (' + (staff[id].rank || '—') + ')';
         select.appendChild(option);
     }
 }
@@ -591,9 +581,9 @@ window.fillEditForm = () => {
     
     const person = globalStaff[id];
     document.getElementById('editStaffId').value = id;
-    document.getElementById('editNick').value = person.nick;
-    document.getElementById('editRank').value = person.rank;
-    document.getElementById('editSteamid').value = person.steamid;
+    document.getElementById('editNick').value = person.nick || '';
+    document.getElementById('editRank').value = person.rank || 'Оператор';
+    document.getElementById('editSteamid').value = person.steamid || '';
     document.getElementById('editOrder').value = person.order || 10;
     document.getElementById('editIsBoss').checked = person.isBoss || false;
     
@@ -603,13 +593,10 @@ window.fillEditForm = () => {
     document.getElementById('editWeek').value = person.week || 0;
     document.getElementById('editPay').value = person.pay || 0;
     
-    // Прячем поля с отчетами, если это руководство
     statsBlock.style.display = person.isBoss ? 'none' : 'block';
-    
     form.style.display = 'block';
 };
 
-// Слушаем галочку, чтобы прятать/показывать поля
 document.getElementById('editIsBoss').addEventListener('change', function() {
     document.getElementById('statsEditBlock').style.display = this.checked ? 'none' : 'block';
 });
@@ -617,16 +604,13 @@ document.getElementById('editIsBoss').addEventListener('change', function() {
 window.saveEditStaff = () => {
     const id = document.getElementById('editStaffId').value;
     if (!id) return;
-    
     const isBoss = document.getElementById('editIsBoss').checked;
-    
     const updates = {
         nick: document.getElementById('editNick').value,
         rank: document.getElementById('editRank').value,
         steamid: document.getElementById('editSteamid').value,
         order: parseInt(document.getElementById('editOrder').value) || 10,
         isBoss: isBoss,
-        // Если это не руководство, обновляем и циферки
         adm: isBoss ? 0 : (parseInt(document.getElementById('editAdm').value) || 0),
         sl: isBoss ? 0 : (parseInt(document.getElementById('editSl').value) || 0),
         sp: isBoss ? 0 : (parseInt(document.getElementById('editSp').value) || 0),
@@ -755,7 +739,7 @@ onValue(reportsRef, (snapshot) => {
                     <p><b>7. Продолжать:</b> ${r.continue}</p>
                 `;
             }
-            const reportSteamUrl = getSteamProfileUrl(r.steamId);
+            const reportSteamUrl = getSteamProfileUrl(r.steamId || "");
             pendingHtml += `
                 <div class="report-card pending">
                     <h3>${r.type === 'adm' ? 'Слежка за админом' : r.type === 'sl' ? 'Слежка по указаниям' : 'Список пидормотов'}
@@ -876,7 +860,6 @@ window.resetMonth = () => {
     remove(ref(db, 'reports'));
 };
 
-// --- НАВЕШИВАЕМ ЗВУКИ НА КНОПКИ ---
 document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('button, .tab-btn, .report-btn, .btn-save-tool, .btn-approve, .btn-reject');
     buttons.forEach(btn => {
