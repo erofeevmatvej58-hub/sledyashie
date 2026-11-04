@@ -169,7 +169,7 @@ input:checked + .slider:before { transform: translateX(24px); }
             <div class="nav-item nav-sound active" onclick="switchPage('table', this)">Состав</div>
             <div class="nav-item nav-sound" onclick="switchPage('stats', this)">Статистика</div>
             <div class="nav-item nav-sound" onclick="switchPage('activity', this)">Активность</div>
-            <div class="nav-item nav-sound" onclick="switchPage('reports_check', this)" id="nav-reports" style="display:none;">Отчеты</div>
+            <div class="nav-item nav-sound" onclick="switchPage('reports_check', this)" id="nav-reports">Отчеты</div>
             <div class="nav-item nav-sound" onclick="switchPage('tools', this)" id="nav-tools" style="display:none;">Инструменты</div>
         </nav>
         <div class="header-user">
@@ -491,9 +491,7 @@ async function loadProfile() {
         document.getElementById('header-rank').textContent = me.rank;
         if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
         
-        // ПРИНУДИТЕЛЬНО ПОКАЗЫВАЕМ ВКЛАДКУ ОТЧЕТОВ АДМИНАМ И РУКОВОДСТВУ
         if (me.role === 'admin' || me.rank === 'Глава следящих' || me.rank === 'Зам. главы следящих' || me.rank === 'Судо-Куратор' || me.rank === 'Куратор') {
-            document.getElementById('nav-reports').style.display = 'flex';
             document.getElementById('nav-tools').style.display = 'flex';
         }
     } else {
@@ -710,10 +708,8 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
             image: imageData
         };
         
-        // ВСТАВЛЯЕМ В БАЗУ
         await supabase.from('reports').insert([data]);
         
-        // СРАЗУ ДОБАВЛЯЕМ В СПИСОК НА СТРАНИЦЕ (ЧТОБЫ ТЫ СРАЗУ УВИДЕЛ)
         const pendingList = document.getElementById('pending-list');
         const tempId = 'temp_' + Date.now();
         
@@ -740,7 +736,6 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
         playSound('notify');
         alert("Отчет отправлен на проверку!"); closeModal('reportModal'); f.reset();
         
-        // Обновляем из базы через секунду, чтобы подтянуть реальный ID
         setTimeout(loadReports, 1000);
     };
 
