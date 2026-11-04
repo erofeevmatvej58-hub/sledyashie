@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Отдел Следящих | Garry's Mod</title>
 <style>
-/* --- СТИЛИ ОСТАВЛЕНЫ БЕЗ ИЗМЕНЕНИЙ --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #0b0e14; color: #e2e8f0; min-height: 100vh; position: relative; overflow-x: hidden; }
 .bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; filter: brightness(0.4) contrast(1.1); }
@@ -243,7 +242,7 @@ input:checked + .slider:before { transform: translateX(24px); }
                 
                 <input type="hidden" id="edit-id">
                 <label>Ник</label><input type="text" id="edit-nick">
-                <label>SteamID (Вводить строго 17 цифр, например 7656119...)</label><input type="text" id="edit-steamid">
+                <label>SteamID (Вводить строго 17 цифр)</label><input type="text" id="edit-steamid">
                 <label>Ссылка на аватарку</label><input type="text" id="edit-avatar" placeholder="https://...">
                 <label>Позиция в таблице (чем меньше число, тем выше)</label>
                 <input type="number" id="edit-order" value="10" placeholder="Например: 1">
@@ -375,20 +374,42 @@ document.querySelectorAll('.btn-sound').forEach(el => {
     el.addEventListener('mouseenter', () => playSound('hover'));
 });
 
+// --- НАДЕЖНЫЙ КОНВЕРТЕР (ЛЮБОЙ ФОРМАТ В 17 ЦИФР) ---
 function toSteam64(input) {
-    if (!input) return null;
+    if (!input) return '—';
     const str = input.trim();
+    
+    // Если уже 17 цифр
     if (/^7656\d{13}$/.test(str)) return str;
+    
+    // Если STEAM_0:1:12345
     const matchSteam = str.match(/^STEAM_(\d):(\d):(\d+)$/i);
     if (matchSteam) {
         const y = BigInt(matchSteam[2]); const z = BigInt(matchSteam[3]);
         return (BigInt("76561197960265728") + (z * 2n) + y).toString();
     }
+    
+    // Если [U:1:12345]
+    const matchU = str.match(/^\[U:(\d):(\d+)\]$/i);
+    if (matchU) return (BigInt("76561197960265728") + BigInt(matchU[2])).toString();
+    
+    // Если просто цифры (но не 17)
     if (/^\d+$/.test(str)) return str;
+    
+    // Если вообще что-то другое, возвращаем как есть
     return str;
 }
+
+// --- ФУНКЦИЯ ССЫЛКИ НА STEAM ---
+function getSteamProfileUrl(input) {
+    const steam64 = toSteam64(input);
+    if (steam64 === '—' || !steam64) return '#';
+    return `https://steamcommunity.com/profiles/${steam64}`;
+}
+
+// --- ДЛЯ КРАСОТЫ В ТАБЛИЦЕ (STEAM_0) ---
 function toSteam32(steam64) {
-    if (!steam64) return '—';
+    if (!steam64 || steam64 === '—') return '—';
     const str = steam64.toString();
     if (!/^\d+$/.test(str)) return str;
     try {
@@ -396,10 +417,6 @@ function toSteam32(steam64) {
         const y = big % 2n; const z = (big - y) / 2n;
         return `STEAM_0:${y}:${z}`;
     } catch(e) { return str; }
-}
-function getSteamProfileUrl(input) {
-    const steam64 = toSteam64(input);
-    return `https://steamcommunity.com/profiles/${steam64}`;
 }
 
 window.onload = () => {
@@ -572,7 +589,7 @@ window.fillEditForm = () => {
     const p = globalStaff.find(s => s.id == id);
     document.getElementById('edit-id').value = p.id;
     document.getElementById('edit-nick').value = p.nick;
-    document.getElementById('edit-steamid').value = p.steamid; // ВСЕГДА 17 ЦИФР
+    document.getElementById('edit-steamid').value = toSteam64(p.steamid); // ВСЕГДА 17 ЦИФР
     document.getElementById('edit-avatar').value = p.avatar || '';
     document.getElementById('edit-order').value = p.order || 10;
     document.getElementById('edit-status').value = p.status || 'Активен';
@@ -645,12 +662,11 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
     const f = e.target;
     const data = {
         type: f.type.value, reporter: f.reporter.value, adminNick: f.adminNick.value,
-        steamId: toSteam32(toSteam64(f.steamId.value)), // Для читаемости в отчете можно оставить 32, но лучше 64. Оставим 64.
+        steamId: toSteam64(f.steamId.value), // Всегда 17 цифр для базы
         rank: f.rank.value, time: f.time.value,
         rule: f.rule.value || '—', suspicious: f.suspicious.value || '—', continue: f.continue.value || '—',
         status: 'pending', date: new Date().toLocaleString('ru-RU')
     };
-    data.steamId = toSteam64(f.steamId.value); // Принудительно 64 для базы
     await supabase.from('reports').insert([data]);
     playSound('notify');
     alert("Отчет отправлен на проверку!"); closeModal('reportModal'); f.reset();
