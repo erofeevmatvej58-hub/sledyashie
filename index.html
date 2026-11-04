@@ -522,7 +522,7 @@ function renderTable() {
         if (normSum >= 5) normClass = 'n-green';
         else if (normSum >= 4) normClass = 'n-yellow';
         
-        // Учитываем флаг is_boss для скрытия отчетов
+        // Учитываем флаг is_boss и новые роли для скрытия отчетов
         const isBoss = p.is_boss || p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник' || p.rank === 'Судо-Куратор' || p.rank === 'Куратор';
         
         const normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
@@ -671,7 +671,7 @@ window.resetWeek = async () => {
     if (!confirm("Сбросить НЕДЕЛЮ? (Отчеты за неделю обнулятся, ДВ останется)")) return;
     const { data: staff } = await supabase.from('staff').select('*');
     for(let s of staff) {
-        if(!s.is_boss && s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих') {
+        if(!s.is_boss && s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих' && s.rank !== 'Табличник' && s.rank !== 'Судо-Куратор' && s.rank !== 'Куратор') {
             await supabase.from('staff').update({ week: 0, adm: 0, sl: 0 }).eq('id', s.id);
         }
     }
@@ -817,7 +817,7 @@ window.importFromUnion = async () => {
                     role: 'user',
                     adm: 0, sl: 0, week: 0, pay: 0,
                     status: person.server.status === "Активен" ? "Активен" : (person.server.status === "Мороз" ? "Мороз" : "Отпуск"),
-                    order: 99 // Ставим 99, чтобы они не пропадали из-за пустой сортировки
+                    order: 99 
                 }]);
             }
         }
