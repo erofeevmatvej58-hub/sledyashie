@@ -3,740 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Отдел Следящих | Garry's Mod</title>
+<title>Тест Отчетов | Garry's Mod</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #0b0e14; color: #e2e8f0; min-height: 100vh; position: relative; overflow-x: hidden; }
-.bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; filter: brightness(0.4) contrast(1.1); }
-.bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 20%, rgba(5, 5, 10, 0.95) 100%); z-index: -1; }
-.glass-mode .glass { background: rgba(15, 19, 26, 0.4) !important; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1) !important; }
-.no-glass-mode .glass { background: #0f131a !important; backdrop-filter: none; border: 1px solid #1f2937 !important; }
-.no-glass-mode .bg-slideshow { filter: blur(8px) brightness(0.3); }
-.spider-web { position: fixed; z-index: 0; pointer-events: none; opacity: 0.15; }
-.web-tl { top: 0; left: 0; width: 200px; height: 200px; background: radial-gradient(circle at 0 0, transparent 50%, #fff 51%, transparent 52%), repeating-conic-gradient(from 90deg at 0 0, transparent 0 10deg, #fff 10deg 11deg); }
-.web-tr { top: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle at 100% 0, transparent 50%, #fff 51%, transparent 52%), repeating-conic-gradient(from 180deg at 100% 0, transparent 0 10deg, #fff 10deg 11deg); }
-.bat { position: fixed; z-index: 0; pointer-events: none; font-size: 24px; opacity: 0.3; animation: fly 20s linear infinite; }
-.bat-1 { top: 10%; left: -50px; animation-duration: 25s; }
-.bat-2 { top: 30%; left: -50px; animation-duration: 35s; animation-delay: 5s; font-size: 18px;}
-@keyframes fly { 0% { transform: translateX(-50px) translateY(0) rotate(0deg); } 50% { transform: translateX(50vw) translateY(-50px) rotate(10deg); } 100% { transform: translateX(105vw) translateY(20px) rotate(-10deg); } }
-.banner { text-align: center; margin-bottom: 20px; padding: 20px 0; }
-.banner h1 { font-size: 36px; font-weight: 900; color: #fff; text-shadow: 0 0 20px rgba(255, 100, 0, 0.8); letter-spacing: 4px; text-transform: uppercase; }
-.top-header { background: rgba(15, 19, 26, 0.6); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 64px; position: sticky; top: 0; z-index: 100; }
-.logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; color: #fff; }
-.logo-icon { color: #ff6600; font-size: 24px; }
-.header-nav { display: flex; gap: 5px; height: 100%; }
-.nav-item { padding: 0 20px; display: flex; align-items: center; height: 100%; color: #94a3b8; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.2s; border-bottom: 2px solid transparent; text-transform: uppercase; }
-.nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
-.nav-item.active { color: #fff; border-bottom-color: #ff6600; background: rgba(255,102,0,0.1); }
-.header-user { display: flex; align-items: center; gap: 15px; position: relative; }
-.user-badge { display: flex; align-items: center; gap: 10px; padding: 5px 15px; background: rgba(30, 41, 59, 0.8); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.2s; }
-.user-badge:hover { background: rgba(30, 41, 59, 1); border-color: #ff6600; }
-.user-avatar { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; background: #1e293b; }
-.user-info { display: flex; flex-direction: column; }
-.user-name { font-weight: 700; font-size: 13px; color: #fff; }
-.user-rank { font-size: 10px; color: #ff6600; font-weight: 700; text-transform: uppercase; }
-.profile-dropdown { position: absolute; top: 55px; right: 0; width: 200px; background: rgba(15, 19, 26, 0.95); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
-.profile-dropdown.open { display: block; animation: fadeIn 0.2s; }
-.profile-item { padding: 12px 20px; font-size: 14px; color: #cbd5e1; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
-.profile-item:hover { background: #1e293b; color: #fff; }
-.profile-item.danger { color: #ef4444; border-top: 1px solid #1f2937; }
-.btn-icon { background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; position: relative; }
-.notify-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: none; border: 2px solid #0f131a; }
-.notify-dropdown { position: absolute; top: 55px; right: 0; width: 320px; background: rgba(15, 19, 26, 0.95); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
-.notify-dropdown.open { display: block; animation: fadeIn 0.2s; }
-.notify-header { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-weight: 700; color: #fff; }
-.notify-list { max-height: 300px; overflow-y: auto; }
-.notify-item { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-size: 13px; color: #cbd5e1; }
-.notify-item span { display: block; font-size: 11px; color: #64748b; margin-top: 5px; }
-.container { max-width: 1500px; margin: 0 auto 30px; padding: 0 40px; position: relative; z-index: 10; }
-.tab-page { display: none; animation: fadeIn 0.3s ease; }
-.tab-page.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.page-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-.page-title::before { content: ''; width: 4px; height: 24px; background: #ff6600; border-radius: 2px; }
-.legend { display: flex; gap: 20px; margin-bottom: 20px; background: rgba(15, 19, 26, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
-.legend span { font-size: 13px; color: #cbd5e1; display: flex; align-items: center; gap: 5px; }
-.legend b { color: #fff; }
-.table-wrapper { position: relative; border-radius: 16px; padding: 3px; animation: borderGlowColor 4s linear infinite; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(245, 158, 11, 0.4), 0 0 80px rgba(251, 191, 36, 0.2); }
-@keyframes borderGlowColor { 0% { background-color: #ef4444; } 33% { background-color: #f59e0b; } 66% { background-color: #fbbf24; } 100% { background-color: #ef4444; } }
-.table-card { border-radius: 13px; overflow: hidden; background: rgba(15, 19, 26, 0.95); backdrop-filter: blur(10px); }
-.table-row { display: grid; grid-template-columns: 2.5fr 1.2fr 1.2fr 1fr 0.6fr 0.8fr 0.8fr 1.8fr; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; }
-.table-row:hover { background: rgba(255, 255, 255, 0.05); }
-.table-header { background: rgba(19, 25, 36, 0.9); font-size: 11px; text-transform: uppercase; color: #cbd5e1; font-weight: 700; padding: 16px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-.table-header > div { text-align: center; }
-.table-header > div:nth-child(1) { text-align: left; padding-left: 15px; }
-.table-cell { padding: 16px 10px; font-size: 14px; color: #e2e8f0; text-align: center; display: flex; align-items: center; justify-content: center; }
-.table-cell:nth-child(1) { justify-content: flex-start; padding-left: 15px; }
-.user-cell { display: flex; align-items: center; gap: 12px; }
-.t-avatar { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; background: #1e293b; }
-.t-name { font-weight: 600; color: #fff; text-align: left; display: flex; flex-direction: column; }
-.t-rank { font-size: 11px; color: #94a3b8; display: flex; align-items: center; gap: 5px; }
-.game-rank { font-size: 10px; color: #ff6600; font-weight: bold; text-transform: uppercase;}
-.status-badge { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; white-space: nowrap; width: 100%; max-width: 100px;}
-.status-active { color: #22c55e; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); }
-.status-frozen { color: #3b82f6; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); }
-.status-vacation { color: #6366f1; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
-.dot.blink { animation: blink 1.5s infinite; }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-.rank-glava { color: #fbbf24; font-weight: 800; text-shadow: 0 0 10px rgba(251,191,36,0.5); white-space: nowrap; }
-.rank-glava::before { content: '👑 '; font-size: 14px; }
-.rank-zam { color: #ef4444; font-weight: 800; }
-.rank-sled { color: #22c55e; white-space: nowrap; }
-.rank-curator { color: #a855f7; font-weight: 800; text-shadow: 0 0 10px rgba(168,85,247,0.5); white-space: nowrap; }
-.rank-sudo { color: #ec4899; font-weight: 800; text-shadow: 0 0 10px rgba(236,72,153,0.5); white-space: nowrap; }
-.badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; text-align: center; min-width: 40px;}
-.b-adm { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
-.b-sl { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
-.b-pay { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
-.norm { padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; display: inline-block; min-width: 55px; text-align: center;}
-.n-red { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444; }
-.n-yellow { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid #f59e0b; }
-.n-green { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid #22c55e; }
-.n-none { color: #64748b; font-style: italic; background: transparent; border: none; }
-a.steam-link { color: #94a3b8; text-decoration: none; border-bottom: 1px dashed #3b82f6; }
-a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
-.actions-cell { display: flex; justify-content: center; gap: 5px; width: 100%; }
-.btn-report { padding: 6px 8px; background: rgba(59,130,246,0.1); border: 1px solid #3b82f6; color: #3b82f6; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap;}
-.btn-report:hover { background: #3b82f6; color: #fff; }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-.stat-box { border-radius: 16px; padding: 25px; display: flex; flex-direction: column; gap: 15px;}
-.stat-header { display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;}
-.stat-row { display: flex; justify-content: space-between; font-size: 14px; color: #cbd5e1; line-height: 1.5;}
-.stat-row b { color: #fff; }
-.stat-row:last-child { margin-top: 10px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 16px; color: #3b82f6; font-weight: 700; }
-.tool-card { border-radius: 16px; padding: 24px; margin-bottom: 20px; }
-.tool-card h3 { color: #fff; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
-.tool-card label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; margin-top: 10px; }
-.tool-card input, .tool-card select, .tool-card textarea { width: 100%; padding: 10px; background: rgba(11, 14, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff; font-family: inherit; }
-.btn { padding: 10px 20px; background: #3b82f6; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
-.btn:hover { background: #2563eb; }
-.btn-red { background: #ef4444; }
-.btn-red:hover { background: #dc2626; }
-.btn-green { background: #22c55e; color: #0b0e14; }
-.btn-green:hover { background: #16a34a; }
-.settings-card { border-radius: 16px; padding: 30px; }
-.settings-card h3 { color: #fff; margin-bottom: 20px; font-size: 18px; }
-.setting-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-.setting-row:last-child { border-bottom: none; }
-.setting-label { font-size: 14px; color: #e2e8f0; }
-.toggle-switch { position: relative; width: 50px; height: 26px; }
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .4s; border-radius: 26px; }
-.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background-color: #ef4444; }
-input:checked + .slider:before { transform: translateX(24px); }
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
-.modal-overlay.open { display: flex; }
-.modal { background: #0f131a; border: 1px solid #1f2937; border-radius: 16px; padding: 30px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
-.modal h2 { color: #fff; margin-bottom: 20px; }
-.modal label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; margin-top: 10px; }
-.modal input, .modal select, .modal textarea { width: 100%; padding: 10px; background: #0b0e14; border: 1px solid #334155; border-radius: 8px; color: #fff; font-family: inherit; margin-bottom: 5px; }
-.modal textarea { resize: vertical; min-height: 60px; }
-.report-card { background: rgba(15, 19, 26, 0.8); border: 1px solid #1f2937; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #ff9f43;}
-.report-card.approved { border-left-color: #22c55e; opacity: 0.7;}
-.report-card h3 { color: #fff; margin-bottom: 10px; font-size: 16px; display: flex; justify-content: space-between;}
-.report-card p { font-size: 14px; color: #cbd5e1; margin-bottom: 5px;}
+body { font-family: sans-serif; background: #0b0e14; color: #fff; padding: 20px; }
+.container { max-width: 800px; margin: 0 auto; }
+.report-card { background: #161b22; border: 1px solid #232a36; border-radius: 8px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #ff9f43; }
+.report-card h3 { color: #4facfe; margin-bottom: 10px; }
+.report-card p { font-size: 14px; color: #c9d1d9; margin-bottom: 5px; }
 .report-card b { color: #fff; }
-.btn-approve { background: rgba(34,197,94,0.2); border: 1px solid #22c55e; color: #22c55e; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px;}
-.btn-approve:hover { background: #22c55e; color: #000;}
-.btn-reject { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #ef4444; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;}
-.btn-reject:hover { background: #ef4444; color: #fff;}
-.img-preview { max-width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #232a36; }
-.loader { text-align: center; padding: 50px; color: #64748b; font-size: 18px; }
+.btn { padding: 10px 20px; background: #3b82f6; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px; }
+.btn-red { background: #ef4444; }
+.btn-green { background: #22c55e; color: #000; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: #161b22; border: 1px solid #232a36; border-radius: 12px; padding: 30px; width: 100%; max-width: 500px; }
+.modal h2 { color: #fff; margin-bottom: 20px; }
+.modal label { display: block; font-size: 12px; color: #8b96ab; margin-top: 10px; margin-bottom: 5px; }
+.modal input, .modal textarea, .modal select { width: 100%; padding: 10px; background: #0b0e14; border: 1px solid #2a3241; border-radius: 8px; color: #fff; font-family: inherit; }
+.modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+.modal-actions button { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+.img-preview { max-width: 200px; border-radius: 8px; margin-top: 10px; }
 </style>
 </head>
-<body class="glass-mode">
+<body>
 
-<div class="spider-web web-tl"></div>
-<div class="spider-web web-tr"></div>
-<div class="bat bat-1">🦇</div>
-<div class="bat bat-2">🦇</div>
-
-<div class="bg-slideshow"></div>
-<div class="bg-overlay"></div>
-
-<div id="auth-screen" style="display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10;">
-    <h1 style="color: #fff; font-size: 48px; font-weight: 900; text-shadow: 0 0 20px rgba(255, 100, 0, 0.8); margin-bottom: 20px;">ДОСТУП ЗАКРЫТ</h1>
-    <p style="color: #94a3b8; margin-bottom: 30px;">Войдите через Steam, чтобы просмотреть таблицу.</p>
-    <a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-sound" style="padding: 15px 30px; background: #ff6600; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 18px; transition: 0.3s;">Войти через Steam</a>
-</div>
-
-<div id="main-site" style="display: none; position: relative; z-index: 10;">
-    <header class="top-header glass">
-        <div class="logo"><span class="logo-icon">🎃</span> СЛЕДЯЩИЕ</div>
-        <nav class="header-nav">
-            <div class="nav-item nav-sound active" onclick="switchPage('table', this)">Состав</div>
-            <div class="nav-item nav-sound" onclick="switchPage('stats', this)">Статистика</div>
-            <div class="nav-item nav-sound" onclick="switchPage('activity', this)">Активность</div>
-            <div class="nav-item nav-sound" onclick="switchPage('reports_check', this)" id="nav-reports">Отчеты</div>
-            <div class="nav-item nav-sound" onclick="switchPage('tools', this)" id="nav-tools" style="display:none;">Инструменты</div>
-        </nav>
-        <div class="header-user">
-            <button class="btn-icon btn-sound" onclick="toggleNotifications()">🔔 <div class="notify-dot" id="notify-dot"></div></button>
-            <div class="notify-dropdown" id="notify-dropdown">
-                <div class="notify-header">Уведомления</div>
-                <div class="notify-list" id="notify-list"><div class="notify-item">Нет новых оповещений.</div></div>
-            </div>
-            
-            <div class="user-badge" onclick="toggleProfileMenu()">
-                <img class="user-avatar" id="header-avatar" src="https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg">
-                <div class="user-info">
-                    <span class="user-name" id="header-name">Загрузка...</span>
-                    <span class="user-rank" id="header-rank">...</span>
-                </div>
-            </div>
-            <div class="profile-dropdown" id="profile-dropdown">
-                <div class="profile-item" onclick="switchPage('settings', this); closeProfileMenu();">⚙️ Настройки</div>
-                <div class="profile-item danger" onclick="logout()">🚪 Выйти из аккаунта</div>
-            </div>
-        </div>
-    </header>
-
-    <div class="banner">
-        <h1>СЛЕДЯЩИЕ</h1>
+<div class="container">
+    <h1>ТЕСТ ОТЧЕТОВ</h1>
+    <p>Напиши отчет, и он должен остаться на экране.</p>
+    
+    <div style="margin: 20px 0;">
+        <button class="btn" onclick="openForm()">Написать отчет</button>
     </div>
 
-    <main class="container">
-        <div id="page-table" class="tab-page active">
-            <div class="legend">
-                <span>👁️ Слежка за админами: <b>+10 ДВ, -5 тикетов</b></span>
-                <span>📋 Слежка по указаниям: <b>+10 ДВ, -5 тикетов</b></span>
-            </div>
-            
-            <div class="table-wrapper">
-                <div class="table-card">
-                    <div class="table-row table-header">
-                        <div>Следящий</div><div>Ранг в отделе</div><div>SteamID</div><div>Статус</div><div>Адм.</div><div>Указ.</div><div>Норма</div><div>Действие</div>
-                    </div>
-                    <div id="table-body"><div class="loader">Загрузка...</div></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-stats" class="tab-page">
-            <h1 class="page-title">Статистика за месяц</h1>
-            <div class="stats-grid" id="stats-grid"></div>
-        </div>
-
-        <div id="page-activity" class="tab-page">
-            <h1 class="page-title">Активность</h1>
-            <div class="tool-card glass"><div class="bar-chart" id="bar-chart"></div></div>
-        </div>
-
-        <div id="page-reports_check" class="tab-page">
-            <h1 class="page-title">Отчеты на проверке</h1>
-            <div id="pending-list"><p class="loader">Загрузка отчетов...</p></div>
-            <h1 class="page-title" style="margin-top: 30px;">История отчетов</h1>
-            <div id="history-list"><p class="loader">Загрузка истории...</p></div>
-        </div>
-
-        <div id="page-tools" class="tab-page">
-            <h1 class="page-title">Инструменты управления</h1>
-            
-            <div class="tool-card glass">
-                <h3>Импорт из Union Teams</h3>
-                <p style="font-size:12px; color:#94a3b8; margin-bottom:10px;">Скопируйте текст из файла data.json и вставьте сюда. Сайт сам найдет всех из отдела "Следящие".</p>
-                <textarea id="import-json" rows="5" placeholder='[{"steam": {"steam64_id": "7656..."}, "server": {"real_name": "Ник", "department": "Следящие", "rang": "Ранг"}}]'></textarea>
-                <button class="btn btn-green btn-sound" onclick="importFromUnion()" style="width:100%; margin-top:10px;">Импортировать следящих</button>
-            </div>
-
-            <div class="tool-card glass">
-                <h3>Сбросы</h3>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-sound" onclick="resetWeek()">Сбросить НЕДЕЛЮ (Оставить ЗП)</button>
-                    <button class="btn btn-red btn-sound" onclick="resetMonth()">Сбросить МЕСЯЦ (Обнулить всё)</button>
-                </div>
-            </div>
-
-            <div class="tool-card glass">
-                <h3>Добавить / Изменить следящего</h3>
-                <select id="edit-select" onchange="fillEditForm()" style="margin-bottom: 15px;"><option value="">Выберите для редактирования...</option></select>
-                
-                <input type="hidden" id="edit-id">
-                <label>Ник</label><input type="text" id="edit-nick">
-                <label>SteamID (Вводить строго 17 цифр)</label><input type="text" id="edit-steamid">
-                <label>Ссылка на аватарку</label><input type="text" id="edit-avatar" placeholder="https://...">
-                <label>Позиция в таблице (чем меньше число, тем выше)</label>
-                <input type="number" id="edit-order" value="10" placeholder="Например: 1">
-                <label>Статус</label>
-                <select id="edit-status">
-                    <option value="Активен">Активен</option>
-                    <option value="Мороз">Мороз</option>
-                    <option value="Отпуск">Отпуск</option>
-                </select>
-                <label>Роль в отделе</label>
-                <select id="edit-rank">
-                    <option value="Следящий">Следящий</option>
-                    <option value="Куратор">Куратор</option>
-                    <option value="Судо-Куратор">Судо-Куратор</option>
-                    <option value="Зам. главы следящих">Зам. главы следящих</option>
-                    <option value="Глава следящих">Глава следящих</option>
-                    <option value="Табличник">Табличник</option>
-                </select>
-                <label>Роль в игре</label>
-                <select id="edit-game-rank">
-                    <option value="Игрок">Игрок</option>
-                    <option value="Модератор">Модератор</option>
-                    <option value="Ассистент">Ассистент</option>
-                    <option value="Оператор">Оператор</option>
-                    <option value="Сеньор Админ">Сеньор Админ</option>
-                    <option value="Администратор">Администратор</option>
-                    <option value="Куратор">Куратор</option>
-                    <option value="Судо-Куратор">Судо-Куратор</option>
-                </select>
-                
-                <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                    <label style="display:flex; align-items:center; gap:5px; margin:0; cursor:pointer;">
-                        <input type="checkbox" id="edit-admin-rights" style="width:auto;"> Права Админа сайта
-                    </label>
-                    <label style="display:flex; align-items:center; gap:5px; margin:0; cursor:pointer;">
-                        <input type="checkbox" id="edit-is-boss" style="width:auto;"> <b style="color:#fbbf24;">Руководство (без отчётов/нормы)</b>
-                    </label>
-                </div>
-
-                <div style="display:flex; gap:10px; margin-top:20px;">
-                    <button class="btn btn-sound" onclick="saveStaff()">Сохранить</button>
-                    <button class="btn btn-red btn-sound" onclick="deleteStaff()" id="btn-delete-staff" style="display:none;">Удалить</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-settings" class="tab-page">
-            <h1 class="page-title">Настройки</h1>
-            <div class="settings-card glass">
-                <h3>Внешний вид</h3>
-                <div class="setting-row">
-                    <span class="setting-label">Прозрачность интерфейса</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-glass" checked onchange="toggleGlassMode(this)">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <h3 style="margin-top:30px;">Звук</h3>
-                <div class="setting-row">
-                    <span class="setting-label">Отключить все звуки</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-mute" onchange="toggleMute(this)">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-    </main>
+    <h2>Отчеты:</h2>
+    <div id="pending-list"><p>Загрузка...</p></div>
 </div>
 
-<!-- МОДАЛКА НАПИСАНИЯ ОТЧЕТА -->
-<div class="modal-overlay" id="reportModal">
+<!-- Модалка -->
+<div class="modal-overlay" id="modal">
     <div class="modal">
-        <h2 id="modalTitle">Отчёт</h2>
+        <h2>Новый отчет</h2>
         <form id="reportForm">
-            <input type="hidden" name="type" id="reportType">
-            <input type="hidden" name="reporter" id="reportReporter">
-            <label>1. Ник админа</label><input type="text" name="adminNick" required>
-            <label>2. SteamID (17 цифр)</label><input type="text" name="steamId" required>
-            <label>3. Ранг</label>
-            <select name="rank" required>
-                <option value="Интерн">Интерн</option>
-                <option value="Модератор">Модератор</option>
-                <option value="Оператор">Оператор</option>
-                <option value="Администратор">Администратор</option>
-            </select>
-            <label>4. Время слежки</label><input type="text" name="time" required placeholder="14:30 — 15:10">
-            <label>5. Нарушенный пункт</label><textarea name="rule"></textarea>
-            <label>6. Сомнительные действия</label><textarea name="suspicious"></textarea>
-            <label>7. Продолжать слежку?</label>
-            <select name="continue" required>
-                <option value="Да">Да</option>
-                <option value="Нет">Нет</option>
-            </select>
-            <label>8. Доказательство (Скриншот до 1 МБ)</label>
+            <label>Ник админа</label>
+            <input type="text" name="adminNick" required>
+            <label>SteamID</label>
+            <input type="text" name="steamId" required>
+            <label>Ранг</label>
+            <input type="text" name="rank" required>
+            <label>Время</label>
+            <input type="text" name="time" required>
+            <label>Нарушение</label>
+            <textarea name="rule"></textarea>
+            <label>Сомнительные действия</label>
+            <textarea name="suspicious"></textarea>
+            <label>Продолжать?</label>
+            <textarea name="continue"></textarea>
+            <label>Скриншот (до 1 МБ)</label>
             <input type="file" id="reportImage" accept="image/*">
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button type="button" class="btn btn-red" onclick="closeModal('reportModal')" style="flex:1;">Отмена</button>
-                <button type="submit" class="btn btn-sound" style="flex:1;">Отправить на проверку</button>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn-red" onclick="closeForm()">Отмена</button>
+                <button type="submit" class="btn-green">Отправить</button>
             </div>
         </form>
     </div>
 </div>
 
 <script type="module">
-let MY_STEAM_ID = localStorage.getItem('my_steam_id');
-
-if (window.location.hash.startsWith('#steamid=')) {
-    const rawId = window.location.hash.substring(9);
-    if (rawId && rawId.length > 5) {
-        MY_STEAM_ID = rawId;
-        localStorage.setItem('my_steam_id', rawId);
-        localStorage.setItem('isLoggedIn', 'true');
-    }
-    window.history.replaceState(null, null, window.location.pathname); 
-}
-
-if (!MY_STEAM_ID) MY_STEAM_ID = "00000000000000000";
-
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_publishable_FyFuciAgrbhv4qNvhjqWwg_PgFMa50g');
 
-let globalStaff = [];
-let currentUser = null;
-
-const sounds = {
-    hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
-    click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
-    notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'
-};
-let isMuted = localStorage.getItem('isMuted') === 'true';
-document.getElementById('toggle-mute').checked = isMuted;
-
-document.body.addEventListener('click', () => {
-    const audio = new Audio(sounds['click']); audio.volume = 0; audio.play().catch(() => {});
-}, { once: true });
-
-function playSound(type) {
-    if (isMuted) return;
-    const audio = new Audio(sounds[type]); audio.volume = 0.4; audio.play().catch(() => {});
-}
-window.toggleMute = (cb) => { isMuted = cb.checked; localStorage.setItem('isMuted', isMuted); if(!isMuted) playSound('click'); };
-document.querySelectorAll('.nav-sound').forEach(el => {
-    el.addEventListener('mouseenter', () => playSound('hover'));
-    el.addEventListener('click', () => playSound('click'));
-});
-document.querySelectorAll('.btn-sound').forEach(el => {
-    el.addEventListener('mouseenter', () => playSound('hover'));
-});
-
-function toSteam64(input) {
-    if (!input) return '—';
-    const str = input.trim();
-    if (/^7656\d{13}$/.test(str)) return str;
-    const matchSteam = str.match(/^STEAM_(\d):(\d):(\d+)$/i);
-    if (matchSteam) {
-        const y = BigInt(matchSteam[2]); const z = BigInt(matchSteam[3]);
-        return (BigInt("76561197960265728") + (z * 2n) + y).toString();
-    }
-    const matchU = str.match(/^\[U:(\d):(\d+)\]$/i);
-    if (matchU) return (BigInt("76561197960265728") + BigInt(matchU[2])).toString();
-    if (/^\d+$/.test(str)) return str;
-    return str;
-}
-
-function getSteamProfileUrl(input) {
-    const steam64 = toSteam64(input);
-    if (steam64 === '—' || !steam64) return '#';
-    return `https://steamcommunity.com/profiles/${steam64}`;
-}
-
-function toSteam32(steam64) {
-    if (!steam64 || steam64 === '—') return '—';
-    const str = steam64.toString();
-    if (!/^\d+$/.test(str)) return str;
-    try {
-        const big = BigInt(str) - BigInt("76561197960265728");
-        const y = big % 2n; const z = (big - y) / 2n;
-        return `STEAM_0:${y}:${z}`;
-    } catch(e) { return str; }
-}
-
-window.onload = () => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    if (!isLoggedIn) {
-        document.getElementById('auth-screen').style.display = 'flex';
-        document.getElementById('main-site').style.display = 'none';
-    } else {
-        document.getElementById('auth-screen').style.display = 'none';
-        document.getElementById('main-site').style.display = 'block';
-        loadProfile();
-        loadData();
-        loadReports(); 
-    }
-};
-window.logout = () => { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('my_steam_id'); window.location.reload(); };
-
-window.switchPage = (pageId, element) => {
-    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('page-' + pageId).classList.add('active');
-    if (element && element.classList.contains('nav-item')) element.classList.add('active');
-    if(pageId === 'activity') renderActivityChart();
-    if(pageId === 'reports_check') loadReports();
-    playSound('click');
-};
-window.toggleNotifications = () => { document.getElementById('notify-dropdown').classList.toggle('open'); document.getElementById('notify-dot').style.display = 'none'; };
-window.toggleProfileMenu = () => { document.getElementById('profile-dropdown').classList.toggle('open'); };
-window.closeProfileMenu = () => { document.getElementById('profile-dropdown').classList.remove('open'); };
-window.closeModal = (id) => { document.getElementById(id).classList.remove('open'); playSound('click'); };
-window.toggleGlassMode = (cb) => {
-    if (cb.checked) { document.body.classList.remove('no-glass-mode'); document.body.classList.add('glass-mode'); localStorage.setItem('glassMode', 'on'); }
-    else { document.body.classList.remove('glass-mode'); document.body.classList.add('no-glass-mode'); localStorage.setItem('glassMode', 'off'); }
-};
-if (localStorage.getItem('glassMode') === 'off') { document.body.classList.remove('glass-mode'); document.body.classList.add('no-glass-mode'); document.getElementById('toggle-glass').checked = false; }
-
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.user-badge') && !e.target.closest('.profile-dropdown')) closeProfileMenu();
-    if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
-});
-
-async function loadProfile() {
-    const { data: staff } = await supabase.from('staff').select('*');
-    const me = staff.find(s => 
-        s.steamid === MY_STEAM_ID || 
-        toSteam64(s.steamid) === MY_STEAM_ID ||
-        s.steamid === toSteam32(MY_STEAM_ID)
-    );
-    
-    if (me) {
-        currentUser = me;
-        document.getElementById('header-name').textContent = me.nick;
-        document.getElementById('header-rank').textContent = me.rank;
-        if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
-        
-        if (me.role === 'admin' || me.rank === 'Глава следящих' || me.rank === 'Зам. главы следящих' || me.rank === 'Судо-Куратор' || me.rank === 'Куратор') {
-            document.getElementById('nav-tools').style.display = 'flex';
-        }
-    } else {
-        document.getElementById('header-name').textContent = "Гость (ID: " + MY_STEAM_ID + ")";
-        document.getElementById('header-rank').textContent = "Не в базе";
-    }
-    setTimeout(() => {
-        document.getElementById('notify-dot').style.display = 'block';
-        document.getElementById('notify-list').innerHTML = `
-            <div class="notify-item">Вы успешно авторизовались как ${currentUser?.nick || 'Гость'}.<span>Только что</span></div>
-        `;
-        playSound('notify');
-    }, 1000);
-}
-
-async function loadData() {
-    const { data: staff } = await supabase.from('staff').select('*').order('order', { ascending: true });
-    globalStaff = staff || [];
-    renderTable(); renderStats(); renderToolsSelect();
-}
-
-function renderTable() {
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = globalStaff.map((p) => {
-        const normSum = p.week || 0;
-        let normClass = 'n-red';
-        if (normSum >= 5) normClass = 'n-green';
-        else if (normSum >= 4) normClass = 'n-yellow';
-        
-        const isBoss = p.is_boss || p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник' || p.rank === 'Судо-Куратор' || p.rank === 'Куратор';
-        
-        const normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
-        
-        const displayId = toSteam32(p.steamid);
-        const avatar = p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
-        
-        let rankClass = 'rank-sled';
-        if (p.rank === 'Глава следящих') rankClass = 'rank-glava';
-        else if (p.rank === 'Зам. главы следящих') rankClass = 'rank-zam';
-        else if (p.rank === 'Судо-Куратор') rankClass = 'rank-sudo';
-        else if (p.rank === 'Куратор') rankClass = 'rank-curator';
-
-        let statusHtml = '';
-        if (p.status === 'Активен') statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
-        else if (p.status === 'Мороз') statusHtml = `<span class="status-badge status-frozen">❄️ Мороз</span>`;
-        else if (p.status === 'Отпуск') statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`;
-        else statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
-
-        const actionsHtml = isBoss ? '<span style="color:#64748b;font-size:12px;">—</span>' : `
-            <div class="actions-cell">
-                <button class="btn-report btn-sound" onclick="openReport('adm','${p.nick}')">Админ</button>
-                <button class="btn-report btn-sound" onclick="openReport('sl','${p.nick}')">Указание</button>
-            </div>`;
-
-        return `
-            <div class="table-row">
-                <div class="table-cell">
-                    <div class="user-cell">
-                        <img class="t-avatar" src="${avatar}">
-                        <div class="t-name">
-                            ${p.nick}
-                            <span class="t-rank"><span class="${rankClass}">${p.rank}</span></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="table-cell">
-                    <div style="display:flex; flex-direction:column; gap:2px;">
-                        <span class="${rankClass}">${p.rank}</span>
-                        ${p.game_rank ? `<span class="game-rank">${p.game_rank}</span>` : ''}
-                    </div>
-                </div>
-                <div class="table-cell"><a href="${getSteamProfileUrl(p.steamid)}" target="_blank" class="steam-link">${displayId}</a></div>
-                <div class="table-cell">${statusHtml}</div>
-                <div class="table-cell"><span class="badge b-adm">${p.adm || 0}</span></div>
-                <div class="table-cell"><span class="badge b-sl">${p.sl || 0}</span></div>
-                <div class="table-cell">${normHtml}</div>
-                <div class="table-cell">${actionsHtml}</div>
-            </div>`;
-    }).join('');
-}
-
-function renderStats() {
-    document.getElementById('stats-grid').innerHTML = globalStaff.map(p => {
-        const isBoss = p.is_boss || p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник' || p.rank === 'Судо-Куратор' || p.rank === 'Куратор';
-        
-        const admHtml = isBoss ? '<span style="color:#64748b;">—</span>' : p.adm || 0;
-        const slHtml = isBoss ? '<span style="color:#64748b;">—</span>' : p.sl || 0;
-        const payHtml = isBoss ? '<span style="color:#64748b;">—</span>' : `${p.pay || 0} ДВ`;
-
-        return `
-        <div class="stat-box glass">
-            <div class="stat-header">
-                <img class="t-avatar" src="${p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'}">
-                <div>
-                    <div class="t-name">${p.nick}</div>
-                    <div class="t-rank" style="color:#ff9f43;">${p.rank} ${p.game_rank ? '/ '+p.game_rank : ''}</div>
-                </div>
-            </div>
-            <div class="stat-row"><span>Слежка за админами:</span><b>${admHtml}</b></div>
-            <div class="stat-row"><span>Слежка по указаниям:</span><b>${slHtml}</b></div>
-            <div class="stat-row"><span>Зарплата за месяц:</span><span>${payHtml}</span></div>
-        </div>
-        `;
-    }).join('');
-}
-
-function renderActivityChart() {
-    const chartContainer = document.getElementById('bar-chart');
-    let dataToShow = globalStaff.filter(s => !s.is_boss && s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих' && s.rank !== 'Табличник' && s.rank !== 'Судо-Куратор' && s.rank !== 'Куратор').map(s => ({ label: s.nick, value: (s.adm || 0) + (s.sl || 0) }));
-    if(dataToShow.length === 0) return chartContainer.innerHTML = '<div class="loader">Нет данных.</div>';
-    dataToShow.sort((a, b) => b.value - a.value);
-    const maxVal = Math.max(...dataToShow.map(d => d.value), 1);
-    chartContainer.innerHTML = dataToShow.map(item => `
-        <div class="bar-wrapper">
-            <div class="bar" style="height: ${(item.value / maxVal) * 100}%;"><div class="bar-value">${item.value}</div></div>
-            <div class="bar-label">${item.label}</div>
-        </div>
-    `).join('');
-}
-
-function renderToolsSelect() {
-    const select = document.getElementById('edit-select');
-    select.innerHTML = '<option value="">Выберите для редактирования...</option>' + globalStaff.map(p => `<option value="${p.id}">${p.nick}</option>`).join('');
-}
-
-window.fillEditForm = () => {
-    const id = document.getElementById('edit-select').value;
-    if (!id) { document.getElementById('btn-delete-staff').style.display = 'none'; return; }
-    const p = globalStaff.find(s => s.id == id);
-    document.getElementById('edit-id').value = p.id;
-    document.getElementById('edit-nick').value = p.nick;
-    document.getElementById('edit-steamid').value = toSteam64(p.steamid); 
-    document.getElementById('edit-avatar').value = p.avatar || '';
-    document.getElementById('edit-order').value = p.order || 10;
-    document.getElementById('edit-status').value = p.status || 'Активен';
-    document.getElementById('edit-rank').value = p.rank;
-    document.getElementById('edit-game-rank').value = p.game_rank || 'Игрок';
-    document.getElementById('edit-admin-rights').checked = p.role === 'admin';
-    document.getElementById('edit-is-boss').checked = p.is_boss || false;
-    document.getElementById('btn-delete-staff').style.display = 'block';
+// 1. Открыть форму
+window.openForm = () => {
+    document.getElementById('modal').classList.add('open');
+    document.getElementById('reportForm').reset();
 };
 
-window.saveStaff = async () => {
-    const id = document.getElementById('edit-id').value;
-    const steam64 = toSteam64(document.getElementById('edit-steamid').value); 
-    const updates = {
-        nick: document.getElementById('edit-nick').value,
-        steamid: steam64,
-        avatar: document.getElementById('edit-avatar').value || null,
-        order: parseInt(document.getElementById('edit-order').value) || 10,
-        status: document.getElementById('edit-status').value,
-        rank: document.getElementById('edit-rank').value,
-        game_rank: document.getElementById('edit-game-rank').value,
-        role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user',
-        is_boss: document.getElementById('edit-is-boss').checked
-    };
-    if (!updates.nick || !updates.steamid) return alert("Заполните ник и SteamID!");
-    if (id) {
-        await supabase.from('staff').update(updates).eq('id', id);
-    } else {
-        updates.adm = 0; updates.sl = 0; updates.week = 0; updates.pay = 0;
-        await supabase.from('staff').insert([updates]);
-    }
-    alert("Сохранено!"); loadData();
+// 2. Закрыть форму
+window.closeForm = () => {
+    document.getElementById('modal').classList.remove('open');
 };
 
-window.deleteStaff = async () => {
-    const id = document.getElementById('edit-id').value;
-    if (!id || !confirm("Удалить этого следящего?")) return;
-    await supabase.from('staff').delete().eq('id', id);
-    alert("Удалено!"); loadData();
-};
-
-window.resetWeek = async () => {
-    if (!confirm("Сбросить НЕДЕЛЮ? (Отчеты за неделю обнулятся, ДВ останется)")) return;
-    const { data: staff } = await supabase.from('staff').select('*');
-    for(let s of staff) {
-        if(!s.is_boss && s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих' && s.rank !== 'Табличник' && s.rank !== 'Судо-Куратор' && s.rank !== 'Куратор') {
-            await supabase.from('staff').update({ week: 0, adm: 0, sl: 0 }).eq('id', s.id);
-        }
-    }
-    alert("Неделя сброшена!"); loadData();
-};
-
-window.resetMonth = async () => {
-    if (!confirm("СБРОСИТЬ ВСЁ? (Обнулятся все отчеты и зарплата)")) return;
-    const { data: staff } = await supabase.from('staff').select('*');
-    for(let s of staff) {
-        await supabase.from('staff').update({ week: 0, adm: 0, sl: 0, pay: 0 }).eq('id', s.id);
-    }
-    alert("Месяц сброшен!"); loadData();
-};
-
-window.openReport = (type, nick) => {
-    document.getElementById('reportType').value = type;
-    document.getElementById('reportReporter').value = nick;
-    document.getElementById('modalTitle').textContent = type === 'adm' ? 'Отчёт: Слежка за админом' : 'Отчёт: Слежка по указаниям';
-    document.getElementById('reportModal').classList.add('open');
-    playSound('click');
-};
-
+// 3. Отправка
 document.getElementById('reportForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = e.target;
     const fileInput = document.getElementById('reportImage');
     
-    const processReport = async (imageData) => {
+    // Функция для сохранения
+    const saveReport = async (imageData) => {
         const data = {
-            type: f.type.value, reporter: f.reporter.value, adminNick: f.adminNick.value,
-            steamId: toSteam64(f.steamId.value), 
-            rank: f.rank.value, time: f.time.value,
-            rule: f.rule.value || '—', suspicious: f.suspicious.value || '—', continue: f.continue.value || '—',
-            status: 'pending', date: new Date().toLocaleString('ru-RU'),
+            type: 'adm',
+            reporter: 'Дед в чешках', // Хардкод для теста
+            adminNick: f.adminNick.value,
+            steamId: f.steamId.value,
+            rank: f.rank.value,
+            time: f.time.value,
+            rule: f.rule.value || '—',
+            suspicious: f.suspicious.value || '—',
+            continue: f.continue.value || '—',
+            status: 'pending',
+            date: new Date().toLocaleString('ru-RU'),
             image: imageData
         };
-        
-        await supabase.from('reports').insert([data]);
-        
+
+        // ВОТ ТУТ МЫ ЛОВИМ ОШИБКУ
+        const { data: result, error } = await supabase.from('reports').insert([data]);
+
+        if (error) {
+            // Если база не приняла - показываем причину
+            alert("ОШИБКА БАЗЫ ДАННЫХ:\n" + error.message + "\nКод: " + error.code);
+            return;
+        }
+
+        // Если всё ок - добавляем на экран
         const pendingList = document.getElementById('pending-list');
-        const tempId = 'temp_' + Date.now();
-        
         const newHtml = `
-            <div class="report-card" id="${tempId}">
-                <h3>${data.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#ff9f43;font-size:12px;">На проверке (Только что)</span></h3>
-                <p><b>Автор:</b> ${data.reporter} • ${data.date}</p>
-                <p><b>Нарушитель:</b> ${data.adminNick} (${toSteam32(data.steamId)}) • ${data.rank}</p>
-                <p><b>Время:</b> ${data.time} | <b>Нарушение:</b> ${data.rule} | <b>Действия:</b> ${data.suspicious}</p>
-                <p><b>Продолжать:</b> ${data.continue}</p>
-                ${data.image ? `<img src="${data.image}" class="img-preview" alt="Доказательство">` : ''}
-                <div style="margin-top:15px;">
-                    <p style="color:#22c55e; font-weight:bold;">Отчет успешно отправлен, ожидайте обновления...</p>
-                </div>
+            <div class="report-card" style="border-left-color: #22c55e;">
+                <h3>Слежка за админом (Только что)</h3>
+                <p><b>Автор:</b> ${data.reporter}</p>
+                <p><b>Нарушитель:</b> ${data.adminNick} (${data.steamId})</p>
+                <p><b>Время:</b> ${data.time}</p>
+                ${data.image ? `<img src="${data.image}" class="img-preview">` : ''}
             </div>
         `;
-        
-        if(pendingList.innerHTML.includes('Нет отчетов')) {
-            pendingList.innerHTML = newHtml;
-        } else {
-            pendingList.insertAdjacentHTML('afterbegin', newHtml);
-        }
-        
-        playSound('notify');
-        alert("Отчет отправлен на проверку!"); closeModal('reportModal'); f.reset();
+        if(pendingList.innerHTML.includes('Загрузка')) pendingList.innerHTML = '';
+        pendingList.innerHTML = newHtml + pendingList.innerHTML;
+
+        alert("УСПЕХ! Отчет записан в базу.");
+        closeForm();
     };
 
+    // Обработка картинки
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         if (file.size > 1024 * 1024) return alert("Файл больше 1 МБ!");
@@ -745,112 +143,46 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
             const img = new Image();
             img.onload = function() {
                 const canvas = document.createElement('canvas');
-                const MAX_WIDTH = 600;
-                const scale = MAX_WIDTH / img.width;
-                canvas.width = MAX_WIDTH;
-                canvas.height = img.height * scale;
+                canvas.width = 600;
+                canvas.height = img.height * (600 / img.width);
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                processReport(canvas.toDataURL('image/jpeg', 0.6));
+                saveReport(canvas.toDataURL('image/jpeg', 0.6));
             };
             img.src = event.target.result;
         };
         reader.readAsDataURL(file);
     } else {
-        processReport(null);
+        saveReport(null);
     }
 });
 
+// 4. Загрузка при старте (только чтение)
 async function loadReports() {
-    const { data: reports } = await supabase.from('reports').select('*').order('id', { ascending: false });
-    if (!reports) return;
+    const { data: reports, error } = await supabase.from('reports').select('*').eq('status', 'pending');
+    
+    if (error) {
+        document.getElementById('pending-list').innerHTML = `<p style="color:red;">Ошибка загрузки: ${error.message}</p>`;
+        return;
+    }
 
-    const pending = reports.filter(r => r.status === 'pending');
-    const history = reports.filter(r => r.status !== 'pending');
+    if (!reports || reports.length === 0) {
+        document.getElementById('pending-list').innerHTML = '<p>Нет отчетов.</p>';
+        return;
+    }
 
-    document.getElementById('pending-list').innerHTML = pending.map(r => `
+    document.getElementById('pending-list').innerHTML = reports.map(r => `
         <div class="report-card">
-            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#ff9f43;font-size:12px;">На проверке</span></h3>
+            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'}</h3>
             <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
-            <p><b>Нарушитель:</b> ${r.adminNick} (${toSteam32(r.steamId)}) • ${r.rank}</p>
-            <p><b>Время:</b> ${r.time} | <b>Нарушение:</b> ${r.rule} | <b>Действия:</b> ${r.suspicious}</p>
-            <p><b>Продолжать:</b> ${r.continue}</p>
-            ${r.image ? `<img src="${r.image}" class="img-preview" alt="Доказательство">` : ''}
-            <div style="margin-top:15px;">
-                <button class="btn-approve" onclick="approveReport(${r.id}, '${r.reporter}', '${r.type}')">Принять (+10 ДВ)</button>
-                <button class="btn-reject" onclick="rejectReport(${r.id})">Отклонить</button>
-            </div>
+            <p><b>Нарушитель:</b> ${r.adminNick} (${r.steamId})</p>
+            <p><b>Время:</b> ${r.time} | <b>Нарушение:</b> ${r.rule}</p>
+            ${r.image ? `<img src="${r.image}" class="img-preview">` : ''}
         </div>
-    `).join('') || '<p style="color:#64748b;">Нет отчетов на проверке.</p>';
-
-    document.getElementById('history-list').innerHTML = history.map(r => `
-        <div class="report-card approved">
-            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#22c55e;font-size:12px;">Принят</span></h3>
-            <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
-            <p><b>Нарушитель:</b> ${r.adminNick} (${toSteam32(r.steamId)})</p>
-        </div>
-    `).join('') || '<p style="color:#64748b;">История пуста.</p>';
+    `).join('');
 }
 
-window.approveReport = async (id, reporterNick, type) => {
-    await supabase.from('reports').update({ status: 'approved' }).eq('id', id);
-    const { data: staff } = await supabase.from('staff').select('*').eq('nick', reporterNick).single();
-    if (staff) {
-        const updates = { week: (staff.week || 0) + 1, pay: (staff.pay || 0) + 10 };
-        if (type === 'adm') updates.adm = (staff.adm || 0) + 1;
-        else updates.sl = (staff.sl || 0) + 1;
-        await supabase.from('staff').update(updates).eq('id', staff.id);
-    }
-    alert("Отчет принят! Баллы начислены."); loadData(); loadReports();
-};
-
-window.rejectReport = async (id) => {
-    await supabase.from('reports').update({ status: 'rejected' }).eq('id', id);
-    alert("Отчет отклонен."); loadReports();
-};
-
-// --- ФУНКЦИЯ ИМПОРТА ИЗ UNION TEAMS ---
-window.importFromUnion = async () => {
-    const jsonText = document.getElementById('import-json').value;
-    if (!jsonText) return alert("Вставьте текст из файла data.json в поле!");
-    
-    try {
-        const data = JSON.parse(jsonText);
-        const sledyashie = data.filter(item => item.server && item.server.department === "Следящие");
-        
-        if (sledyashie.length === 0) return alert("В этом файле нет людей из отдела 'Следящие'!");
-        
-        if (!confirm(`Найдено ${sledyashie.length} человек из отдела Следящие. Импортировать их?`)) return;
-        
-        for (let person of sledyashie) {
-            const steam64 = person.steam.steam64_id;
-            const nick = person.server.real_name;
-            const rank = person.server.rang || "Следящий";
-            
-            const { data: existing } = await supabase.from('staff').select('id').eq('steamid', steam64).single();
-            
-            if (!existing) {
-                await supabase.from('staff').insert([{
-                    nick: nick,
-                    rank: rank,
-                    game_rank: person.server.rang,
-                    steamid: steam64,
-                    role: 'user',
-                    adm: 0, sl: 0, week: 0, pay: 0,
-                    status: person.server.status === "Активен" ? "Активен" : (person.server.status === "Мороз" ? "Мороз" : "Отпуск"),
-                    order: 99 
-                }]);
-            }
-        }
-        
-        alert(`Успешно импортировано ${sledyashie.length} человек!`);
-        document.getElementById('import-json').value = '';
-        loadData();
-    } catch (e) {
-        alert("Ошибка чтения JSON. Убедитесь, что вы скопировали весь текст из файла.");
-        console.error(e);
-    }
-};
+loadReports();
 </script>
 </body>
 </html>
