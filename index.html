@@ -12,8 +12,6 @@ body {
     color: #e2e8f0; min-height: 100vh;
     position: relative; overflow-x: hidden;
 }
-
-/* --- ФОН --- */
 .bg-slideshow {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -2; background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop');
@@ -23,7 +21,6 @@ body {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: radial-gradient(circle at center, transparent 20%, rgba(5, 5, 10, 0.95) 100%); z-index: -1;
 }
-
 .glass-mode .glass { background: rgba(15, 19, 26, 0.4) !important; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1) !important; }
 .no-glass-mode .glass { background: #0f131a !important; backdrop-filter: none; border: 1px solid #1f2937 !important; }
 .no-glass-mode .bg-slideshow { filter: blur(8px) brightness(0.3); }
@@ -77,19 +74,16 @@ body {
 .page-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 .page-title::before { content: ''; width: 4px; height: 24px; background: #ff6600; border-radius: 2px; }
 
-/* --- ЛЕГЕНДА --- */
 .legend { display: flex; gap: 20px; margin-bottom: 20px; background: rgba(15, 19, 26, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
 .legend span { font-size: 13px; color: #cbd5e1; display: flex; align-items: center; gap: 5px; }
 .legend b { color: #fff; }
 
-/* --- ТАБЛИЦА --- */
 .table-wrapper {
     position: relative; border-radius: 16px; padding: 3px;
     animation: borderGlowColor 4s linear infinite;
     box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(245, 158, 11, 0.4), 0 0 80px rgba(251, 191, 36, 0.2);
 }
 @keyframes borderGlowColor { 0% { background-color: #ef4444; } 33% { background-color: #f59e0b; } 66% { background-color: #fbbf24; } 100% { background-color: #ef4444; } }
-
 .table-card { border-radius: 13px; overflow: hidden; background: rgba(15, 19, 26, 0.95); backdrop-filter: blur(10px); }
 .table-row { display: grid; grid-template-columns: 2.5fr 1.2fr 1.2fr 1fr 0.6fr 0.8fr 0.8fr 1.8fr; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; }
 .table-row:hover { background: rgba(255, 255, 255, 0.05); }
@@ -134,7 +128,6 @@ a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
 .btn-report { padding: 6px 8px; background: rgba(59,130,246,0.1); border: 1px solid #3b82f6; color: #3b82f6; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap;}
 .btn-report:hover { background: #3b82f6; color: #fff; }
 
-/* СТАТИСТИКА */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 .stat-box { border-radius: 16px; padding: 25px; display: flex; flex-direction: column; gap: 15px;}
 .stat-header { display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;}
@@ -142,7 +135,6 @@ a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
 .stat-row b { color: #fff; }
 .stat-row:last-child { margin-top: 10px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 16px; color: #3b82f6; font-weight: 700; }
 
-/* ИНСТРУМЕНТЫ */
 .tool-card { border-radius: 16px; padding: 24px; margin-bottom: 20px; }
 .tool-card h3 { color: #fff; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
 .tool-card label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; margin-top: 10px; }
@@ -154,7 +146,6 @@ a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
 .btn-green { background: #22c55e; color: #0f131a;}
 .btn-green:hover { background: #16a34a; }
 
-/* НАСТРОЙКИ */
 .settings-card { border-radius: 16px; padding: 30px; }
 .settings-card h3 { color: #fff; margin-bottom: 20px; font-size: 18px; }
 .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
@@ -175,7 +166,6 @@ input:checked + .slider:before { transform: translateX(24px); }
 .modal input, .modal select, .modal textarea { width: 100%; padding: 10px; background: #0b0e14; border: 1px solid #334155; border-radius: 8px; color: #fff; font-family: inherit; margin-bottom: 5px; }
 .modal textarea { resize: vertical; min-height: 60px; }
 
-/* ОТЧЕТЫ */
 .report-card { background: rgba(15, 19, 26, 0.8); border: 1px solid #1f2937; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #ff9f43;}
 .report-card.approved { border-left-color: #22c55e; opacity: 0.7;}
 .report-card h3 { color: #fff; margin-bottom: 10px; font-size: 16px; display: flex; justify-content: space-between;}
@@ -375,14 +365,22 @@ input:checked + .slider:before { transform: translateX(24px); }
 </div>
 
 <script type="module">
+// --- НОВАЯ ЛОГИКА ВХОДА (Защита от пустых ссылок) ---
+let MY_STEAM_ID = localStorage.getItem('my_steam_id');
+
 if (window.location.hash.startsWith('#steamid=')) {
-    const id = window.location.hash.substring(9);
-    localStorage.setItem('my_steam_id', id);
-    localStorage.setItem('isLoggedIn', 'true');
+    const rawId = window.location.hash.substring(9);
+    // Проверяем, что пришло хоть что-то похожее на ID
+    if (rawId && rawId.length > 5) {
+        MY_STEAM_ID = rawId;
+        localStorage.setItem('my_steam_id', rawId);
+        localStorage.setItem('isLoggedIn', 'true');
+    }
     window.history.replaceState(null, null, window.location.pathname); 
 }
 
-const MY_STEAM_ID = localStorage.getItem('my_steam_id') || "76561199816021510"; 
+// Если ID так и нет, ставим заглушку
+if (!MY_STEAM_ID) MY_STEAM_ID = "00000000000000000";
 
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_publishable_FyFuciAgrbhv4qNvhjqWwg_PgFMa50g');
@@ -390,6 +388,7 @@ const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_pu
 let globalStaff = [];
 let currentUser = null;
 
+// --- ЗВУКИ ---
 const sounds = {
     hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
     click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
@@ -415,6 +414,7 @@ document.querySelectorAll('.btn-sound').forEach(el => {
     el.addEventListener('mouseenter', () => playSound('hover'));
 });
 
+// --- КОНВЕРТЕРЫ ---
 function toSteam64(input) {
     if (!input) return null;
     const str = input.trim();
@@ -424,8 +424,6 @@ function toSteam64(input) {
         const y = BigInt(matchSteam[2]); const z = BigInt(matchSteam[3]);
         return (BigInt("76561197960265728") + (z * 2n) + y).toString();
     }
-    const matchU = str.match(/^\[U:(\d):(\d+)\]$/i);
-    if (matchU) return (BigInt("76561197960265728") + BigInt(matchU[2])).toString();
     if (/^\d+$/.test(str)) return str;
     return str;
 }
@@ -444,6 +442,7 @@ function getSteamProfileUrl(input) {
     return `https://steamcommunity.com/profiles/${steam64}`;
 }
 
+// --- ИНИЦИАЛИЗАЦИЯ ---
 window.onload = () => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     if (!isLoggedIn) {
@@ -454,7 +453,7 @@ window.onload = () => {
         document.getElementById('main-site').style.display = 'block';
         loadProfile();
         loadData();
-        loadReports();
+        loadReports(); 
     }
 };
 window.logout = () => { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('my_steam_id'); window.location.reload(); };
@@ -482,9 +481,10 @@ document.addEventListener('click', (e) => {
     if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
 });
 
+// --- ПРОФИЛЬ ---
 async function loadProfile() {
-    // Ищем профиль по 64-битному ID
     const { data: staff } = await supabase.from('staff').select('*');
+    // Ищем по 64-битному ID
     const me = staff.find(s => s.steamid === MY_STEAM_ID || toSteam64(s.steamid) === MY_STEAM_ID);
     
     if (me) {
@@ -493,14 +493,14 @@ async function loadProfile() {
         document.getElementById('header-rank').textContent = me.rank;
         if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
         
-        // Даем доступ, если это админ или Глава/Зам
         if (me.role === 'admin' || me.rank === 'Глава следящих' || me.rank === 'Зам. главы следящих') {
             document.getElementById('nav-reports').style.display = 'flex';
             document.getElementById('nav-tools').style.display = 'flex';
         }
     } else {
-        document.getElementById('header-name').textContent = "Гость (Не в базе)";
-        document.getElementById('header-rank').textContent = "Ошибка";
+        // Если не нашли — выводим ID в шапку, чтобы ты увидел, что прислал сервер
+        document.getElementById('header-name').textContent = "Гость (ID: " + MY_STEAM_ID + ")";
+        document.getElementById('header-rank').textContent = "Не в базе";
     }
     setTimeout(() => {
         document.getElementById('notify-dot').style.display = 'block';
@@ -512,7 +512,7 @@ async function loadProfile() {
 }
 
 async function loadData() {
-    const { data: staff } = await supabase.from('staff').select('*').order('order', { ascending: true }); // Сортировка по order
+    const { data: staff } = await supabase.from('staff').select('*').order('order', { ascending: true });
     globalStaff = staff || [];
     renderTable(); renderStats(); renderToolsSelect();
 }
