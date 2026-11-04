@@ -736,7 +736,7 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
         playSound('notify');
         alert("Отчет отправлен на проверку!"); closeModal('reportModal'); f.reset();
         
-        setTimeout(loadReports, 1000);
+        // УБРАЛИ SETTIMEOUT, ЧТОБЫ ОТЧЕТ НЕ ИСЧЕЗАЛ
     };
 
     if (fileInput.files.length > 0) {
