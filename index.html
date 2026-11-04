@@ -817,7 +817,7 @@ window.importFromUnion = async () => {
                     role: 'user',
                     adm: 0, sl: 0, week: 0, pay: 0,
                     status: person.server.status === "Активен" ? "Активен" : (person.server.status === "Мороз" ? "Мороз" : "Отпуск"),
-                    order: 10
+                    order: 99 // Ставим 99, чтобы они не пропадали из-за пустой сортировки
                 }]);
             }
         }
