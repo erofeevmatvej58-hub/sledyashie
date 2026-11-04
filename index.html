@@ -5,22 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Отдел Следящих | Garry's Mod</title>
 <style>
-/* --- НОВЫЙ СТРОГИЙ ДИЗАЙН --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
-    background: #09090b; /* Глубокий темный фон */
-    color: #e4e4e7; min-height: 100vh; padding: 20px;
-    background-image: radial-gradient(circle at 50% 0%, #18181b 0%, #09090b 70%);
-}
-
-/* --- ВЕРХНЯЯ ПАНЕЛЬ --- */
-.top-nav {
-    max-width: 1280px; margin: 0 auto 20px;
-    display: flex; justify-content: space-between; align-items: center;
-    background: #18181b; border: 1px solid #27272a;
-    border-radius: 12px; padding: 12px 24px;
-}
+body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background: #09090b; color: #e4e4e7; min-height: 100vh; padding: 20px; background-image: radial-gradient(circle at 50% 0%, #18181b 0%, #09090b 70%); }
+.top-nav { max-width: 1280px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 12px 24px; }
 .brand { font-size: 18px; font-weight: 700; color: #fafafa; display: flex; align-items: center; gap: 10px; }
 .brand-icon { color: #ef4444; font-size: 22px; }
 .user-profile { display: flex; align-items: center; gap: 15px; }
@@ -32,31 +19,17 @@ body {
 .btn-notify { background: transparent; border: none; color: #a1a1aa; font-size: 20px; cursor: pointer; position: relative; transition: 0.2s; }
 .btn-notify:hover { color: #fafafa; }
 .badge-dot { position: absolute; top: 0; right: -2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: none; }
-
-/* --- БАННЕР --- */
-.banner {
-    max-width: 1280px; margin: 0 auto 24px;
-    background: #18181b; border: 1px solid #27272a;
-    border-radius: 12px; padding: 24px;
-    text-align: center;
-}
+.banner { max-width: 1280px; margin: 0 auto 24px; background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px; text-align: center; }
 .banner h1 { font-size: 24px; font-weight: 700; color: #fafafa; margin-bottom: 4px; }
 .banner p { color: #a1a1aa; font-size: 14px; }
-
-/* --- ВКЛАДКИ --- */
 .tabs { max-width: 1280px; margin: 0 auto 20px; display: flex; gap: 8px; border-bottom: 1px solid #27272a; overflow-x: auto; }
-.tab-btn {
-    padding: 10px 16px; background: transparent; border: none; color: #a1a1aa;
-    font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-    border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap;
-}
+.tab-btn { padding: 10px 16px; background: transparent; border: none; color: #a1a1aa; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
 .tab-btn:hover { color: #fafafa; }
 .tab-btn.active { color: #fafafa; border-bottom-color: #ef4444; }
 .tab-content { display: none; max-width: 1280px; margin: 0 auto; }
 .tab-content.active { display: block; animation: fadeIn 0.2s; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* --- ТАБЛИЦА --- */
 .table-wrapper { background: #18181b; border: 1px solid #27272a; border-radius: 12px; overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
 thead th { background: #18181b; color: #a1a1aa; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; padding: 14px 16px; text-align: left; border-bottom: 1px solid #27272a; }
@@ -76,29 +49,11 @@ tbody tr:hover { background: #27272a; }
 .norm-green { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
 .avatar { width: 32px; height: 32px; border-radius: 6px; background: #27272a; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: #fafafa; margin-right: 10px; }
 
-/* --- ИНСТРУМЕНТЫ / СТАТИСТИКА / ЛОГИ / ОБНОВЛЕНИЯ --- */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
 .stat-card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 20px; }
 .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #27272a; font-size: 14px; }
 .stat-row:last-child { border: none; color: #3b82f6; font-weight: 600; font-size: 16px; }
-.tool-card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-.tool-card h2 { font-size: 16px; color: #fafafa; margin-bottom: 16px; border-bottom: 1px solid #27272a; padding-bottom: 10px; }
-.tool-card label { display: block; font-size: 12px; color: #a1a1aa; margin-bottom: 6px; margin-top: 12px; }
-.tool-card input, .tool-card select { width: 100%; padding: 10px; background: #09090b; border: 1px solid #27272a; border-radius: 6px; color: #fafafa; }
-.btn-save { padding: 10px 16px; background: #ef4444; color: #fafafa; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-.btn-save:hover { background: #dc2626; }
 
-.changelog-card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 20px; margin-bottom: 12px; border-left: 3px solid #ef4444; }
-.changelog-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
-.changelog-version { font-size: 16px; font-weight: 700; color: #fafafa; }
-.changelog-date { font-size: 12px; color: #71717a; }
-.changelog-content { font-size: 14px; color: #d4d4d8; line-height: 1.6; white-space: pre-wrap; }
-
-.log-item { background: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; display: flex; gap: 15px; font-size: 13px; }
-.log-time { color: #71717a; font-family: monospace; }
-.log-text { color: #d4d4d8; }
-
-/* --- МОДАЛКИ / УВЕДОМЛЕНИЯ --- */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
 .modal-overlay.open { display: flex; }
 .modal { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
@@ -106,32 +61,10 @@ tbody tr:hover { background: #27272a; }
 .modal label { display: block; font-size: 12px; color: #a1a1aa; margin-bottom: 5px; margin-top: 12px; }
 .modal input, .modal select, .modal textarea { width: 100%; padding: 10px; background: #09090b; border: 1px solid #27272a; border-radius: 6px; color: #fafafa; font-family: inherit; }
 .btn-cancel { width: 100%; padding: 10px; background: transparent; color: #a1a1aa; border: 1px solid #27272a; border-radius: 6px; cursor: pointer; margin-top: 10px; }
-.notification-list { max-height: 400px; overflow-y: auto; }
-.notification-item { padding: 12px; background: #09090b; border-left: 3px solid #3b82f6; border-radius: 6px; margin-bottom: 8px; font-size: 13px; }
-.notification-item span { display: block; font-size: 11px; color: #71717a; margin-top: 4px; }
-
-/* --- ОТЧЕТЫ И ЧАТ --- */
-.report-card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 20px; margin-bottom: 12px; }
-.report-card.pending { border-left: 3px solid #f59e0b; }
-.report-card.approved { border-left: 3px solid #22c55e; }
-.report-card h3 { font-size: 15px; color: #fafafa; margin-bottom: 12px; display: flex; justify-content: space-between; }
-.report-card p { font-size: 13px; color: #d4d4d8; margin-bottom: 6px; }
-.report-card p b { color: #a1a1aa; }
-.report-actions { display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #27272a; }
-.btn-approve { padding: 8px 16px; background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 6px; font-weight: 600; cursor: pointer; }
-.btn-reject { padding: 8px 16px; background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); border-radius: 6px; font-weight: 600; cursor: pointer; }
-
-.chat-box { margin-top: 15px; background: #09090b; border-radius: 8px; padding: 12px; border: 1px solid #27272a; }
-.chat-msg { font-size: 13px; margin-bottom: 6px; color: #d4d4d8; }
-.chat-msg b { color: #3b82f6; }
-.chat-input-area { display: flex; gap: 8px; margin-top: 10px; }
-.chat-input-area input { flex: 1; padding: 8px; background: #18181b; border: 1px solid #27272a; border-radius: 6px; color: #fafafa; }
-.chat-input-area button { padding: 8px 12px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
 </style>
 </head>
 <body>
 
-<!-- Верхняя панель -->
 <div class="top-nav">
     <div class="brand"><span class="brand-icon">🛡️</span> GARRY'S MOD PANEL</div>
     <div class="user-profile" id="user-profile-area">
@@ -144,191 +77,131 @@ tbody tr:hover { background: #27272a; }
     <p>Панель управления • Garry's Mod</p>
 </div>
 
-<!-- Вкладки -->
 <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('main', this)">Таблица состава</button>
     <button class="tab-btn" onclick="switchTab('stats', this)">Статистика</button>
-    <button class="tab-btn" onclick="switchTab('tools', this)">Инструменты</button>
-    <button class="tab-btn" onclick="switchTab('changelog', this)">Обновления</button>
-    <button class="tab-btn" onclick="switchTab('logs', this)">Журнал действий</button>
 </div>
 
-<!-- ВКЛАДКА 1: ТАБЛИЦА -->
 <div id="tab-main" class="tab-content active">
     <div class="table-wrapper">
         <table>
             <thead>
                 <tr>
                     <th>ID</th><th>Следящий</th><th>Ранг</th><th>SteamID</th>
-                    <th>Адм.</th><th>Слежка</th><th>Норма</th><th>СП</th><th>Зарплата</th><th>Действие</th>
+                    <th>Адм.</th><th>Слежка</th><th>Норма</th><th>СП</th><th>Зарплата</th>
                 </tr>
             </thead>
-            <tbody id="table-body"></tbody>
+            <tbody id="table-body"><tr><td colspan="9" style="text-align:center; padding: 40px; color: #a1a1aa;">Загрузка...</td></tr></tbody>
         </table>
-    </div>
-    <div class="reports-section" style="margin-top: 30px;">
-        <h2 style="font-size: 18px; color: #fafafa; margin-bottom: 15px;">Отчёты на проверке</h2>
-        <div id="pending-list"></div>
-        <h2 style="font-size: 18px; color: #fafafa; margin-top: 30px; margin-bottom: 15px;">История отчётов</h2>
-        <div id="history-list"></div>
     </div>
 </div>
 
-<!-- ВКЛАДКА 2: СТАТИСТИКА -->
 <div id="tab-stats" class="tab-content">
     <div class="stats-grid" id="stats-grid"></div>
 </div>
 
-<!-- ВКЛАДКА 3: ИНСТРУМЕНТЫ -->
-<div id="tab-tools" class="tab-content">
-    <div id="tools-content">
-        <p style="color: #a1a1aa; text-align: center; padding: 40px;">Инструменты доступны только Главе отдела.</p>
-    </div>
-</div>
-
-<!-- ВКЛАДКА 4: ОБНОВЛЕНИЯ -->
-<div id="tab-changelog" class="tab-content">
-    <button class="btn-save" id="btn-add-changelog" onclick="openChangelogModal()" style="margin-bottom: 20px; display: none;">+ Добавить обновление</button>
-    <div class="changelog-list" id="changelog-list"></div>
-</div>
-
-<!-- ВКЛАДКА 5: ЖУРНАЛ -->
-<div id="tab-logs" class="tab-content">
-    <div id="logs-list"></div>
-</div>
-
-<!-- МОДАЛКА ОБНОВЛЕНИЙ -->
-<div class="modal-overlay" id="changelogModal">
-    <div class="modal">
-        <h2>Новое обновление</h2>
-        <label>Версия (например, v16.7)</label>
-        <input type="text" id="log-version" placeholder="v1.0.0">
-        <label>Что изменилось?</label>
-        <textarea id="log-content" rows="5" placeholder="- Изменил цвета баннера&#10;- Добавил новые роли"></textarea>
-        <button class="btn-save" onclick="saveChangelog()" style="width: 100%; margin-top: 20px;">Опубликовать</button>
-        <button class="btn-cancel" onclick="closeModal('changelogModal')">Отмена</button>
-    </div>
-</div>
-
-<!-- МОДАЛКА УВЕДОМЛЕНИЙ -->
-<div class="modal-overlay" id="notifyModal">
-    <div class="modal">
-        <h2>Уведомления</h2>
-        <div class="notification-list" id="notify-list"></div>
-        <button class="btn-cancel" onclick="closeModal('notifyModal')">Закрыть</button>
-    </div>
-</div>
-
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-import { getAuth, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyA5nHxcCy2x-qs4LTYYTlgEdS2S5cfHs",
-  authDomain: "sledashie.firebaseapp.com",
-  databaseURL: "https://sledashie-default-rtdb.firebaseio.com",
-  projectId: "sledashie",
-  storageBucket: "sledashie.firebasestorage.app",
-  messagingSenderId: "736810121287",
-  appId: "1:736810121287:web:41d0bfcd667eb50c1d9962"
-};
+// --- ТВОИ КЛЮЧИ SUPABASE ---
+const SUPABASE_URL = 'https://gqmrwtcztqluaqltuhss.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FyFuciAgrbhv4qNvhjqWwg_PgFMa50g';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const auth = getAuth(app);
+// --- ТВОИ ДАННЫЕ (ЗАХАРДКОЖЕНЫ) ---
+const MY_STEAM_ID = "76561199816021510";
+const MY_NICK = "Разраб таблицы";
+const MY_RANK = "Разработчик";
 
-let currentUserData = null;
-let globalStaff = {};
-const notifySound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+let globalStaff = [];
 
-// --- АВТОРИЗАЦИЯ ---
-if (window.location.hash.startsWith('#token=')) {
-    const token = window.location.hash.substring(7);
-    signInWithCustomToken(auth, token).then(() => window.history.replaceState(null, null, window.location.pathname)).catch((e) => { alert(e.message); window.history.replaceState(null, null, window.location.pathname); });
-}
+async function initApp() {
+    // 1. Пытаемся загрузить всех из Supabase
+    const { data: staff, error } = await supabase.from('staff').select('*');
+    
+    // 2. Создаем массив, куда первым делом кладем ТЕБЯ (захардкоженного)
+    let combinedStaff = [
+        { 
+            steamid: MY_STEAM_ID, 
+            nick: MY_NICK, 
+            rank: MY_RANK, 
+            adm: 0, sl: 0, sp: 0, week: 0, pay: 0,
+            isMe: true // Метка, чтобы знать, что это ты
+        }
+    ];
 
-onAuthStateChanged(auth, (user) => {
-    if (user) checkUserAccess(user.uid);
-    else renderLoginButton();
-});
-
-async function checkUserAccess(steamId) {
-    onValue(ref(db, 'staff'), (snapshot) => {
-        const staff = snapshot.val() || {};
-        globalStaff = staff;
-        let foundId = null; let foundUser = null;
-
-        for (const id in staff) {
-            const dbSteamId = staff[id].steamid.replace(/\D/g, ''); 
-            if (dbSteamId === steamId || staff[id].steamid === steamId) {
-                foundId = id; foundUser = staff[id]; break;
+    // 3. Если из базы что-то пришло, добавляем это к тебе (исключая дубликаты)
+    if (!error && staff) {
+        staff.forEach(person => {
+            if (person.steamid !== MY_STEAM_ID) {
+                combinedStaff.push(person);
             }
-        }
-
-        if (foundUser) {
-            currentUserData = foundUser;
-            renderUserProfile(foundUser);
-            applyPermissions(foundUser);
-            loadNotifications(steamId);
-            renderTable(staff);
-            renderStats(staff);
-            loadChangelog();
-            loadLogs();
-            // Приветствие при входе
-            sendWelcomeNotification(steamId, foundUser.nick);
-        } else {
-            currentUserData = null;
-            renderProfileDenied();
-            alert("Вас нет в списке отдела!");
-            auth.signOut();
-        }
-    }, { onlyOnce: true });
-}
-
-// --- ПРИВЕТСТВИЕ ---
-function sendWelcomeNotification(steamId, nick) {
-    const welcomeRef = ref(db, `notifications/${steamId}/welcome`);
-    onValue(welcomeRef, (snap) => {
-        if (!snap.exists()) { // Если еще нет приветствия
-            set(welcomeRef, {
-                text: `Вас успешно авторизовал разработчик таблицы. Рады вас видеть в отделе следящих, ${nick}! А теперь ознакомьтесь с сайтом и его функционалом.`,
-                date: new Date().toLocaleString('ru-RU'),
-                read: false,
-                time: Date.now()
-            });
-        }
-    }, { onlyOnce: true });
-}
-
-// --- ИНТЕРФЕЙС ---
-function renderLoginButton() {
-    document.getElementById('user-profile-area').innerHTML = `<a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-login">Войти через Steam</a>`;
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.disabled = true);
-    document.getElementById('table-body').innerHTML = '<tr><td colspan="10" style="text-align:center; padding: 40px; color: #a1a1aa;">Войдите через Steam, чтобы увидеть состав.</td></tr>';
-}
-
-function renderUserProfile(user) {
-    document.getElementById('user-profile-area').innerHTML = `
-        <button class="btn-notify" onclick="openNotifications()" id="btn-notify">🔔 <div class="badge-dot" id="notify-dot"></div></button>
-        <div class="user-info"><div class="user-name">${user.nick}</div><div class="user-rank">${user.rank}</div></div>
-        <div class="avatar" style="margin: 0; width: 40px; height: 40px; font-size: 16px;">${user.nick[0]}</div>
-    `;
-}
-
-function renderProfileDenied() {
-    document.getElementById('user-profile-area').innerHTML = `<div style="color: #ef4444; font-weight: bold; font-size: 14px;">Доступ запрещен</div><a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-login">Сменить аккаунт</a>`;
-}
-
-function applyPermissions(user) {
-    const role = user.role || 'user'; 
-    if (role === 'admin') {
-        document.getElementById('btn-add-changelog').style.display = 'block';
-        document.getElementById('tools-content').innerHTML = `<p style="color: #a1a1aa; text-align: center; padding: 40px;">Инструменты управления составом (в разработке).</p>`;
-    } else {
-        document.getElementById('btn-add-changelog').style.display = 'none';
-        document.getElementById('tools-content').innerHTML = `<p style="color: #ef4444; text-align: center; padding: 40px; font-weight: bold;">Доступ ограничен из-за прав.</p>`;
+        });
     }
+
+    globalStaff = combinedStaff;
+    renderTable(globalStaff);
+    renderStats(globalStaff);
+
+    // --- АВТОРИЗАЦИЯ ---
+    // Если сервер Netrun вернул ссылку со SteamID
+    if (window.location.hash.startsWith('#steamid=')) {
+        const steamIdFromUrl = window.location.hash.substring(9);
+        window.history.replaceState(null, null, window.location.pathname);
+        
+        const found = globalStaff.find(s => s.steamid === steamIdFromUrl);
+        if (found) {
+            document.getElementById('user-profile-area').innerHTML = `
+                <div class="user-info"><div class="user-name">${found.nick}</div><div class="user-rank">${found.rank}</div></div>
+                <div class="avatar" style="margin: 0; width: 40px; height: 40px; font-size: 16px;">${found.nick[0]}</div>
+            `;
+            alert(`С возвращением, ${found.nick}!`);
+        } else {
+            alert("Вас нет в списке отдела!");
+        }
+    }
+}
+
+function renderTable(staff) {
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = '';
+    staff.forEach((person, index) => {
+        const normSum = person.week || 0;
+        let normClass = normSum >= 5 ? 'norm-green' : (normSum >= 3 ? 'norm-yellow' : 'norm-red');
+        
+        // Если это ты, выделяем строку зеленым или добавляем метку
+        const rowStyle = person.isMe ? 'style="border-left: 3px solid #22c55e;"' : '';
+
+        tbody.innerHTML += `
+            <tr ${rowStyle}>
+                <td class="id">#${index + 1}</td>
+                <td><div class="avatar">${person.nick[0]}</div><span class="nick">${person.nick}</span> ${person.isMe ? '<span style="color:#22c55e;font-size:10px;margin-left:5px;">(Вы)</span>' : ''}</td>
+                <td><span class="rank">${person.rank}</span></td>
+                <td style="color:#a1a1aa; font-family:monospace;">${person.steamid}</td>
+                <td><span class="badge adm">${person.adm || 0}</span></td>
+                <td><span class="badge sl">${person.sl || 0}</span></td>
+                <td><span class="norm-block ${normClass}">${normSum} / 5</span></td>
+                <td><span class="badge sp">${person.sp || 0}</span></td>
+                <td><span class="badge pay">${person.pay || 0} Д</span></td>
+            </tr>`;
+    });
+}
+
+function renderStats(staff) {
+    const grid = document.getElementById('stats-grid');
+    grid.innerHTML = '';
+    staff.forEach(p => {
+        grid.innerHTML += `
+            <div class="stat-card">
+                <h3 style="font-size: 16px; margin-bottom: 10px; display:flex; align-items:center; gap:10px;">
+                    <div class="avatar" style="margin:0;">${p.nick[0]}</div> ${p.nick} ${p.isMe ? '(Вы)' : ''}
+                </h3>
+                <div class="stat-row"><span>Отчёты об админах:</span><b>${p.adm || 0}</b></div>
+                <div class="stat-row"><span>Слежка по указ.:</span><b>${p.sl || 0}</b></div>
+                <div class="stat-row"><span>Список пидормотов:</span><b>${p.sp || 0}</b></div>
+                <div class="stat-row"><span>Зарплата:</span><span>${p.pay || 0} Д</span></div>
+            </div>`;
+    });
 }
 
 window.switchTab = (tabId, btnElement) => {
@@ -338,209 +211,7 @@ window.switchTab = (tabId, btnElement) => {
     btnElement.classList.add('active');
 };
 
-// --- УВЕДОМЛЕНИЯ ---
-function loadNotifications(steamId) {
-    onValue(ref(db, 'notifications/' + steamId), (snapshot) => {
-        const notifs = snapshot.val() || {};
-        const list = document.getElementById('notify-list');
-        const dot = document.getElementById('notify-dot');
-        let html = ''; let hasUnread = false;
-
-        const sorted = Object.values(notifs).sort((a, b) => b.time - a.time);
-        sorted.forEach(n => {
-            html += `<div class="notification-item">${n.text}<span>${n.date}</span></div>`;
-            if (!n.read) hasUnread = true;
-        });
-        list.innerHTML = html || '<p style="color:#a1a1aa;">Нет уведомлений.</p>';
-        if (dot) dot.style.display = hasUnread ? 'block' : 'none';
-        if (hasUnread) notifySound.play().catch(e => {});
-    });
-}
-
-window.openNotifications = () => {
-    document.getElementById('notifyModal').classList.add('open');
-    if (auth.currentUser) {
-        onValue(ref(db, 'notifications/' + auth.currentUser.uid), (snap) => {
-            const notifs = snap.val();
-            if (notifs) {
-                const updates = {};
-                for (const key in notifs) updates[`notifications/${auth.currentUser.uid}/${key}/read`] = true;
-                update(ref(db), updates);
-            }
-        }, { onlyOnce: true });
-    }
-};
-
-// --- ТАБЛИЦА / СТАТИСТИКА ---
-function renderTable(staff) {
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = '';
-    let displayId = 1;
-    for (const id in staff) {
-        const person = staff[id];
-        const normSum = person.week || 0;
-        let normClass = normSum >= 5 ? 'norm-green' : (normSum >= 3 ? 'norm-yellow' : 'norm-red');
-        tbody.innerHTML += `
-            <tr>
-                <td class="id">#${displayId}</td>
-                <td><div class="avatar">${person.nick ? person.nick[0] : '?'}</div><span class="nick">${person.nick}</span></td>
-                <td><span class="rank">${person.rank}</span></td>
-                <td style="color:#a1a1aa; font-family:monospace;">${person.steamid}</td>
-                <td><span class="badge adm">${person.adm || 0}</span></td>
-                <td><span class="badge sl">${person.sl || 0}</span></td>
-                <td><span class="norm-block ${normClass}">${normSum} / 5</span></td>
-                <td><span class="badge sp">${person.sp || 0}</span></td>
-                <td><span class="badge pay">${person.pay || 0} Д</span></td>
-                <td><button class="report-btn" style="padding: 4px 8px; font-size: 11px;" onclick="openReport('adm','${id}','${person.pin || ''}')">Отчёт</button></td>
-            </tr>`;
-        displayId++;
-    }
-}
-
-function renderStats(staff) {
-    const grid = document.getElementById('stats-grid');
-    grid.innerHTML = '';
-    for (const id in staff) {
-        const p = staff[id];
-        grid.innerHTML += `
-            <div class="stat-card">
-                <h3 style="font-size: 16px; margin-bottom: 10px; display:flex; align-items:center; gap:10px;">
-                    <div class="avatar" style="margin:0;">${p.nick ? p.nick[0] : '?'}</div> ${p.nick}
-                </h3>
-                <div class="stat-row"><span>Отчёты об админах:</span><b>${p.adm || 0}</b></div>
-                <div class="stat-row"><span>Слежка по указ.:</span><b>${p.sl || 0}</b></div>
-                <div class="stat-row"><span>Список пидормотов:</span><b>${p.sp || 0}</b></div>
-                <div class="stat-row"><span>Зарплата:</span><span>${p.pay || 0} Д</span></div>
-            </div>`;
-    }
-}
-
-// --- ЧЕЙНДЖЛОГ (ОБНОВЛЕНИЯ) ---
-function loadChangelog() {
-    onValue(ref(db, 'changelog'), (snapshot) => {
-        const logs = snapshot.val() || {};
-        const list = document.getElementById('changelog-list');
-        let html = '';
-        const sorted = Object.values(logs).sort((a, b) => b.timestamp - a.timestamp);
-        sorted.forEach(log => {
-            html += `
-                <div class="changelog-card">
-                    <div class="changelog-header">
-                        <div class="changelog-version">Версия ${log.version}</div>
-                        <div class="changelog-date">${log.date}</div>
-                    </div>
-                    <div class="changelog-content">${log.content}</div>
-                </div>`;
-        });
-        list.innerHTML = html || '<p style="color:#a1a1aa; text-align:center; padding:20px;">Обновлений пока нет.</p>';
-    });
-}
-
-window.openChangelogModal = () => document.getElementById('changelogModal').classList.add('open');
-
-window.saveChangelog = () => {
-    const version = document.getElementById('log-version').value;
-    const content = document.getElementById('log-content').value;
-    if (!version || !content) return alert("Заполните все поля!");
-    const newLogRef = push(ref(db, 'changelog'));
-    set(newLogRef, {
-        version: version, content: content,
-        date: new Date().toLocaleString('ru-RU'), timestamp: Date.now()
-    }).then(() => {
-        closeModal('changelogModal');
-        document.getElementById('log-version').value = '';
-        document.getElementById('log-content').value = '';
-    });
-};
-
-// --- ЛОГИ ---
-function loadLogs() {
-    onValue(ref(db, 'logs'), (snapshot) => {
-        const logs = snapshot.val() || {};
-        const list = document.getElementById('logs-list');
-        let html = '';
-        const sorted = Object.values(logs).sort((a, b) => new Date(b.date) - new Date(a.date));
-        sorted.forEach(log => {
-            html += `<div class="log-item"><div class="log-time">${log.date}</div><div class="log-text">${log.action}</div></div>`;
-        });
-        list.innerHTML = html || '<p style="color:#a1a1aa; text-align:center; padding:20px;">Журнал пуст.</p>';
-    });
-}
-
-window.closeModal = (id) => document.getElementById(id).classList.remove('open');
-
-// --- ОТЧЕТЫ И ЧАТ ---
-const reportsRef = ref(db, 'reports');
-onValue(reportsRef, (snapshot) => {
-    const reports = snapshot.val() || {};
-    const pendingList = document.getElementById('pending-list');
-    const historyList = document.getElementById('history-list');
-    let pendingHtml = '', historyHtml = '';
-
-    for (const key in reports) {
-        const r = reports[key];
-        
-        // Рендер чата
-        let chatHtml = '<div class="chat-box">';
-        if (r.comments) {
-            for (const cid in r.comments) {
-                chatHtml += `<div class="chat-msg"><b>${r.comments[cid].author}:</b> ${r.comments[cid].text}</div>`;
-            }
-        }
-        if (currentUserData && (currentUserData.role === 'admin' || currentUserData.role === 'zam')) {
-             chatHtml += `
-                <div class="chat-input-area">
-                    <input type="text" id="chat-input-${key}" placeholder="Написать комментарий...">
-                    <button onclick="addComment('${key}')">Отпр</button>
-                </div>
-            `;
-        }
-        chatHtml += '</div>';
-
-        if (r.status === 'pending') {
-            pendingHtml += `
-                <div class="report-card pending">
-                    <h3>Отчёт: ${r.type === 'adm' ? 'Админ' : 'Слежка'} <span class="status pending">На проверке</span></h3>
-                    <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
-                    <p><b>Нарушитель:</b> ${r.adminNick} (${r.steamId})</p>
-                    ${chatHtml}
-                    <div class="report-actions">
-                        <button class="btn-approve" onclick="approveReport('${key}')">Одобрить</button>
-                        <button class="btn-reject" onclick="rejectReport('${key}')">Отклонить</button>
-                    </div>
-                </div>`;
-        } else {
-            historyHtml += `
-                <div class="report-card ${r.status}">
-                    <h3>Отчёт: ${r.type === 'adm' ? 'Админ' : 'Слежка'} <span class="status ${r.status}">${r.status === 'approved' ? 'Одобрено' : 'Отклонено'}</span></h3>
-                    <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
-                    <p><b>Нарушитель:</b> ${r.adminNick} (${r.steamId})</p>
-                    ${chatHtml}
-                </div>`;
-        }
-    }
-    pendingList.innerHTML = pendingHtml || '<p style="color:#a1a1aa;">Нет отчётов.</p>';
-    historyList.innerHTML = historyHtml || '<p style="color:#a1a1aa;">История пуста.</p>';
-});
-
-window.addComment = (reportKey) => {
-    const input = document.getElementById(`chat-input-${reportKey}`);
-    const text = input.value.trim();
-    if (!text) return;
-    
-    const newCommentRef = push(ref(db, `reports/${reportKey}/comments`));
-    set(newCommentRef, {
-        author: currentUserData.nick,
-        text: text,
-        date: new Date().toLocaleString('ru-RU')
-    }).then(() => { input.value = ''; });
-};
-
-// --- ФУНКЦИИ ОТЧЕТОВ (ЗАГЛУШКИ, ТАК КАК ОНИ У ТЕБЯ УЖЕ БЫЛИ) ---
-window.openReport = (type, id, expectedPin) => { alert("Форма отчета в разработке."); };
-window.approveReport = (key) => { alert("Одобрение в разработке."); };
-window.rejectReport = (key) => { alert("Отклонение в разработке."); };
-
+initApp();
 </script>
 
 </body>
