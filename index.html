@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Отдел Следящих | Garry's Mod</title>
 <style>
+/* СТИЛИ ОСТАВЛЕНЫ БЕЗ ИЗМЕНЕНИЙ, ЧТОБЫ НИЧЕГО НЕ СЛОМАТЬ */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #0b0e14; color: #e2e8f0; min-height: 100vh; position: relative; overflow-x: hidden; }
 .bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; filter: brightness(0.4) contrast(1.1); }
@@ -341,6 +342,7 @@ input:checked + .slider:before { transform: translateX(24px); }
 </div>
 
 <script type="module">
+// --- НАДЕЖНАЯ ЛОГИКА ВХОДА ---
 let MY_STEAM_ID = localStorage.getItem('my_steam_id');
 
 if (window.location.hash.startsWith('#steamid=')) {
@@ -361,6 +363,7 @@ const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_pu
 let globalStaff = [];
 let currentUser = null;
 
+// --- ЗВУКИ ---
 const sounds = {
     hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
     click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
@@ -386,6 +389,7 @@ document.querySelectorAll('.btn-sound').forEach(el => {
     el.addEventListener('mouseenter', () => playSound('hover'));
 });
 
+// --- МОЩНЫЙ КОНВЕРТЕР STEAMID ---
 function toSteam64(input) {
     if (!input) return '—';
     const str = input.trim();
@@ -439,7 +443,7 @@ window.switchPage = (pageId, element) => {
     document.getElementById('page-' + pageId).classList.add('active');
     if (element && element.classList.contains('nav-item')) element.classList.add('active');
     if(pageId === 'activity') renderActivityChart();
-    if(pageId === 'reports_check') loadReports(); // Автообновление отчетов
+    if(pageId === 'reports_check') loadReports();
     playSound('click');
 };
 window.toggleNotifications = () => { document.getElementById('notify-dropdown').classList.toggle('open'); document.getElementById('notify-dot').style.display = 'none'; };
@@ -457,9 +461,16 @@ document.addEventListener('click', (e) => {
     if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
 });
 
+// --- ПОИСК ПРОФИЛЯ (ПО ЛЮБОМУ СОВПАДЕНИЮ) ---
 async function loadProfile() {
     const { data: staff } = await supabase.from('staff').select('*');
-    const me = staff.find(s => s.steamid === MY_STEAM_ID || toSteam64(s.steamid) === MY_STEAM_ID);
+    
+    // Ищем по длинному ID или по короткому (переведенному)
+    const me = staff.find(s => 
+        s.steamid === MY_STEAM_ID || 
+        toSteam64(s.steamid) === MY_STEAM_ID ||
+        s.steamid === toSteam32(MY_STEAM_ID)
+    );
     
     if (me) {
         currentUser = me;
@@ -472,6 +483,7 @@ async function loadProfile() {
             document.getElementById('nav-tools').style.display = 'flex';
         }
     } else {
+        // Выводим присланный ID в шапку
         document.getElementById('header-name').textContent = "Гость (ID: " + MY_STEAM_ID + ")";
         document.getElementById('header-rank').textContent = "Не в базе";
     }
@@ -498,7 +510,6 @@ function renderTable() {
         if (normSum >= 5) normClass = 'n-green';
         else if (normSum >= 4) normClass = 'n-yellow';
         
-        // РУКОВОДСТВО НЕ ИМЕЕТ НОРМЫ И ОТЧЕТОВ
         const isBoss = (p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник');
         const normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
         
@@ -515,7 +526,6 @@ function renderTable() {
         else if (p.status === 'Отпуск') statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`;
         else statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
 
-        // СКРЫВАЕМ КНОПКИ ДЛЯ РУКОВОДСТВА
         const actionsHtml = isBoss ? '<span style="color:#64748b;font-size:12px;">—</span>' : `
             <div class="actions-cell">
                 <button class="btn-report btn-sound" onclick="openReport('adm','${p.nick}')">Админ</button>
@@ -552,8 +562,6 @@ function renderTable() {
 function renderStats() {
     document.getElementById('stats-grid').innerHTML = globalStaff.map(p => {
         const isBoss = (p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник');
-        
-        // Если босс, то вместо цифр ставим прочерки
         const admHtml = isBoss ? '<span style="color:#64748b;">—</span>' : p.adm || 0;
         const slHtml = isBoss ? '<span style="color:#64748b;">—</span>' : p.sl || 0;
         const payHtml = isBoss ? '<span style="color:#64748b;">—</span>' : `${p.pay || 0} ДВ`;
@@ -685,7 +693,7 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
         await supabase.from('reports').insert([data]);
         playSound('notify');
         alert("Отчет отправлен на проверку!"); closeModal('reportModal'); f.reset();
-        loadReports(); // СРАЗУ ОБНОВЛЯЕМ СПИСОК
+        loadReports();
     };
 
     if (fileInput.files.length > 0) {
