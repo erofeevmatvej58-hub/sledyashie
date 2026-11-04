@@ -491,6 +491,7 @@ async function loadProfile() {
         document.getElementById('header-rank').textContent = me.rank;
         if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
         
+        // ПРИНУДИТЕЛЬНО ПОКАЗЫВАЕМ ВКЛАДКУ ОТЧЕТОВ АДМИНАМ И РУКОВОДСТВУ
         if (me.role === 'admin' || me.rank === 'Глава следящих' || me.rank === 'Зам. главы следящих' || me.rank === 'Судо-Куратор' || me.rank === 'Куратор') {
             document.getElementById('nav-reports').style.display = 'flex';
             document.getElementById('nav-tools').style.display = 'flex';
@@ -522,7 +523,6 @@ function renderTable() {
         if (normSum >= 5) normClass = 'n-green';
         else if (normSum >= 4) normClass = 'n-yellow';
         
-        // Учитываем флаг is_boss и новые роли для скрытия отчетов
         const isBoss = p.is_boss || p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник' || p.rank === 'Судо-Куратор' || p.rank === 'Куратор';
         
         const normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
@@ -709,10 +709,39 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
             status: 'pending', date: new Date().toLocaleString('ru-RU'),
             image: imageData
         };
+        
+        // ВСТАВЛЯЕМ В БАЗУ
         await supabase.from('reports').insert([data]);
+        
+        // СРАЗУ ДОБАВЛЯЕМ В СПИСОК НА СТРАНИЦЕ (ЧТОБЫ ТЫ СРАЗУ УВИДЕЛ)
+        const pendingList = document.getElementById('pending-list');
+        const tempId = 'temp_' + Date.now();
+        
+        const newHtml = `
+            <div class="report-card" id="${tempId}">
+                <h3>${data.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#ff9f43;font-size:12px;">На проверке (Только что)</span></h3>
+                <p><b>Автор:</b> ${data.reporter} • ${data.date}</p>
+                <p><b>Нарушитель:</b> ${data.adminNick} (${toSteam32(data.steamId)}) • ${data.rank}</p>
+                <p><b>Время:</b> ${data.time} | <b>Нарушение:</b> ${data.rule} | <b>Действия:</b> ${data.suspicious}</p>
+                <p><b>Продолжать:</b> ${data.continue}</p>
+                ${data.image ? `<img src="${data.image}" class="img-preview" alt="Доказательство">` : ''}
+                <div style="margin-top:15px;">
+                    <p style="color:#22c55e; font-weight:bold;">Отчет успешно отправлен, ожидайте обновления...</p>
+                </div>
+            </div>
+        `;
+        
+        if(pendingList.innerHTML.includes('Нет отчетов')) {
+            pendingList.innerHTML = newHtml;
+        } else {
+            pendingList.insertAdjacentHTML('afterbegin', newHtml);
+        }
+        
         playSound('notify');
         alert("Отчет отправлен на проверку!"); closeModal('reportModal'); f.reset();
-        loadReports();
+        
+        // Обновляем из базы через секунду, чтобы подтянуть реальный ID
+        setTimeout(loadReports, 1000);
     };
 
     if (fileInput.files.length > 0) {
@@ -805,7 +834,6 @@ window.importFromUnion = async () => {
             const nick = person.server.real_name;
             const rank = person.server.rang || "Следящий";
             
-            // Проверяем, есть ли уже такой человек в базе (по SteamID)
             const { data: existing } = await supabase.from('staff').select('id').eq('steamid', steam64).single();
             
             if (!existing) {
