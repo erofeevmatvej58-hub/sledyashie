@@ -141,6 +141,7 @@ input:checked + .slider:before { transform: translateX(24px); }
 .btn-reject { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #ef4444; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;}
 .btn-reject:hover { background: #ef4444; color: #fff;}
 .img-preview { max-width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #232a36; }
+.loader { text-align: center; padding: 50px; color: #64748b; font-size: 18px; }
 </style>
 </head>
 <body class="glass-mode">
@@ -223,9 +224,9 @@ input:checked + .slider:before { transform: translateX(24px); }
 
         <div id="page-reports_check" class="tab-page">
             <h1 class="page-title">Отчеты на проверке</h1>
-            <div id="pending-list"><p style="color:#64748b;">Загрузка отчетов...</p></div>
+            <div id="pending-list"><p class="loader">Загрузка отчетов...</p></div>
             <h1 class="page-title" style="margin-top: 30px;">История отчетов</h1>
-            <div id="history-list"><p style="color:#64748b;">Загрузка истории...</p></div>
+            <div id="history-list"><p class="loader">Загрузка истории...</p></div>
         </div>
 
         <div id="page-tools" class="tab-page">
@@ -307,4 +308,511 @@ input:checked + .slider:before { transform: translateX(24px); }
                     <span class="setting-label">Отключить все звуки</span>
                     <label class="toggle-switch">
                         <input type="checkbox" id="toggle-mute" onchange="toggleMute(this)">
-                        <
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- МОДАЛКА НАПИСАНИЯ ОТЧЕТА -->
+<div class="modal-overlay" id="reportModal">
+    <div class="modal">
+        <h2 id="modalTitle">Отчёт</h2>
+        <form id="reportForm">
+            <input type="hidden" name="type" id="reportType">
+            <input type="hidden" name="reporter" id="reportReporter">
+            <label>1. Ник админа</label><input type="text" name="adminNick" required>
+            <label>2. SteamID (17 цифр)</label><input type="text" name="steamId" required>
+            <label>3. Ранг</label>
+            <select name="rank" required>
+                <option value="Интерн">Интерн</option>
+                <option value="Модератор">Модератор</option>
+                <option value="Оператор">Оператор</option>
+                <option value="Администратор">Администратор</option>
+            </select>
+            <label>4. Время слежки</label><input type="text" name="time" required placeholder="14:30 — 15:10">
+            <label>5. Нарушенный пункт</label><textarea name="rule"></textarea>
+            <label>6. Сомнительные действия</label><textarea name="suspicious"></textarea>
+            <label>7. Продолжать слежку?</label>
+            <select name="continue" required>
+                <option value="Да">Да</option>
+                <option value="Нет">Нет</option>
+            </select>
+            <label>8. Доказательство (Скриншот до 1 МБ)</label>
+            <input type="file" id="reportImage" accept="image/*">
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button type="button" class="btn btn-red" onclick="closeModal('reportModal')" style="flex:1;">Отмена</button>
+                <button type="submit" class="btn btn-sound" style="flex:1;">Отправить на проверку</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="module">
+let MY_STEAM_ID = localStorage.getItem('my_steam_id');
+
+if (window.location.hash.startsWith('#steamid=')) {
+    const rawId = window.location.hash.substring(9);
+    if (rawId && rawId.length > 5) {
+        MY_STEAM_ID = rawId;
+        localStorage.setItem('my_steam_id', rawId);
+        localStorage.setItem('isLoggedIn', 'true');
+    }
+    window.history.replaceState(null, null, window.location.pathname); 
+}
+
+if (!MY_STEAM_ID) MY_STEAM_ID = "00000000000000000";
+
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_publishable_FyFuciAgrbhv4qNvhjqWwg_PgFMa50g');
+
+let globalStaff = [];
+let currentUser = null;
+
+const sounds = {
+    hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
+    click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
+    notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'
+};
+let isMuted = localStorage.getItem('isMuted') === 'true';
+document.getElementById('toggle-mute').checked = isMuted;
+
+document.body.addEventListener('click', () => {
+    const audio = new Audio(sounds['click']); audio.volume = 0; audio.play().catch(() => {});
+}, { once: true });
+
+function playSound(type) {
+    if (isMuted) return;
+    const audio = new Audio(sounds[type]); audio.volume = 0.4; audio.play().catch(() => {});
+}
+window.toggleMute = (cb) => { isMuted = cb.checked; localStorage.setItem('isMuted', isMuted); if(!isMuted) playSound('click'); };
+document.querySelectorAll('.nav-sound').forEach(el => {
+    el.addEventListener('mouseenter', () => playSound('hover'));
+    el.addEventListener('click', () => playSound('click'));
+});
+document.querySelectorAll('.btn-sound').forEach(el => {
+    el.addEventListener('mouseenter', () => playSound('hover'));
+});
+
+function toSteam64(input) {
+    if (!input) return '—';
+    const str = input.trim();
+    if (/^7656\d{13}$/.test(str)) return str;
+    const matchSteam = str.match(/^STEAM_(\d):(\d):(\d+)$/i);
+    if (matchSteam) {
+        const y = BigInt(matchSteam[2]); const z = BigInt(matchSteam[3]);
+        return (BigInt("76561197960265728") + (z * 2n) + y).toString();
+    }
+    const matchU = str.match(/^\[U:(\d):(\d+)\]$/i);
+    if (matchU) return (BigInt("76561197960265728") + BigInt(matchU[2])).toString();
+    if (/^\d+$/.test(str)) return str;
+    return str;
+}
+
+function getSteamProfileUrl(input) {
+    const steam64 = toSteam64(input);
+    if (steam64 === '—' || !steam64) return '#';
+    return `https://steamcommunity.com/profiles/${steam64}`;
+}
+
+function toSteam32(steam64) {
+    if (!steam64 || steam64 === '—') return '—';
+    const str = steam64.toString();
+    if (!/^\d+$/.test(str)) return str;
+    try {
+        const big = BigInt(str) - BigInt("76561197960265728");
+        const y = big % 2n; const z = (big - y) / 2n;
+        return `STEAM_0:${y}:${z}`;
+    } catch(e) { return str; }
+}
+
+window.onload = () => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('main-site').style.display = 'none';
+    } else {
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('main-site').style.display = 'block';
+        loadProfile();
+        loadData();
+        loadReports(); 
+    }
+};
+window.logout = () => { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('my_steam_id'); window.location.reload(); };
+
+window.switchPage = (pageId, element) => {
+    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + pageId).classList.add('active');
+    if (element && element.classList.contains('nav-item')) element.classList.add('active');
+    if(pageId === 'activity') renderActivityChart();
+    if(pageId === 'reports_check') loadReports();
+    playSound('click');
+};
+window.toggleNotifications = () => { document.getElementById('notify-dropdown').classList.toggle('open'); document.getElementById('notify-dot').style.display = 'none'; };
+window.toggleProfileMenu = () => { document.getElementById('profile-dropdown').classList.toggle('open'); };
+window.closeProfileMenu = () => { document.getElementById('profile-dropdown').classList.remove('open'); };
+window.closeModal = (id) => { document.getElementById(id).classList.remove('open'); playSound('click'); };
+window.toggleGlassMode = (cb) => {
+    if (cb.checked) { document.body.classList.remove('no-glass-mode'); document.body.classList.add('glass-mode'); localStorage.setItem('glassMode', 'on'); }
+    else { document.body.classList.remove('glass-mode'); document.body.classList.add('no-glass-mode'); localStorage.setItem('glassMode', 'off'); }
+};
+if (localStorage.getItem('glassMode') === 'off') { document.body.classList.remove('glass-mode'); document.body.classList.add('no-glass-mode'); document.getElementById('toggle-glass').checked = false; }
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.user-badge') && !e.target.closest('.profile-dropdown')) closeProfileMenu();
+    if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
+});
+
+async function loadProfile() {
+    const { data: staff } = await supabase.from('staff').select('*');
+    const me = staff.find(s => 
+        s.steamid === MY_STEAM_ID || 
+        toSteam64(s.steamid) === MY_STEAM_ID ||
+        s.steamid === toSteam32(MY_STEAM_ID)
+    );
+    
+    if (me) {
+        currentUser = me;
+        document.getElementById('header-name').textContent = me.nick;
+        document.getElementById('header-rank').textContent = me.rank;
+        if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
+        
+        if (me.role === 'admin' || me.rank === 'Глава следящих' || me.rank === 'Зам. главы следящих') {
+            document.getElementById('nav-reports').style.display = 'flex';
+            document.getElementById('nav-tools').style.display = 'flex';
+        }
+    } else {
+        document.getElementById('header-name').textContent = "Гость (ID: " + MY_STEAM_ID + ")";
+        document.getElementById('header-rank').textContent = "Не в базе";
+    }
+    setTimeout(() => {
+        document.getElementById('notify-dot').style.display = 'block';
+        document.getElementById('notify-list').innerHTML = `
+            <div class="notify-item">Вы успешно авторизовались как ${currentUser?.nick || 'Гость'}.<span>Только что</span></div>
+        `;
+        playSound('notify');
+    }, 1000);
+}
+
+async function loadData() {
+    const { data: staff } = await supabase.from('staff').select('*').order('order', { ascending: true });
+    globalStaff = staff || [];
+    renderTable(); renderStats(); renderToolsSelect();
+}
+
+function renderTable() {
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = globalStaff.map((p) => {
+        const normSum = p.week || 0;
+        let normClass = 'n-red';
+        if (normSum >= 5) normClass = 'n-green';
+        else if (normSum >= 4) normClass = 'n-yellow';
+        
+        const isBoss = (p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник');
+        const normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
+        
+        const displayId = toSteam32(p.steamid);
+        const avatar = p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
+        
+        let rankClass = 'rank-sled';
+        if (p.rank === 'Глава следящих') rankClass = 'rank-glava';
+        else if (p.rank === 'Зам. главы следящих') rankClass = 'rank-zam';
+
+        let statusHtml = '';
+        if (p.status === 'Активен') statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
+        else if (p.status === 'Мороз') statusHtml = `<span class="status-badge status-frozen">❄️ Мороз</span>`;
+        else if (p.status === 'Отпуск') statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`;
+        else statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
+
+        const actionsHtml = isBoss ? '<span style="color:#64748b;font-size:12px;">—</span>' : `
+            <div class="actions-cell">
+                <button class="btn-report btn-sound" onclick="openReport('adm','${p.nick}')">Админ</button>
+                <button class="btn-report btn-sound" onclick="openReport('sl','${p.nick}')">Указание</button>
+            </div>`;
+
+        return `
+            <div class="table-row">
+                <div class="table-cell">
+                    <div class="user-cell">
+                        <img class="t-avatar" src="${avatar}">
+                        <div class="t-name">
+                            ${p.nick}
+                            <span class="t-rank"><span class="${rankClass}">${p.rank}</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-cell">
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                        <span class="${rankClass}">${p.rank}</span>
+                        ${p.game_rank ? `<span class="game-rank">${p.game_rank}</span>` : ''}
+                    </div>
+                </div>
+                <div class="table-cell"><a href="${getSteamProfileUrl(p.steamid)}" target="_blank" class="steam-link">${displayId}</a></div>
+                <div class="table-cell">${statusHtml}</div>
+                <div class="table-cell"><span class="badge b-adm">${p.adm || 0}</span></div>
+                <div class="table-cell"><span class="badge b-sl">${p.sl || 0}</span></div>
+                <div class="table-cell">${normHtml}</div>
+                <div class="table-cell">${actionsHtml}</div>
+            </div>`;
+    }).join('');
+}
+
+function renderStats() {
+    document.getElementById('stats-grid').innerHTML = globalStaff.map(p => {
+        const isBoss = (p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник');
+        const admHtml = isBoss ? '<span style="color:#64748b;">—</span>' : p.adm || 0;
+        const slHtml = isBoss ? '<span style="color:#64748b;">—</span>' : p.sl || 0;
+        const payHtml = isBoss ? '<span style="color:#64748b;">—</span>' : `${p.pay || 0} ДВ`;
+
+        return `
+        <div class="stat-box glass">
+            <div class="stat-header">
+                <img class="t-avatar" src="${p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'}">
+                <div>
+                    <div class="t-name">${p.nick}</div>
+                    <div class="t-rank" style="color:#ff9f43;">${p.rank} ${p.game_rank ? '/ '+p.game_rank : ''}</div>
+                </div>
+            </div>
+            <div class="stat-row"><span>Слежка за админами:</span><b>${admHtml}</b></div>
+            <div class="stat-row"><span>Слежка по указаниям:</span><b>${slHtml}</b></div>
+            <div class="stat-row"><span>Зарплата за месяц:</span><span>${payHtml}</span></div>
+        </div>
+        `;
+    }).join('');
+}
+
+function renderActivityChart() {
+    const chartContainer = document.getElementById('bar-chart');
+    let dataToShow = globalStaff.filter(s => s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих' && s.rank !== 'Табличник').map(s => ({ label: s.nick, value: (s.adm || 0) + (s.sl || 0) }));
+    if(dataToShow.length === 0) return chartContainer.innerHTML = '<div class="loader">Нет данных.</div>';
+    dataToShow.sort((a, b) => b.value - a.value);
+    const maxVal = Math.max(...dataToShow.map(d => d.value), 1);
+    chartContainer.innerHTML = dataToShow.map(item => `
+        <div class="bar-wrapper">
+            <div class="bar" style="height: ${(item.value / maxVal) * 100}%;"><div class="bar-value">${item.value}</div></div>
+            <div class="bar-label">${item.label}</div>
+        </div>
+    `).join('');
+}
+
+function renderToolsSelect() {
+    const select = document.getElementById('edit-select');
+    select.innerHTML = '<option value="">Выберите для редактирования...</option>' + globalStaff.map(p => `<option value="${p.id}">${p.nick}</option>`).join('');
+}
+
+window.fillEditForm = () => {
+    const id = document.getElementById('edit-select').value;
+    if (!id) { document.getElementById('btn-delete-staff').style.display = 'none'; return; }
+    const p = globalStaff.find(s => s.id == id);
+    document.getElementById('edit-id').value = p.id;
+    document.getElementById('edit-nick').value = p.nick;
+    document.getElementById('edit-steamid').value = toSteam64(p.steamid); 
+    document.getElementById('edit-avatar').value = p.avatar || '';
+    document.getElementById('edit-order').value = p.order || 10;
+    document.getElementById('edit-status').value = p.status || 'Активен';
+    document.getElementById('edit-rank').value = p.rank;
+    document.getElementById('edit-game-rank').value = p.game_rank || 'Игрок';
+    document.getElementById('edit-admin-rights').checked = p.role === 'admin';
+    document.getElementById('btn-delete-staff').style.display = 'block';
+};
+
+window.saveStaff = async () => {
+    const id = document.getElementById('edit-id').value;
+    const steam64 = toSteam64(document.getElementById('edit-steamid').value); 
+    const updates = {
+        nick: document.getElementById('edit-nick').value,
+        steamid: steam64,
+        avatar: document.getElementById('edit-avatar').value || null,
+        order: parseInt(document.getElementById('edit-order').value) || 10,
+        status: document.getElementById('edit-status').value,
+        rank: document.getElementById('edit-rank').value,
+        game_rank: document.getElementById('edit-game-rank').value,
+        role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user'
+    };
+    if (!updates.nick || !updates.steamid) return alert("Заполните ник и SteamID!");
+    if (id) {
+        await supabase.from('staff').update(updates).eq('id', id);
+    } else {
+        updates.adm = 0; updates.sl = 0; updates.week = 0; updates.pay = 0;
+        await supabase.from('staff').insert([updates]);
+    }
+    alert("Сохранено!"); loadData();
+};
+
+window.deleteStaff = async () => {
+    const id = document.getElementById('edit-id').value;
+    if (!id || !confirm("Удалить этого следящего?")) return;
+    await supabase.from('staff').delete().eq('id', id);
+    alert("Удалено!"); loadData();
+};
+
+window.resetWeek = async () => {
+    if (!confirm("Сбросить НЕДЕЛЮ? (Отчеты за неделю обнулятся, ДВ останется)")) return;
+    const { data: staff } = await supabase.from('staff').select('*');
+    for(let s of staff) {
+        if(s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих') {
+            await supabase.from('staff').update({ week: 0, adm: 0, sl: 0 }).eq('id', s.id);
+        }
+    }
+    alert("Неделя сброшена!"); loadData();
+};
+
+window.resetMonth = async () => {
+    if (!confirm("СБРОСИТЬ ВСЁ? (Обнулятся все отчеты и зарплата)")) return;
+    const { data: staff } = await supabase.from('staff').select('*');
+    for(let s of staff) {
+        await supabase.from('staff').update({ week: 0, adm: 0, sl: 0, pay: 0 }).eq('id', s.id);
+    }
+    alert("Месяц сброшен!"); loadData();
+};
+
+window.openReport = (type, nick) => {
+    document.getElementById('reportType').value = type;
+    document.getElementById('reportReporter').value = nick;
+    document.getElementById('modalTitle').textContent = type === 'adm' ? 'Отчёт: Слежка за админом' : 'Отчёт: Слежка по указаниям';
+    document.getElementById('reportModal').classList.add('open');
+    playSound('click');
+};
+
+document.getElementById('reportForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const fileInput = document.getElementById('reportImage');
+    
+    const processReport = async (imageData) => {
+        const data = {
+            type: f.type.value, reporter: f.reporter.value, adminNick: f.adminNick.value,
+            steamId: toSteam64(f.steamId.value), 
+            rank: f.rank.value, time: f.time.value,
+            rule: f.rule.value || '—', suspicious: f.suspicious.value || '—', continue: f.continue.value || '—',
+            status: 'pending', date: new Date().toLocaleString('ru-RU'),
+            image: imageData
+        };
+        await supabase.from('reports').insert([data]);
+        playSound('notify');
+        alert("Отчет отправлен на проверку!"); closeModal('reportModal'); f.reset();
+        loadReports();
+    };
+
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        if (file.size > 1024 * 1024) return alert("Файл больше 1 МБ!");
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 600;
+                const scale = MAX_WIDTH / img.width;
+                canvas.width = MAX_WIDTH;
+                canvas.height = img.height * scale;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                processReport(canvas.toDataURL('image/jpeg', 0.6));
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        processReport(null);
+    }
+});
+
+async function loadReports() {
+    const { data: reports } = await supabase.from('reports').select('*').order('id', { ascending: false });
+    if (!reports) return;
+
+    const pending = reports.filter(r => r.status === 'pending');
+    const history = reports.filter(r => r.status !== 'pending');
+
+    document.getElementById('pending-list').innerHTML = pending.map(r => `
+        <div class="report-card">
+            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#ff9f43;font-size:12px;">На проверке</span></h3>
+            <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
+            <p><b>Нарушитель:</b> ${r.adminNick} (${toSteam32(r.steamId)}) • ${r.rank}</p>
+            <p><b>Время:</b> ${r.time} | <b>Нарушение:</b> ${r.rule} | <b>Действия:</b> ${r.suspicious}</p>
+            <p><b>Продолжать:</b> ${r.continue}</p>
+            ${r.image ? `<img src="${r.image}" class="img-preview" alt="Доказательство">` : ''}
+            <div style="margin-top:15px;">
+                <button class="btn-approve" onclick="approveReport(${r.id}, '${r.reporter}', '${r.type}')">Принять (+10 ДВ)</button>
+                <button class="btn-reject" onclick="rejectReport(${r.id})">Отклонить</button>
+            </div>
+        </div>
+    `).join('') || '<p style="color:#64748b;">Нет отчетов на проверке.</p>';
+
+    document.getElementById('history-list').innerHTML = history.map(r => `
+        <div class="report-card approved">
+            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#22c55e;font-size:12px;">Принят</span></h3>
+            <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
+            <p><b>Нарушитель:</b> ${r.adminNick} (${toSteam32(r.steamId)})</p>
+        </div>
+    `).join('') || '<p style="color:#64748b;">История пуста.</p>';
+}
+
+window.approveReport = async (id, reporterNick, type) => {
+    await supabase.from('reports').update({ status: 'approved' }).eq('id', id);
+    const { data: staff } = await supabase.from('staff').select('*').eq('nick', reporterNick).single();
+    if (staff) {
+        const updates = { week: (staff.week || 0) + 1, pay: (staff.pay || 0) + 10 };
+        if (type === 'adm') updates.adm = (staff.adm || 0) + 1;
+        else updates.sl = (staff.sl || 0) + 1;
+        await supabase.from('staff').update(updates).eq('id', staff.id);
+    }
+    alert("Отчет принят! Баллы начислены."); loadData(); loadReports();
+};
+
+window.rejectReport = async (id) => {
+    await supabase.from('reports').update({ status: 'rejected' }).eq('id', id);
+    alert("Отчет отклонен."); loadReports();
+};
+
+// --- ФУНКЦИЯ ИМПОРТА ИЗ UNION TEAMS ---
+window.importFromUnion = async () => {
+    const jsonText = document.getElementById('import-json').value;
+    if (!jsonText) return alert("Вставьте текст из файла data.json в поле!");
+    
+    try {
+        const data = JSON.parse(jsonText);
+        const sledyashie = data.filter(item => item.server && item.server.department === "Следящие");
+        
+        if (sledyashie.length === 0) return alert("В этом файле нет людей из отдела 'Следящие'!");
+        
+        if (!confirm(`Найдено ${sledyashie.length} человек из отдела Следящие. Импортировать их?`)) return;
+        
+        for (let person of sledyashie) {
+            const steam64 = person.steam.steam64_id;
+            const nick = person.server.real_name;
+            const rank = person.server.rang || "Следящий";
+            
+            // Проверяем, есть ли уже такой человек в базе (по SteamID)
+            const { data: existing } = await supabase.from('staff').select('id').eq('steamid', steam64).single();
+            
+            if (!existing) {
+                await supabase.from('staff').insert([{
+                    nick: nick,
+                    rank: rank,
+                    game_rank: person.server.rang,
+                    steamid: steam64,
+                    role: 'user',
+                    adm: 0, sl: 0, week: 0, pay: 0,
+                    status: person.server.status === "Активен" ? "Активен" : (person.server.status === "Мороз" ? "Мороз" : "Отпуск"),
+                    order: 10
+                }]);
+            }
+        }
+        
+        alert(`Успешно импортировано ${sledyashie.length} человек!`);
+        document.getElementById('import-json').value = '';
+        loadData();
+    } catch (e) {
+        alert("Ошибка чтения JSON. Убедитесь, что вы скопировали весь текст из файла.");
+        console.error(e);
+    }
+};
+</script>
+</body>
+</html>
