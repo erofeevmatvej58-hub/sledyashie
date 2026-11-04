@@ -11,22 +11,25 @@ body {
     background-color: #0b0e14;
     color: #e2e8f0; min-height: 100vh;
     position: relative; overflow-x: hidden;
-    transition: background 0.3s;
 }
+
+/* --- НАДЕЖНЫЙ ФОН --- */
 .bg-slideshow {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -2; background-size: cover; background-position: center;
-    background-image: url('https://images.unsplash.com/photo-1542281286-9e0a16bb7366?q=80&w=2070&auto=format&fit=crop');
-    transition: filter 0.3s, opacity 0.3s;
+    z-index: -2; 
+    background-image: url('https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover; background-position: center;
+    filter: brightness(0.4); /* Затемняем, чтобы текст читался */
 }
 .bg-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(11, 14, 20, 0.85); z-index: -1;
-    transition: background 0.3s;
+    background: rgba(11, 14, 20, 0.6); z-index: -1; /* Полупрозрачный слой */
 }
+
+/* --- СТЕКЛО (ПРОЗРАЧНОСТЬ) --- */
 .glass-mode .glass {
-    background: rgba(15, 19, 26, 0.4) !important;
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    background: rgba(15, 19, 26, 0.5) !important; /* Более прозрачный фон */
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
@@ -34,14 +37,23 @@ body {
     background: #0f131a !important;
     backdrop-filter: none; -webkit-backdrop-filter: none;
     border: 1px solid #1f2937 !important;
-    box-shadow: none;
 }
 .no-glass-mode .bg-slideshow { filter: blur(8px); opacity: 0.3; }
+
+/* ХЭЛЛОУИН ДЕКОР */
+.spider-web { position: fixed; z-index: 0; pointer-events: none; opacity: 0.15; }
+.web-tl { top: 0; left: 0; width: 200px; height: 200px; background: radial-gradient(circle at 0 0, transparent 50%, #fff 51%, transparent 52%), repeating-conic-gradient(from 90deg at 0 0, transparent 0 10deg, #fff 10deg 11deg); }
+.web-tr { top: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle at 100% 0, transparent 50%, #fff 51%, transparent 52%), repeating-conic-gradient(from 180deg at 100% 0, transparent 0 10deg, #fff 10deg 11deg); }
+.bat { position: fixed; z-index: 0; pointer-events: none; font-size: 24px; opacity: 0.4; animation: fly 20s linear infinite; }
+.bat-1 { top: 10%; left: -50px; animation-duration: 25s; animation-delay: 0s; }
+.bat-2 { top: 30%; left: -50px; animation-duration: 35s; animation-delay: 5s; font-size: 18px;}
+.bat-3 { top: 70%; left: -50px; animation-duration: 20s; animation-delay: 12s; font-size: 30px;}
+@keyframes fly { 0% { transform: translateX(-50px) translateY(0) rotate(0deg); } 50% { transform: translateX(50vw) translateY(-50px) rotate(10deg); } 100% { transform: translateX(105vw) translateY(20px) rotate(-10deg); } }
 
 .banner { text-align: center; margin-bottom: 30px; padding: 20px 0; }
 .banner h1 { font-size: 36px; font-weight: 900; color: #fff; text-shadow: 0 0 20px rgba(239, 68, 68, 0.8); letter-spacing: 4px; text-transform: uppercase; }
 
-.top-header { background: rgba(15, 19, 26, 0.4); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 64px; position: sticky; top: 0; z-index: 100; }
+.top-header { background: rgba(15, 19, 26, 0.6); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 64px; position: sticky; top: 0; z-index: 100; }
 .logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; color: #fff; }
 .logo-icon { color: #ef4444; font-size: 24px; }
 .header-nav { display: flex; gap: 5px; height: 100%; }
@@ -50,14 +62,14 @@ body {
 .nav-item.active { color: #fff; border-bottom-color: #ef4444; background: rgba(255,255,255,0.05); }
 
 .header-user { display: flex; align-items: center; gap: 15px; position: relative; }
-.user-badge { display: flex; align-items: center; gap: 10px; padding: 5px 15px; background: rgba(30, 41, 59, 0.6); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.2s; }
-.user-badge:hover { background: rgba(30, 41, 59, 0.9); border-color: #ef4444; }
+.user-badge { display: flex; align-items: center; gap: 10px; padding: 5px 15px; background: rgba(30, 41, 59, 0.8); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.2s; }
+.user-badge:hover { background: rgba(30, 41, 59, 1); border-color: #ef4444; }
 .user-avatar { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; background: #1e293b; }
 .user-info { display: flex; flex-direction: column; }
 .user-name { font-weight: 700; font-size: 13px; color: #fff; }
 .user-rank { font-size: 10px; color: #ef4444; font-weight: 700; text-transform: uppercase; }
 
-.profile-dropdown { position: absolute; top: 55px; right: 0; width: 200px; background: #0f131a; border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
+.profile-dropdown { position: absolute; top: 55px; right: 0; width: 200px; background: rgba(15, 19, 26, 0.95); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
 .profile-dropdown.open { display: block; animation: fadeIn 0.2s; }
 .profile-item { padding: 12px 20px; font-size: 14px; color: #cbd5e1; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
 .profile-item:hover { background: #1e293b; color: #fff; }
@@ -65,64 +77,63 @@ body {
 
 .btn-icon { background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; position: relative; }
 .notify-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: none; border: 2px solid #0f131a; }
-.notify-dropdown { position: absolute; top: 55px; right: 0; width: 320px; background: #0f131a; border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
+.notify-dropdown { position: absolute; top: 55px; right: 0; width: 320px; background: rgba(15, 19, 26, 0.95); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
 .notify-dropdown.open { display: block; animation: fadeIn 0.2s; }
 .notify-header { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-weight: 700; color: #fff; }
 .notify-list { max-height: 300px; overflow-y: auto; }
 .notify-item { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-size: 13px; color: #cbd5e1; }
 .notify-item span { display: block; font-size: 11px; color: #64748b; margin-top: 5px; }
 
-.container { max-width: 1500px; margin: 0 auto 30px; padding: 0 40px; }
+.container { max-width: 1500px; margin: 0 auto 30px; padding: 0 40px; position: relative; z-index: 10; }
 .tab-page { display: none; animation: fadeIn 0.3s ease; }
 .tab-page.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .page-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 .page-title::before { content: ''; width: 4px; height: 24px; background: #ef4444; border-radius: 2px; }
 
-/* ТАБЛИЦА */
+/* --- ТАБЛИЦА С ЖЕСТКОЙ СЕТКОЙ --- */
 .table-card { border-radius: 16px; overflow: hidden; }
-table { width: 100%; border-collapse: collapse; text-align: left; }
-thead { background: rgba(19, 25, 36, 0.6); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-th { padding: 16px 20px; font-size: 11px; text-transform: uppercase; color: #cbd5e1; font-weight: 700; }
-tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; }
-tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
-td { padding: 16px 20px; font-size: 14px; color: #e2e8f0; }
+.table-row { display: grid; grid-template-columns: 2.5fr 1.2fr 1.2fr 1fr 0.6fr 0.6fr 0.8fr 0.6fr 0.8fr 1.8fr; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; }
+.table-row:hover { background: rgba(255, 255, 255, 0.05); }
+.table-header { background: rgba(19, 25, 36, 0.8); font-size: 11px; text-transform: uppercase; color: #cbd5e1; font-weight: 700; padding: 16px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.table-header > div { text-align: center; }
+.table-header > div:nth-child(1) { text-align: left; padding-left: 15px; }
+.table-cell { padding: 16px 10px; font-size: 14px; color: #e2e8f0; text-align: center; display: flex; align-items: center; justify-content: center; }
+.table-cell:nth-child(1) { justify-content: flex-start; padding-left: 15px; }
+
 .user-cell { display: flex; align-items: center; gap: 12px; }
 .t-avatar { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; background: #1e293b; }
-.t-name { font-weight: 600; color: #fff; }
+.t-name { font-weight: 600; color: #fff; text-align: left; }
 .t-rank { font-size: 12px; color: #94a3b8; display: flex; align-items: center; gap: 5px; }
 
-/* СТАТУСЫ */
-.status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+.status-badge { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; white-space: nowrap; width: 100%; max-width: 100px;}
 .status-active { color: #22c55e; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); }
 .status-frozen { color: #3b82f6; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); }
 .status-vacation { color: #6366f1; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); }
 
-/* Мигающий кружок */
-.dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; display: inline-block; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
 .dot.blink { animation: blink 1.5s infinite; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-/* Цветные роли */
-.rank-glava { color: #fbbf24; font-weight: 800; text-shadow: 0 0 10px rgba(251,191,36,0.5); }
+.rank-glava { color: #fbbf24; font-weight: 800; text-shadow: 0 0 10px rgba(251,191,36,0.5); white-space: nowrap; }
 .rank-glava::before { content: '👑 '; font-size: 14px; }
 .rank-zam { color: #ef4444; font-weight: 800; }
-.rank-sled { color: #22c55e; }
-.rank-sled.moron { color: #3b82f6; }
-.rank-sled.otpusk { color: #6366f1; }
+.rank-sled { color: #22c55e; white-space: nowrap; }
 
-.badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; }
+.badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; text-align: center; min-width: 40px;}
 .b-adm { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
 .b-sl { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
 .b-sp { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
 .b-pay { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
-.norm { padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; }
+.norm { padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; display: inline-block; min-width: 55px; text-align: center;}
 .n-red { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444; }
 .n-yellow { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid #f59e0b; }
 .n-green { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid #22c55e; }
 a.steam-link { color: #94a3b8; text-decoration: none; border-bottom: 1px dashed #3b82f6; }
 a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
-.btn-report { padding: 6px 12px; background: rgba(59,130,246,0.1); border: 1px solid #3b82f6; color: #3b82f6; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; margin-right: 5px; }
+
+.actions-cell { display: flex; justify-content: center; gap: 5px; width: 100%; }
+.btn-report { padding: 6px 8px; background: rgba(59,130,246,0.1); border: 1px solid #3b82f6; color: #3b82f6; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap;}
 .btn-report:hover { background: #3b82f6; color: #fff; }
 
 /* ОСТАЛЬНОЕ */
@@ -146,6 +157,7 @@ a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
 .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
 input:checked + .slider { background-color: #ef4444; }
 input:checked + .slider:before { transform: translateX(24px); }
+select.setting-select { padding: 8px; background: #0b0e14; border: 1px solid #334155; border-radius: 6px; color: #fff; outline: none; }
 
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
 .modal-overlay.open { display: flex; }
@@ -164,28 +176,35 @@ input:checked + .slider:before { transform: translateX(24px); }
 </head>
 <body class="glass-mode">
 
+<!-- ДЕКОР ХЭЛЛОУИНА -->
+<div class="spider-web web-tl"></div>
+<div class="spider-web web-tr"></div>
+<div class="bat bat-1">🦇</div>
+<div class="bat bat-2">🦇</div>
+<div class="bat bat-3">🦇</div>
+
 <div class="bg-slideshow"></div>
 <div class="bg-overlay"></div>
 
-<div id="auth-screen" style="display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+<div id="auth-screen" style="display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10;">
     <h1 style="color: #fff; font-size: 48px; font-weight: 900; text-shadow: 0 0 20px rgba(239, 68, 68, 0.8); margin-bottom: 20px;">ДОСТУП ЗАКРЫТ</h1>
     <p style="color: #94a3b8; margin-bottom: 30px;">Войдите через Steam, чтобы просмотреть таблицу.</p>
-    <a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" style="padding: 15px 30px; background: #ef4444; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 18px; transition: 0.3s;">Войти через Steam</a>
+    <a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-sound" style="padding: 15px 30px; background: #ef4444; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 18px; transition: 0.3s;">Войти через Steam</a>
 </div>
 
-<div id="main-site" style="display: none;">
+<div id="main-site" style="display: none; position: relative; z-index: 10;">
     <header class="top-header glass">
-        <div class="logo"><span class="logo-icon">🛡️</span> СЛЕДЯЩИЕ</div>
+        <div class="logo"><span class="logo-icon">🎃</span> СЛЕДЯЩИЕ</div>
         <nav class="header-nav">
-            <div class="nav-item active" onclick="switchPage('table', this)">Состав</div>
-            <div class="nav-item" onclick="switchPage('stats', this)">Статистика</div>
-            <div class="nav-item" onclick="switchPage('activity', this)">Активность</div>
-            <div class="nav-item" onclick="switchPage('changelog', this)">Обновления</div>
-            <div class="nav-item" onclick="switchPage('tools', this)" id="nav-tools" style="display:none;">Инструменты</div>
-            <div class="nav-item" onclick="switchPage('logs', this)" id="nav-logs" style="display:none;">Журнал</div>
+            <div class="nav-item nav-sound active" onclick="switchPage('table', this)">Состав</div>
+            <div class="nav-item nav-sound" onclick="switchPage('stats', this)">Статистика</div>
+            <div class="nav-item nav-sound" onclick="switchPage('activity', this)">Активность</div>
+            <div class="nav-item nav-sound" onclick="switchPage('changelog', this)">Обновления</div>
+            <div class="nav-item nav-sound" onclick="switchPage('tools', this)" id="nav-tools" style="display:none;">Инструменты</div>
+            <div class="nav-item nav-sound" onclick="switchPage('logs', this)" id="nav-logs" style="display:none;">Журнал</div>
         </nav>
         <div class="header-user">
-            <button class="btn-icon" onclick="toggleNotifications()">🔔 <div class="notify-dot" id="notify-dot"></div></button>
+            <button class="btn-icon btn-sound" onclick="toggleNotifications()">🔔 <div class="notify-dot" id="notify-dot"></div></button>
             <div class="notify-dropdown" id="notify-dropdown">
                 <div class="notify-header">Уведомления</div>
                 <div class="notify-list" id="notify-list"><div class="notify-item">Нет новых оповещений.</div></div>
@@ -212,10 +231,12 @@ input:checked + .slider:before { transform: translateX(24px); }
     <main class="container">
         <div id="page-table" class="tab-page active">
             <div class="table-card glass">
-                <table>
-                    <thead><tr><th>Следящий</th><th>Ранг</th><th>SteamID</th><th>Адм.</th><th>Слежка</th><th>Норма</th><th>СП</th><th>Зарплата</th><th>Действие</th></tr></thead>
-                    <tbody id="table-body"><tr><td colspan="9"><div class="loader">Загрузка...</div></td></tr></tbody>
-                </table>
+                <div class="table-row table-header">
+                    <div>Следящий</div><div>Ранг</div><div>SteamID</div><div>Статус</div><div>Адм.</div><div>Слежка</div><div>Норма</div><div>СП</div><div>Зарплата</div><div>Действие</div>
+                </div>
+                <div id="table-body">
+                    <div class="loader">Загрузка...</div>
+                </div>
             </div>
         </div>
 
@@ -231,7 +252,7 @@ input:checked + .slider:before { transform: translateX(24px); }
 
         <div id="page-changelog" class="tab-page">
             <h1 class="page-title">Обновления</h1>
-            <button class="btn" id="btn-add-changelog" onclick="openChangelogModal()" style="margin-bottom: 20px; display: none;">+ Добавить обновление</button>
+            <button class="btn btn-sound" id="btn-add-changelog" onclick="openChangelogModal()" style="margin-bottom: 20px; display: none;">+ Добавить обновление</button>
             <div id="changelog-list"></div>
         </div>
 
@@ -276,11 +297,11 @@ input:checked + .slider:before { transform: translateX(24px); }
                 </div>
 
                 <div style="display:flex; gap:10px; margin-top:20px;">
-                    <button class="btn" onclick="saveStaff()">Сохранить</button>
-                    <button class="btn btn-red" onclick="deleteStaff()" id="btn-delete-staff" style="display:none;">Удалить</button>
+                    <button class="btn btn-sound" onclick="saveStaff()">Сохранить</button>
+                    <button class="btn btn-red btn-sound" onclick="deleteStaff()" id="btn-delete-staff" style="display:none;">Удалить</button>
                 </div>
                 <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-                <button class="btn" onclick="clearForm()" style="width:100%; background:#22c55e;">+ Добавить нового</button>
+                <button class="btn btn-sound" onclick="clearForm()" style="width:100%; background:#22c55e;">+ Добавить нового</button>
             </div>
         </div>
 
@@ -297,6 +318,21 @@ input:checked + .slider:before { transform: translateX(24px); }
                     <span class="setting-label">Прозрачность интерфейса (Glassmorphism)</span>
                     <label class="toggle-switch">
                         <input type="checkbox" id="toggle-glass" checked onchange="toggleGlassMode(this)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <h3 style="margin-top:30px;">Звук</h3>
+                <div class="setting-row">
+                    <span class="setting-label">Звуковая тема</span>
+                    <select class="setting-select" id="sound-theme" onchange="changeSoundTheme(this)">
+                        <option value="halloween">Хэллоуин 🎃</option>
+                        <option value="vanilla">Ванильные (Классика)</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Отключить все звуки</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-mute" onchange="toggleMute(this)">
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -321,7 +357,7 @@ input:checked + .slider:before { transform: translateX(24px); }
             <label>7. Продолжать слежку?</label><textarea name="continue"></textarea>
             <div style="display:flex; gap:10px; margin-top:20px;">
                 <button type="button" class="btn btn-red" onclick="closeModal('reportModal')" style="flex:1;">Отмена</button>
-                <button type="submit" class="btn" style="flex:1;">Отправить</button>
+                <button type="submit" class="btn btn-sound" style="flex:1;">Отправить</button>
             </div>
         </form>
     </div>
@@ -336,14 +372,14 @@ input:checked + .slider:before { transform: translateX(24px); }
             <label>Что изменилось?</label><textarea id="log-content" rows="6"></textarea>
             <div style="display:flex; gap:10px; margin-top:20px;">
                 <button type="button" class="btn btn-red" onclick="closeModal('changelogModal')" style="flex:1;">Отмена</button>
-                <button type="submit" class="btn" style="flex:1;">Опубликовать</button>
+                <button type="submit" class="btn btn-sound" style="flex:1;">Опубликовать</button>
             </div>
         </form>
     </div>
 </div>
 
 <script type="module">
-// ВСТРОЕННАЯ ПРОВЕРКА ССЫЛКИ ОТ СЕРВЕРА
+// --- ВСТРОЕННАЯ ПРОВЕРКА ССЫЛКИ ОТ СЕРВЕРА ---
 if (window.location.hash.startsWith('#steamid=')) {
     localStorage.setItem('isLoggedIn', 'true'); 
     window.history.replaceState(null, null, window.location.pathname); 
@@ -356,6 +392,59 @@ const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_pu
 
 let globalStaff = [];
 let currentUser = null;
+
+// --- ЗВУКОВАЯ СИСТЕМА (С РАЗБЛОКИРОВКОЙ) ---
+const sounds = {
+    halloween: {
+        hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', // Скрип
+        click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', // Стук
+        notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' // Колокольчик
+    },
+    vanilla: {
+        hover: 'https://assets.mixkit.co/active_storage/sfx/2563/2563-preview.mp3', // Поп
+        click: 'https://assets.mixkit.co/active_storage/sfx/2564/2564-preview.mp3', // Клик
+        notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'
+    }
+};
+
+let currentSoundTheme = localStorage.getItem('soundTheme') || 'halloween';
+let isMuted = localStorage.getItem('isMuted') === 'true';
+
+document.getElementById('sound-theme').value = currentSoundTheme;
+document.getElementById('toggle-mute').checked = isMuted;
+
+// Разблокировка звука при первом клике (требование браузеров)
+document.body.addEventListener('click', () => {
+    const audio = new Audio(sounds[currentSoundTheme]['click']);
+    audio.volume = 0; // Беззвучно
+    audio.play().catch(() => {});
+}, { once: true });
+
+function playSound(type) {
+    if (isMuted) return;
+    const audio = new Audio(sounds[currentSoundTheme][type]);
+    audio.volume = 0.4;
+    audio.play().catch(() => {});
+}
+
+window.changeSoundTheme = (select) => {
+    currentSoundTheme = select.value;
+    localStorage.setItem('soundTheme', currentSoundTheme);
+    playSound('click');
+};
+window.toggleMute = (checkbox) => {
+    isMuted = checkbox.checked;
+    localStorage.setItem('isMuted', isMuted);
+    if (!isMuted) playSound('click');
+};
+
+document.querySelectorAll('.nav-sound').forEach(el => {
+    el.addEventListener('mouseenter', () => playSound('hover'));
+    el.addEventListener('click', () => playSound('click'));
+});
+document.querySelectorAll('.btn-sound').forEach(el => {
+    el.addEventListener('mouseenter', () => playSound('hover'));
+});
 
 // --- КОНВЕРТЕРЫ STEAMID ---
 function toSteam64(input) {
@@ -388,22 +477,19 @@ function getSteamProfileUrl(input) {
 }
 
 // --- ЛОГИКА АВТОРИЗАЦИИ ---
-const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-
-if (!isLoggedIn) {
-    document.getElementById('auth-screen').style.display = 'flex';
-    document.getElementById('main-site').style.display = 'none';
-} else {
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('main-site').style.display = 'block';
-    loadProfile();
-    loadData();
-}
-
-window.logout = () => {
-    localStorage.removeItem('isLoggedIn');
-    window.location.reload();
+window.onload = () => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('main-site').style.display = 'none';
+    } else {
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('main-site').style.display = 'block';
+        loadProfile();
+        loadData();
+    }
 };
+window.logout = () => { localStorage.removeItem('isLoggedIn'); window.location.reload(); };
 
 window.switchPage = (pageId, element) => {
     document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
@@ -412,6 +498,7 @@ window.switchPage = (pageId, element) => {
     if (element && element.classList.contains('nav-item')) element.classList.add('active');
     if(pageId === 'activity') renderActivityChart();
     if(pageId === 'changelog') loadChangelog();
+    playSound('click');
 };
 window.toggleNotifications = () => { document.getElementById('notify-dropdown').classList.toggle('open'); document.getElementById('notify-dot').style.display = 'none'; };
 window.toggleProfileMenu = () => document.getElementById('profile-dropdown').classList.toggle('open');
@@ -426,7 +513,7 @@ window.toggleGlassMode = (checkbox) => {
 };
 if (localStorage.getItem('glassMode') === 'off') { document.body.classList.remove('glass-mode'); document.body.classList.add('no-glass-mode'); document.getElementById('toggle-glass').checked = false; }
 
-// --- ЗАГРУЗКА ПРОФИЛЯ ---
+// --- ЗАГРУЗКА ---
 async function loadProfile() {
     const { data: staff } = await supabase.from('staff').select('*');
     const me = staff.find(s => s.steamid === MY_STEAM_ID || toSteam64(s.steamid) === MY_STEAM_ID);
@@ -450,10 +537,10 @@ async function loadProfile() {
             <div class="notify-item">Вам назначены права: ${currentUser?.role === 'admin' ? 'Полный доступ' : 'Обычный пользователь'}<span>Только что</span></div>
             <div class="notify-item">Вы успешно авторизовались! Ознакомьтесь с сайтом!<span>Только что</span></div>
         `;
+        playSound('notify');
     }, 1000);
 }
 
-// --- ЗАГРУЗКА ДАННЫХ ---
 async function loadData() {
     const { data: staff } = await supabase.from('staff').select('*');
     globalStaff = staff || [];
@@ -467,46 +554,36 @@ function renderTable() {
         const normClass = normSum >= 5 ? 'n-green' : (normSum >= 3 ? 'n-yellow' : 'n-red');
         const displayId = toSteam32(p.steamid);
         const avatar = p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
-        
-        // Статус и роль
-        let statusHtml = '';
-        let rankClass = 'rank-sled';
-        let nameColor = '';
+        let statusHtml = ''; let rankClass = 'rank-sled'; let nameColor = '';
 
         if (p.rank === 'Глава следящих') rankClass = 'rank-glava';
         else if (p.rank === 'Зам. главы следящих') rankClass = 'rank-zam';
         else rankClass = 'rank-sled';
 
-        if (p.status === 'Активен') {
-            statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
-            if (p.rank === 'Следящий') nameColor = 'color: #22c55e;';
-        } else if (p.status === 'Мороз') {
-            statusHtml = `<span class="status-badge status-frozen">❄️ Мороз</span>`;
-            if (p.rank === 'Следящий') nameColor = 'color: #3b82f6;';
-        } else if (p.status === 'Отпуск') {
-            statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`;
-            if (p.rank === 'Следящий') nameColor = 'color: #6366f1;';
-        } else {
-            statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
-        }
+        if (p.status === 'Активен') { statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`; if (p.rank === 'Следящий') nameColor = 'color: #22c55e;'; }
+        else if (p.status === 'Мороз') { statusHtml = `<span class="status-badge status-frozen">❄️ Мороз</span>`; if (p.rank === 'Следящий') nameColor = 'color: #3b82f6;'; }
+        else if (p.status === 'Отпуск') { statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`; if (p.rank === 'Следящий') nameColor = 'color: #6366f1;'; }
+        else { statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`; }
 
         return `
-            <tr>
-                <td><div class="user-cell"><img class="t-avatar" src="${avatar}"><div><div class="t-name" style="${nameColor}">${p.nick}</div><div class="t-rank">${p.rank}</div></div></div></td>
-                <td><span class="${rankClass}">${p.rank}</span></td>
-                <td><a href="${getSteamProfileUrl(p.steamid)}" target="_blank" class="steam-link">${displayId}</a></td>
-                <td>${statusHtml}</td>
-                <td><span class="badge b-adm">${p.adm || 0}</span></td>
-                <td><span class="badge b-sl">${p.sl || 0}</span></td>
-                <td><span class="norm ${normClass}">${normSum} / 5</span></td>
-                <td><span class="badge b-sp">${p.sp || 0}</span></td>
-                <td><span class="badge b-pay">${p.pay || 0} Д</span></td>
-                <td>
-                    <button class="btn-report" onclick="openReport('adm','${p.nick}')">Отчёт</button>
-                    <button class="btn-report" onclick="openReport('sl','${p.nick}')">Слежка</button>
-                    <button class="btn-report" onclick="openReport('sp','${p.nick}')">СП</button>
-                </td>
-            </tr>`;
+            <div class="table-row">
+                <div class="table-cell"><div class="user-cell"><img class="t-avatar" src="${avatar}"><div><div class="t-name" style="${nameColor}">${p.nick}</div><div class="t-rank">${p.rank}</div></div></div></div>
+                <div class="table-cell"><span class="${rankClass}">${p.rank}</span></div>
+                <div class="table-cell"><a href="${getSteamProfileUrl(p.steamid)}" target="_blank" class="steam-link">${displayId}</a></div>
+                <div class="table-cell">${statusHtml}</div>
+                <div class="table-cell"><span class="badge b-adm">${p.adm || 0}</span></div>
+                <div class="table-cell"><span class="badge b-sl">${p.sl || 0}</span></div>
+                <div class="table-cell"><span class="norm ${normClass}">${normSum} / 5</span></div>
+                <div class="table-cell"><span class="badge b-sp">${p.sp || 0}</span></div>
+                <div class="table-cell"><span class="badge b-pay">${p.pay || 0} Д</span></div>
+                <div class="table-cell">
+                    <div class="actions-cell">
+                        <button class="btn-report btn-sound" onclick="openReport('adm','${p.nick}')">Отчёт</button>
+                        <button class="btn-report btn-sound" onclick="openReport('sl','${p.nick}')">Слежка</button>
+                        <button class="btn-report btn-sound" onclick="openReport('sp','${p.nick}')">СП</button>
+                    </div>
+                </div>
+            </div>`;
     }).join('');
 }
 
@@ -597,6 +674,7 @@ window.saveStaff = async () => {
         await supabase.from('staff').insert([updates]);
     }
     await supabase.from('logs').insert([{ action: `Сохранен ${updates.nick}`, date: new Date().toLocaleString('ru-RU') }]);
+    playSound('click');
     alert("Сохранено!"); clearForm(); loadData();
 };
 
@@ -606,6 +684,7 @@ window.deleteStaff = async () => {
     if (!confirm("Удалить этого следящего?")) return;
     await supabase.from('staff').delete().eq('id', id);
     await supabase.from('logs').insert([{ action: `Удален пользователь`, date: new Date().toLocaleString('ru-RU') }]);
+    playSound('click');
     alert("Удалено!"); clearForm(); loadData();
 };
 
@@ -624,8 +703,8 @@ async function loadChangelog() {
     `).join('') || '<div class="loader">Обновлений нет.</div>';
 }
 
-window.openChangelogModal = () => document.getElementById('changelogModal').classList.add('open');
-window.closeModal = (id) => document.getElementById(id).classList.remove('open');
+window.openChangelogModal = () => { document.getElementById('changelogModal').classList.add('open'); playSound('click'); };
+window.closeModal = (id) => { document.getElementById(id).classList.remove('open'); playSound('click'); };
 
 document.getElementById('changelogForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -633,6 +712,7 @@ document.getElementById('changelogForm').addEventListener('submit', async (e) =>
     const content = document.getElementById('log-content').value;
     if (!version || !content) return alert("Заполните поля!");
     await supabase.from('changelog').insert([{ version, content, date: new Date().toLocaleString('ru-RU') }]);
+    playSound('click');
     closeModal('changelogModal'); loadChangelog();
 });
 
@@ -641,6 +721,7 @@ window.openReport = (type, nick) => {
     document.getElementById('reportReporter').value = nick;
     document.getElementById('modalTitle').textContent = type === 'adm' ? 'Отчёт: слежка за админом' : (type === 'sl' ? 'Слежка по указаниям' : 'Список пидормотов');
     document.getElementById('reportModal').classList.add('open');
+    playSound('click');
 };
 
 document.getElementById('reportForm').addEventListener('submit', async (e) => {
@@ -655,6 +736,7 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
     };
     await supabase.from('reports').insert([data]);
     await supabase.from('logs').insert([{ action: `Новый отчет от ${f.reporter.value}`, date: new Date().toLocaleString('ru-RU') }]);
+    playSound('notify');
     alert("Отчет отправлен!"); closeModal('reportModal'); f.reset();
 });
 </script>
