@@ -13,7 +13,7 @@ body {
     position: relative; overflow-x: hidden;
 }
 
-/* --- УЮТНЫЙ ФОН --- */
+/* --- ФОН --- */
 .bg-slideshow {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -2; background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop');
@@ -82,7 +82,7 @@ body {
 .legend span { font-size: 13px; color: #cbd5e1; display: flex; align-items: center; gap: 5px; }
 .legend b { color: #fff; }
 
-/* --- ТАБЛИЦА С ОБВОДКОЙ --- */
+/* --- ТАБЛИЦА --- */
 .table-wrapper {
     position: relative; border-radius: 16px; padding: 3px;
     animation: borderGlowColor 4s linear infinite;
@@ -154,6 +154,7 @@ a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
 .btn-green { background: #22c55e; color: #0f131a;}
 .btn-green:hover { background: #16a34a; }
 
+/* НАСТРОЙКИ */
 .settings-card { border-radius: 16px; padding: 30px; }
 .settings-card h3 { color: #fff; margin-bottom: 20px; font-size: 18px; }
 .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
@@ -196,14 +197,12 @@ input:checked + .slider:before { transform: translateX(24px); }
 <div class="bg-slideshow"></div>
 <div class="bg-overlay"></div>
 
-<!-- ЭКРАН БЛОКИРОВКИ -->
 <div id="auth-screen" style="display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10;">
     <h1 style="color: #fff; font-size: 48px; font-weight: 900; text-shadow: 0 0 20px rgba(255, 100, 0, 0.8); margin-bottom: 20px;">ДОСТУП ЗАКРЫТ</h1>
     <p style="color: #94a3b8; margin-bottom: 30px;">Войдите через Steam, чтобы просмотреть таблицу.</p>
     <a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-sound" style="padding: 15px 30px; background: #ff6600; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 18px; transition: 0.3s;">Войти через Steam</a>
 </div>
 
-<!-- ОСНОВНОЙ САЙТ -->
 <div id="main-site" style="display: none; position: relative; z-index: 10;">
     <header class="top-header glass">
         <div class="logo"><span class="logo-icon">🎃</span> СЛЕДЯЩИЕ</div>
@@ -240,7 +239,6 @@ input:checked + .slider:before { transform: translateX(24px); }
     </div>
 
     <main class="container">
-        <!-- ВКЛАДКА: СОСТАВ -->
         <div id="page-table" class="tab-page active">
             <div class="legend">
                 <span>👁️ Слежка за админами: <b>+10 ДВ, -5 тикетов</b></span>
@@ -257,19 +255,16 @@ input:checked + .slider:before { transform: translateX(24px); }
             </div>
         </div>
 
-        <!-- ВКЛАДКА: СТАТИСТИКА -->
         <div id="page-stats" class="tab-page">
             <h1 class="page-title">Статистика за месяц</h1>
             <div class="stats-grid" id="stats-grid"></div>
         </div>
 
-        <!-- ВКЛАДКА: АКТИВНОСТЬ -->
         <div id="page-activity" class="tab-page">
             <h1 class="page-title">Активность</h1>
             <div class="tool-card glass"><div class="bar-chart" id="bar-chart"></div></div>
         </div>
 
-        <!-- ВКЛАДКА: ОТЧЕТЫ НА ПРОВЕРКЕ (Админ) -->
         <div id="page-reports_check" class="tab-page">
             <h1 class="page-title">Отчеты на проверке</h1>
             <div id="pending-list"></div>
@@ -277,12 +272,11 @@ input:checked + .slider:before { transform: translateX(24px); }
             <div id="history-list"></div>
         </div>
 
-        <!-- ВКЛАДКА: ИНСТРУМЕНТЫ (Админ) -->
         <div id="page-tools" class="tab-page">
             <h1 class="page-title">Инструменты управления</h1>
             
             <div class="tool-card glass">
-                <h3>Сбросы (Только для Админа)</h3>
+                <h3>Сбросы</h3>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn btn-sound" onclick="resetWeek()">Сбросить НЕДЕЛЮ (Оставить ЗП)</button>
                     <button class="btn btn-red btn-sound" onclick="resetMonth()">Сбросить МЕСЯЦ (Обнулить всё)</button>
@@ -297,6 +291,8 @@ input:checked + .slider:before { transform: translateX(24px); }
                 <label>Ник</label><input type="text" id="edit-nick">
                 <label>SteamID</label><input type="text" id="edit-steamid">
                 <label>Ссылка на аватарку</label><input type="text" id="edit-avatar" placeholder="https://...">
+                <label>Позиция в таблице (чем меньше число, тем выше)</label>
+                <input type="number" id="edit-order" value="10" placeholder="Например: 1">
                 <label>Статус</label>
                 <select id="edit-status">
                     <option value="Активен">Активен</option>
@@ -332,7 +328,6 @@ input:checked + .slider:before { transform: translateX(24px); }
             </div>
         </div>
 
-        <!-- ВКЛАДКА: НАСТРОЙКИ -->
         <div id="page-settings" class="tab-page">
             <h1 class="page-title">Настройки</h1>
             <div class="settings-card glass">
@@ -380,7 +375,6 @@ input:checked + .slider:before { transform: translateX(24px); }
 </div>
 
 <script type="module">
-// --- ПРОВЕРКА ВХОДА ---
 if (window.location.hash.startsWith('#steamid=')) {
     const id = window.location.hash.substring(9);
     localStorage.setItem('my_steam_id', id);
@@ -396,7 +390,6 @@ const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_pu
 let globalStaff = [];
 let currentUser = null;
 
-// --- ЗВУКИ ---
 const sounds = {
     hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
     click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
@@ -422,7 +415,6 @@ document.querySelectorAll('.btn-sound').forEach(el => {
     el.addEventListener('mouseenter', () => playSound('hover'));
 });
 
-// --- STEAM КОНВЕРТЕРЫ ---
 function toSteam64(input) {
     if (!input) return null;
     const str = input.trim();
@@ -452,7 +444,6 @@ function getSteamProfileUrl(input) {
     return `https://steamcommunity.com/profiles/${steam64}`;
 }
 
-// --- ИНИЦИАЛИЗАЦИЯ ---
 window.onload = () => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     if (!isLoggedIn) {
@@ -463,12 +454,11 @@ window.onload = () => {
         document.getElementById('main-site').style.display = 'block';
         loadProfile();
         loadData();
-        loadReports(); // Загружаем отчеты
+        loadReports();
     }
 };
 window.logout = () => { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('my_steam_id'); window.location.reload(); };
 
-// --- ЛОГИКА ИНТЕРФЕЙСА ---
 window.switchPage = (pageId, element) => {
     document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -478,8 +468,8 @@ window.switchPage = (pageId, element) => {
     playSound('click');
 };
 window.toggleNotifications = () => { document.getElementById('notify-dropdown').classList.toggle('open'); document.getElementById('notify-dot').style.display = 'none'; };
-window.toggleProfileMenu = () => document.getElementById('profile-dropdown').classList.toggle('open');
-window.closeProfileMenu = () => document.getElementById('profile-dropdown').classList.remove('open');
+window.toggleProfileMenu = () => { document.getElementById('profile-dropdown').classList.toggle('open'); };
+window.closeProfileMenu = () => { document.getElementById('profile-dropdown').classList.remove('open'); };
 window.closeModal = (id) => { document.getElementById(id).classList.remove('open'); playSound('click'); };
 window.toggleGlassMode = (cb) => {
     if (cb.checked) { document.body.classList.remove('no-glass-mode'); document.body.classList.add('glass-mode'); localStorage.setItem('glassMode', 'on'); }
@@ -492,10 +482,9 @@ document.addEventListener('click', (e) => {
     if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
 });
 
-// --- ЗАГРУЗКА ПРОФИЛЯ ---
 async function loadProfile() {
+    // Ищем профиль по 64-битному ID
     const { data: staff } = await supabase.from('staff').select('*');
-    // Ищем того, кто зашел (сравниваем 64-битные ID для надежности)
     const me = staff.find(s => s.steamid === MY_STEAM_ID || toSteam64(s.steamid) === MY_STEAM_ID);
     
     if (me) {
@@ -504,16 +493,15 @@ async function loadProfile() {
         document.getElementById('header-rank').textContent = me.rank;
         if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
         
-        // Если Админ - показываем вкладки
-        if (me.role === 'admin' || me.rank === 'Глава следящих') {
+        // Даем доступ, если это админ или Глава/Зам
+        if (me.role === 'admin' || me.rank === 'Глава следящих' || me.rank === 'Зам. главы следящих') {
             document.getElementById('nav-reports').style.display = 'flex';
             document.getElementById('nav-tools').style.display = 'flex';
         }
     } else {
-        document.getElementById('header-name').textContent = "Неизвестный";
-        alert("Вас нет в базе! Доступ только для просмотра.");
+        document.getElementById('header-name').textContent = "Гость (Не в базе)";
+        document.getElementById('header-rank').textContent = "Ошибка";
     }
-    // Приветствие
     setTimeout(() => {
         document.getElementById('notify-dot').style.display = 'block';
         document.getElementById('notify-list').innerHTML = `
@@ -523,9 +511,8 @@ async function loadProfile() {
     }, 1000);
 }
 
-// --- ОТРИСОВКА ТАБЛИЦЫ ---
 async function loadData() {
-    const { data: staff } = await supabase.from('staff').select('*');
+    const { data: staff } = await supabase.from('staff').select('*').order('order', { ascending: true }); // Сортировка по order
     globalStaff = staff || [];
     renderTable(); renderStats(); renderToolsSelect();
 }
@@ -534,12 +521,10 @@ function renderTable() {
     const tbody = document.getElementById('table-body');
     tbody.innerHTML = globalStaff.map((p) => {
         const normSum = p.week || 0;
-        // Логика светофора
         let normClass = 'n-red';
         if (normSum >= 5) normClass = 'n-green';
         else if (normSum >= 4) normClass = 'n-yellow';
         
-        // У Главы и Зама нет нормы
         const isBoss = (p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник');
         const normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
         
@@ -556,7 +541,6 @@ function renderTable() {
         else if (p.status === 'Отпуск') statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`;
         else statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
 
-        // Кнопки отчета
         const actionsHtml = isBoss ? '<span style="color:#64748b;font-size:12px;">—</span>' : `
             <div class="actions-cell">
                 <button class="btn-report btn-sound" onclick="openReport('adm','${p.nick}')">Админ</button>
@@ -621,7 +605,6 @@ function renderActivityChart() {
     `).join('');
 }
 
-// --- ИНСТРУМЕНТЫ ---
 function renderToolsSelect() {
     const select = document.getElementById('edit-select');
     select.innerHTML = '<option value="">Выберите для редактирования...</option>' + globalStaff.map(p => `<option value="${p.id}">${p.nick}</option>`).join('');
@@ -635,6 +618,7 @@ window.fillEditForm = () => {
     document.getElementById('edit-nick').value = p.nick;
     document.getElementById('edit-steamid').value = toSteam32(p.steamid);
     document.getElementById('edit-avatar').value = p.avatar || '';
+    document.getElementById('edit-order').value = p.order || 10;
     document.getElementById('edit-status').value = p.status || 'Активен';
     document.getElementById('edit-rank').value = p.rank;
     document.getElementById('edit-game-rank').value = p.game_rank || 'Игрок';
@@ -649,6 +633,7 @@ window.saveStaff = async () => {
         nick: document.getElementById('edit-nick').value,
         steamid: steam64,
         avatar: document.getElementById('edit-avatar').value || null,
+        order: parseInt(document.getElementById('edit-order').value) || 10,
         status: document.getElementById('edit-status').value,
         rank: document.getElementById('edit-rank').value,
         game_rank: document.getElementById('edit-game-rank').value,
@@ -691,7 +676,6 @@ window.resetMonth = async () => {
     alert("Месяц сброшен!"); loadData();
 };
 
-// --- ОТЧЕТЫ (СИСТЕМА ПРОВЕРКИ) ---
 window.openReport = (type, nick) => {
     document.getElementById('reportType').value = type;
     document.getElementById('reportReporter').value = nick;
@@ -722,7 +706,6 @@ async function loadReports() {
     const pending = reports.filter(r => r.status === 'pending');
     const history = reports.filter(r => r.status !== 'pending');
 
-    // Отрисовка на проверку
     document.getElementById('pending-list').innerHTML = pending.map(r => `
         <div class="report-card">
             <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#ff9f43;font-size:12px;">На проверке</span></h3>
@@ -736,7 +719,6 @@ async function loadReports() {
         </div>
     `).join('') || '<p style="color:#64748b;">Нет отчетов на проверке.</p>';
 
-    // Отрисовка истории
     document.getElementById('history-list').innerHTML = history.map(r => `
         <div class="report-card approved">
             <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#22c55e;font-size:12px;">Принят</span></h3>
@@ -747,32 +729,21 @@ async function loadReports() {
 }
 
 window.approveReport = async (id, reporterNick, type) => {
-    // 1. Меняем статус отчета
     await supabase.from('reports').update({ status: 'approved' }).eq('id', id);
-    
-    // 2. Начисляем баллы автору
     const { data: staff } = await supabase.from('staff').select('*').eq('nick', reporterNick).single();
     if (staff) {
-        const updates = {
-            week: (staff.week || 0) + 1,
-            pay: (staff.pay || 0) + 10
-        };
+        const updates = { week: (staff.week || 0) + 1, pay: (staff.pay || 0) + 10 };
         if (type === 'adm') updates.adm = (staff.adm || 0) + 1;
         else updates.sl = (staff.sl || 0) + 1;
-        
         await supabase.from('staff').update(updates).eq('id', staff.id);
     }
-    alert("Отчет принят! Баллы начислены.");
-    loadData();
-    loadReports();
+    alert("Отчет принят! Баллы начислены."); loadData(); loadReports();
 };
 
 window.rejectReport = async (id) => {
     await supabase.from('reports').update({ status: 'rejected' }).eq('id', id);
-    alert("Отчет отклонен.");
-    loadReports();
+    alert("Отчет отклонен."); loadReports();
 };
-
 </script>
 </body>
 </html>
