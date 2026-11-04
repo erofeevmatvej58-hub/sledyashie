@@ -108,7 +108,18 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
         };
 
         // ВОТ ТУТ МЫ ЛОВИМ ОШИБКУ
-        const { data: result, error } = await supabase.from('reports').insert([data]);
+        const { data: result, error } = await supabase.rpc('insert_report_direct', {
+    p_type: data.type,
+    p_reporter: data.reporter,
+    p_adminNick: data.adminNick,
+    p_steamId: data.steamId,
+    p_rank: data.rank,
+    p_time: data.time,
+    p_rule: data.rule,
+    p_suspicious: data.suspicious,
+    p_continue: data.continue,
+    p_image: data.image
+});
 
         if (error) {
             // Если база не приняла - показываем причину
