@@ -6,213 +6,627 @@
 <title>Отдел Следящих | Garry's Mod</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background: #09090b; color: #e4e4e7; min-height: 100vh; padding: 20px; background-image: radial-gradient(circle at 50% 0%, #18181b 0%, #09090b 70%); }
-.top-nav { max-width: 1280px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 12px 24px; }
-.brand { font-size: 18px; font-weight: 700; color: #fafafa; display: flex; align-items: center; gap: 10px; }
-.brand-icon { color: #ef4444; font-size: 22px; }
-.user-profile { display: flex; align-items: center; gap: 15px; }
-.user-info { text-align: right; }
-.user-name { font-weight: 600; color: #fafafa; font-size: 14px; }
-.user-rank { font-size: 12px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.5px; }
-.btn-login { background: #27272a; color: #fafafa; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; border: 1px solid #3f3f46; transition: 0.2s; font-size: 14px;}
-.btn-login:hover { background: #3f3f46; border-color: #52525b; }
-.btn-notify { background: transparent; border: none; color: #a1a1aa; font-size: 20px; cursor: pointer; position: relative; transition: 0.2s; }
-.btn-notify:hover { color: #fafafa; }
-.badge-dot { position: absolute; top: 0; right: -2px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: none; }
-.banner { max-width: 1280px; margin: 0 auto 24px; background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px; text-align: center; }
-.banner h1 { font-size: 24px; font-weight: 700; color: #fafafa; margin-bottom: 4px; }
-.banner p { color: #a1a1aa; font-size: 14px; }
-.tabs { max-width: 1280px; margin: 0 auto 20px; display: flex; gap: 8px; border-bottom: 1px solid #27272a; overflow-x: auto; }
-.tab-btn { padding: 10px 16px; background: transparent; border: none; color: #a1a1aa; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
-.tab-btn:hover { color: #fafafa; }
-.tab-btn.active { color: #fafafa; border-bottom-color: #ef4444; }
-.tab-content { display: none; max-width: 1280px; margin: 0 auto; }
-.tab-content.active { display: block; animation: fadeIn 0.2s; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+    background-color: #0b0e14;
+    color: #e2e8f0; min-height: 100vh;
+    position: relative; overflow-x: hidden;
+    transition: background 0.3s;
+}
+.bg-slideshow {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -2; background-size: cover; background-position: center;
+    background-image: url('https://images.unsplash.com/photo-1542281286-9e0a16bb7366?q=80&w=2070&auto=format&fit=crop');
+    transition: filter 0.3s, opacity 0.3s;
+}
+.bg-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(11, 14, 20, 0.85); z-index: -1;
+    transition: background 0.3s;
+}
+.glass-mode .glass {
+    background: rgba(15, 19, 26, 0.4) !important;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+.no-glass-mode .glass {
+    background: #0f131a !important;
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    border: 1px solid #1f2937 !important;
+    box-shadow: none;
+}
+.no-glass-mode .bg-slideshow { filter: blur(8px); opacity: 0.3; }
 
-.table-wrapper { background: #18181b; border: 1px solid #27272a; border-radius: 12px; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-thead th { background: #18181b; color: #a1a1aa; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; padding: 14px 16px; text-align: left; border-bottom: 1px solid #27272a; }
-tbody td { padding: 14px 16px; border-bottom: 1px solid #27272a; vertical-align: middle; }
-tbody tr:hover { background: #27272a; }
-.id { color: #52525b; font-weight: 600; }
-.nick { font-weight: 600; color: #fafafa; }
-.badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
-.badge.adm { background: rgba(245,158,11,0.15); color: #f59e0b; }
-.badge.sp { background: rgba(239,68,68,0.15); color: #ef4444; }
-.badge.sl { background: rgba(34,197,94,0.15); color: #22c55e; }
-.badge.pay { background: rgba(59,130,246,0.15); color: #3b82f6; }
-.rank { font-size: 12px; color: #a1a1aa; font-weight: 600; }
-.norm-block { display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 13px; }
-.norm-red { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
-.norm-yellow { background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
-.norm-green { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
-.avatar { width: 32px; height: 32px; border-radius: 6px; background: #27272a; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: #fafafa; margin-right: 10px; }
+.banner { text-align: center; margin-bottom: 30px; padding: 20px 0; }
+.banner h1 { font-size: 36px; font-weight: 900; color: #fff; text-shadow: 0 0 20px rgba(239, 68, 68, 0.8); letter-spacing: 4px; text-transform: uppercase; }
 
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-.stat-card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 20px; }
-.stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #27272a; font-size: 14px; }
-.stat-row:last-child { border: none; color: #3b82f6; font-weight: 600; font-size: 16px; }
+.top-header { background: rgba(15, 19, 26, 0.4); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 64px; position: sticky; top: 0; z-index: 100; }
+.logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; color: #fff; }
+.logo-icon { color: #ef4444; font-size: 24px; }
+.header-nav { display: flex; gap: 5px; height: 100%; }
+.nav-item { padding: 0 20px; display: flex; align-items: center; height: 100%; color: #94a3b8; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.2s; border-bottom: 2px solid transparent; text-transform: uppercase; }
+.nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.nav-item.active { color: #fff; border-bottom-color: #ef4444; background: rgba(255,255,255,0.05); }
 
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+.header-user { display: flex; align-items: center; gap: 15px; position: relative; }
+.user-badge { display: flex; align-items: center; gap: 10px; padding: 5px 15px; background: rgba(30, 41, 59, 0.6); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.2s; }
+.user-badge:hover { background: rgba(30, 41, 59, 0.9); border-color: #ef4444; }
+.user-avatar { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; }
+.user-info { display: flex; flex-direction: column; }
+.user-name { font-weight: 700; font-size: 13px; color: #fff; }
+.user-rank { font-size: 10px; color: #ef4444; font-weight: 700; text-transform: uppercase; }
+
+.profile-dropdown { position: absolute; top: 55px; right: 0; width: 200px; background: #0f131a; border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
+.profile-dropdown.open { display: block; animation: fadeIn 0.2s; }
+.profile-item { padding: 12px 20px; font-size: 14px; color: #cbd5e1; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+.profile-item:hover { background: #1e293b; color: #fff; }
+.profile-item.danger { color: #ef4444; border-top: 1px solid #1f2937; }
+
+.btn-icon { background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; position: relative; }
+.notify-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: none; border: 2px solid #0f131a; }
+.notify-dropdown { position: absolute; top: 55px; right: 0; width: 320px; background: #0f131a; border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
+.notify-dropdown.open { display: block; animation: fadeIn 0.2s; }
+.notify-header { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-weight: 700; color: #fff; }
+.notify-list { max-height: 300px; overflow-y: auto; }
+.notify-item { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-size: 13px; color: #cbd5e1; }
+.notify-item span { display: block; font-size: 11px; color: #64748b; margin-top: 5px; }
+
+.container { max-width: 1500px; margin: 0 auto 30px; padding: 0 40px; }
+.tab-page { display: none; animation: fadeIn 0.3s ease; }
+.tab-page.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.page-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.page-title::before { content: ''; width: 4px; height: 24px; background: #ef4444; border-radius: 2px; }
+
+.table-card { border-radius: 16px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+thead { background: rgba(19, 25, 36, 0.6); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+th { padding: 16px 20px; font-size: 11px; text-transform: uppercase; color: #cbd5e1; font-weight: 700; }
+tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; }
+tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
+td { padding: 16px 20px; font-size: 14px; color: #e2e8f0; }
+.user-cell { display: flex; align-items: center; gap: 12px; }
+.t-avatar { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+.t-name { font-weight: 600; color: #fff; }
+.t-rank { font-size: 12px; color: #94a3b8; }
+
+.badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; }
+.b-adm { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+.b-sl { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+.b-sp { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+.b-pay { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
+.norm { padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; }
+.n-red { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444; }
+.n-yellow { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid #f59e0b; }
+.n-green { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid #22c55e; }
+a.steam-link { color: #94a3b8; text-decoration: none; border-bottom: 1px dashed #3b82f6; }
+a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
+.btn-report { padding: 6px 12px; background: rgba(59,130,246,0.1); border: 1px solid #3b82f6; color: #3b82f6; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; margin-right: 5px; }
+.btn-report:hover { background: #3b82f6; color: #fff; }
+
+.tool-card { border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+.tool-card h3 { color: #fff; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
+.tool-card label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; margin-top: 10px; }
+.tool-card input, .tool-card select, .tool-card textarea { width: 100%; padding: 10px; background: rgba(11, 14, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff; font-family: inherit; }
+.btn { padding: 10px 20px; background: #3b82f6; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+.btn:hover { background: #2563eb; }
+.btn-red { background: #ef4444; }
+.btn-red:hover { background: #dc2626; }
+
+.settings-card { border-radius: 16px; padding: 30px; }
+.settings-card h3 { color: #fff; margin-bottom: 20px; font-size: 18px; }
+.setting-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.setting-row:last-child { border-bottom: none; }
+.setting-label { font-size: 14px; color: #e2e8f0; }
+.toggle-switch { position: relative; width: 50px; height: 26px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .4s; border-radius: 26px; }
+.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: #ef4444; }
+input:checked + .slider:before { transform: translateX(24px); }
+
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
 .modal-overlay.open { display: flex; }
-.modal { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-.modal h2 { font-size: 18px; margin-bottom: 20px; color: #fafafa; }
-.modal label { display: block; font-size: 12px; color: #a1a1aa; margin-bottom: 5px; margin-top: 12px; }
-.modal input, .modal select, .modal textarea { width: 100%; padding: 10px; background: #09090b; border: 1px solid #27272a; border-radius: 6px; color: #fafafa; font-family: inherit; }
-.btn-cancel { width: 100%; padding: 10px; background: transparent; color: #a1a1aa; border: 1px solid #27272a; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+.modal { background: #0f131a; border: 1px solid #1f2937; border-radius: 16px; padding: 30px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+.modal h2 { color: #fff; margin-bottom: 20px; }
+.modal label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; margin-top: 10px; }
+.modal input, .modal select, .modal textarea { width: 100%; padding: 10px; background: #0b0e14; border: 1px solid #334155; border-radius: 8px; color: #fff; font-family: inherit; margin-bottom: 5px; }
+.modal textarea { resize: vertical; min-height: 60px; }
+
+.bar-chart { display: flex; align-items: flex-end; height: 300px; gap: 20px; padding-top: 40px; border-bottom: 2px solid rgba(255,255,255,0.1); overflow-x: auto; }
+.bar-wrapper { display: flex; flex-direction: column; align-items: center; min-width: 80px; height: 100%; justify-content: flex-end; }
+.bar { width: 50px; background: linear-gradient(180deg, #3b82f6, #1d4ed8); border-radius: 8px 8px 0 0; position: relative; }
+.bar-value { position: absolute; top: -30px; width: 100%; text-align: center; font-size: 14px; font-weight: 800; color: #fff; }
+.bar-label { margin-top: 12px; font-size: 12px; color: #cbd5e1; text-align: center; font-weight: 600; }
 </style>
 </head>
-<body>
+<body class="glass-mode">
 
-<div class="top-nav">
-    <div class="brand"><span class="brand-icon">🛡️</span> GARRY'S MOD PANEL</div>
-    <div class="user-profile" id="user-profile-area">
-        <a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-login">Войти через Steam</a>
+<div class="bg-slideshow"></div>
+<div class="bg-overlay"></div>
+
+<header class="top-header glass">
+    <div class="logo"><span class="logo-icon">🛡️</span> СЛЕДЯЩИЕ</div>
+    <nav class="header-nav">
+        <div class="nav-item active" onclick="switchPage('table', this)">Состав</div>
+        <div class="nav-item" onclick="switchPage('stats', this)">Статистика</div>
+        <div class="nav-item" onclick="switchPage('activity', this)">Активность</div>
+        <div class="nav-item" onclick="switchPage('changelog', this)">Обновления</div>
+        <div class="nav-item" onclick="switchPage('tools', this)" id="nav-tools" style="display:none;">Инструменты</div>
+        <div class="nav-item" onclick="switchPage('logs', this)" id="nav-logs" style="display:none;">Журнал</div>
+    </nav>
+    <div class="header-user">
+        <button class="btn-icon" onclick="toggleNotifications()">🔔 <div class="notify-dot" id="notify-dot"></div></button>
+        <div class="notify-dropdown" id="notify-dropdown">
+            <div class="notify-header">Уведомления</div>
+            <div class="notify-list" id="notify-list"><div class="notify-item">Нет новых оповещений.</div></div>
+        </div>
+        
+        <div class="user-badge" onclick="toggleProfileMenu()">
+            <img class="user-avatar" id="header-avatar" src="https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg">
+            <div class="user-info">
+                <span class="user-name" id="header-name">Загрузка...</span>
+                <span class="user-rank" id="header-rank">...</span>
+            </div>
+        </div>
+        <div class="profile-dropdown" id="profile-dropdown">
+            <div class="profile-item" onclick="switchPage('settings', this); closeProfileMenu();">⚙️ Настройки</div>
+            <div class="profile-item danger" onclick="logout()">🚪 Выйти из аккаунта</div>
+        </div>
     </div>
-</div>
+</header>
 
 <div class="banner">
-    <h1>ОТДЕЛ СЛЕДЯЩИХ</h1>
-    <p>Панель управления • Garry's Mod</p>
+    <h1>СЛЕДЯЩИЕ</h1>
 </div>
 
-<div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('main', this)">Таблица состава</button>
-    <button class="tab-btn" onclick="switchTab('stats', this)">Статистика</button>
-</div>
+<main class="container">
+    <div id="page-table" class="tab-page active">
+        <div class="table-card glass">
+            <table>
+                <thead><tr><th>Следящий</th><th>Ранг</th><th>SteamID</th><th>Адм.</th><th>Слежка</th><th>Норма</th><th>СП</th><th>Зарплата</th><th>Действие</th></tr></thead>
+                <tbody id="table-body"><tr><td colspan="9"><div class="loader">Загрузка...</div></td></tr></tbody>
+            </table>
+        </div>
+    </div>
 
-<div id="tab-main" class="tab-content active">
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th><th>Следящий</th><th>Ранг</th><th>SteamID</th>
-                    <th>Адм.</th><th>Слежка</th><th>Норма</th><th>СП</th><th>Зарплата</th>
-                </tr>
-            </thead>
-            <tbody id="table-body"><tr><td colspan="9" style="text-align:center; padding: 40px; color: #a1a1aa;">Загрузка...</td></tr></tbody>
-        </table>
+    <div id="page-stats" class="tab-page">
+        <h1 class="page-title">Статистика</h1>
+        <div class="stats-grid" id="stats-grid"></div>
+    </div>
+
+    <div id="page-activity" class="tab-page">
+        <h1 class="page-title">Активность</h1>
+        <div class="tool-card glass"><div class="bar-chart" id="bar-chart"></div></div>
+    </div>
+
+    <div id="page-changelog" class="tab-page">
+        <h1 class="page-title">Обновления</h1>
+        <button class="btn" id="btn-add-changelog" onclick="openChangelogModal()" style="margin-bottom: 20px; display: none;">+ Добавить обновление</button>
+        <div id="changelog-list"></div>
+    </div>
+
+    <div id="page-tools" class="tab-page">
+        <h1 class="page-title">Инструменты</h1>
+        <div class="tool-card glass">
+            <h3>Добавить / Изменить следящего</h3>
+            <select id="edit-select" onchange="fillEditForm()" style="margin-bottom: 15px;"><option value="">Выберите для редактирования...</option></select>
+            
+            <input type="hidden" id="edit-id">
+            <label>Ник</label><input type="text" id="edit-nick">
+            <label>SteamID (Любой формат: 7656..., STEAM_0..., [U:1:...])</label><input type="text" id="edit-steamid">
+            <label>Роль в отделе</label>
+            <select id="edit-rank">
+                <option value="Следящий">Следящий</option>
+                <option value="Зам. главы следящих">Зам. главы следящих</option>
+                <option value="Глава следящих">Глава следящих</option>
+                <option value="Табличник">Табличник</option>
+            </select>
+            <label>Роль в игре</label>
+            <select id="edit-game-rank">
+                <option value="Игрок">Игрок</option>
+                <option value="Модератор">Модератор</option>
+                <option value="Оператор">Оператор</option>
+                <option value="Администратор">Администратор</option>
+            </select>
+            
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <label style="display:flex; align-items:center; gap:5px; margin:0; cursor:pointer;">
+                    <input type="checkbox" id="edit-admin-rights" style="width:auto;"> Права Админа сайта
+                </label>
+                <label style="display:flex; align-items:center; gap:5px; margin:0; cursor:pointer;">
+                    <input type="checkbox" id="edit-can-edit-reports" style="width:auto;"> Может менять отчеты
+                </label>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn" onclick="saveStaff()">Сохранить</button>
+                <button class="btn btn-red" onclick="deleteStaff()" id="btn-delete-staff" style="display:none;">Удалить</button>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+            <button class="btn" onclick="clearForm()" style="width:100%; background:#22c55e;">+ Добавить нового</button>
+        </div>
+    </div>
+
+    <div id="page-logs" class="tab-page">
+        <h1 class="page-title">Журнал</h1>
+        <div id="logs-list"></div>
+    </div>
+
+    <div id="page-settings" class="tab-page">
+        <h1 class="page-title">Настройки</h1>
+        <div class="settings-card glass">
+            <h3>Внешний вид</h3>
+            <div class="setting-row">
+                <span class="setting-label">Прозрачность интерфейса (Glassmorphism)</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-glass" checked onchange="toggleGlassMode(this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- МОДАЛКА ОТЧЕТА -->
+<div class="modal-overlay" id="reportModal">
+    <div class="modal">
+        <h2 id="modalTitle">Отчёт</h2>
+        <form id="reportForm">
+            <input type="hidden" name="type" id="reportType">
+            <input type="hidden" name="reporter" id="reportReporter">
+            <label>1. Ник админа</label><input type="text" name="adminNick" required>
+            <label>2. SteamID</label><input type="text" name="steamId" required>
+            <label>3. Ранг</label><input type="text" name="rank" required>
+            <label>4. Время слежки</label><input type="text" name="time" required placeholder="14:30 — 15:10">
+            <label>5. Нарушенный пункт</label><textarea name="rule"></textarea>
+            <label>6. Сомнительные действия</label><textarea name="suspicious"></textarea>
+            <label>7. Продолжать слежку?</label><textarea name="continue"></textarea>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button type="button" class="btn btn-red" onclick="closeModal('reportModal')" style="flex:1;">Отмена</button>
+                <button type="submit" class="btn" style="flex:1;">Отправить</button>
+            </div>
+        </form>
     </div>
 </div>
 
-<div id="tab-stats" class="tab-content">
-    <div class="stats-grid" id="stats-grid"></div>
+<!-- МОДАЛКА ОБНОВЛЕНИЙ -->
+<div class="modal-overlay" id="changelogModal">
+    <div class="modal">
+        <h2>Новое обновление</h2>
+        <form id="changelogForm">
+            <label>Версия</label><input type="text" id="log-version" placeholder="v16.7">
+            <label>Что изменилось?</label><textarea id="log-content" rows="6"></textarea>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button type="button" class="btn btn-red" onclick="closeModal('changelogModal')" style="flex:1;">Отмена</button>
+                <button type="submit" class="btn" style="flex:1;">Опубликовать</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script type="module">
+const MY_STEAM_ID = "76561199816021510"; 
+
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-// --- ТВОИ КЛЮЧИ SUPABASE ---
-const SUPABASE_URL = 'https://gqmrwtcztqluaqltuhss.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_FyFuciAgrbhv4qNvhjqWwg_PgFMa50g';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// --- ТВОИ ДАННЫЕ (ЗАХАРДКОЖЕНЫ) ---
-const MY_STEAM_ID = "76561199816021510";
-const MY_NICK = "Разраб таблицы";
-const MY_RANK = "Разработчик";
+const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_publishable_FyFuciAgrbhv4qNvhjqWwg_PgFMa50g');
 
 let globalStaff = [];
+let currentUser = null;
 
-async function initApp() {
-    // 1. Пытаемся загрузить всех из Supabase
-    const { data: staff, error } = await supabase.from('staff').select('*');
+// --- КОНВЕРТЕР STEAMID ---
+// Превращает любой формат в 64-битный (для API и базы)
+function toSteam64(input) {
+    if (!input) return null;
+    const str = input.trim();
     
-    // 2. Создаем массив, куда первым делом кладем ТЕБЯ (захардкоженного)
-    let combinedStaff = [
-        { 
-            steamid: MY_STEAM_ID, 
-            nick: MY_NICK, 
-            rank: MY_RANK, 
-            adm: 0, sl: 0, sp: 0, week: 0, pay: 0,
-            isMe: true // Метка, чтобы знать, что это ты
-        }
-    ];
-
-    // 3. Если из базы что-то пришло, добавляем это к тебе (исключая дубликаты)
-    if (!error && staff) {
-        staff.forEach(person => {
-            if (person.steamid !== MY_STEAM_ID) {
-                combinedStaff.push(person);
-            }
-        });
+    // Если уже 64-битный (17 цифр)
+    if (/^7656\d{13}$/.test(str)) return str;
+    
+    // Если формат STEAM_0:1:1234
+    const matchSteam = str.match(/^STEAM_(\d):(\d):(\d+)$/i);
+    if (matchSteam) {
+        const y = BigInt(matchSteam[2]);
+        const z = BigInt(matchSteam[3]);
+        return (BigInt("76561197960265728") + (z * 2n) + y).toString();
     }
+    
+    // Если формат [U:1:1234]
+    const matchU = str.match(/^\[U:(\d):(\d+)\]$/i);
+    if (matchU) {
+        const z = BigInt(matchU[2]);
+        return (BigInt("76561197960265728") + z).toString();
+    }
+    
+    // Если просто набор цифр
+    if (/^\d+$/.test(str)) return str;
+    
+    return str; // Возвращаем как есть, если не распознали
+}
 
-    globalStaff = combinedStaff;
-    renderTable(globalStaff);
-    renderStats(globalStaff);
-
-    // --- АВТОРИЗАЦИЯ ---
-    // Если сервер Netrun вернул ссылку со SteamID
-    if (window.location.hash.startsWith('#steamid=')) {
-        const steamIdFromUrl = window.location.hash.substring(9);
-        window.history.replaceState(null, null, window.location.pathname);
-        
-        const found = globalStaff.find(s => s.steamid === steamIdFromUrl);
-        if (found) {
-            document.getElementById('user-profile-area').innerHTML = `
-                <div class="user-info"><div class="user-name">${found.nick}</div><div class="user-rank">${found.rank}</div></div>
-                <div class="avatar" style="margin: 0; width: 40px; height: 40px; font-size: 16px;">${found.nick[0]}</div>
-            `;
-            alert(`С возвращением, ${found.nick}!`);
-        } else {
-            alert("Вас нет в списке отдела!");
-        }
+// Превращает 64-битный в красивый STEAM_0:1:1234
+function toSteam32(steam64) {
+    if (!steam64) return '—';
+    const str = steam64.toString();
+    if (!/^\d+$/.test(str)) return str; // Если уже не цифры, оставляем как есть
+    
+    try {
+        const big = BigInt(str) - BigInt("76561197960265728");
+        const y = big % 2n;
+        const z = (big - y) / 2n;
+        return `STEAM_0:${y}:${z}`;
+    } catch(e) {
+        return str;
     }
 }
 
-function renderTable(staff) {
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = '';
-    staff.forEach((person, index) => {
-        const normSum = person.week || 0;
-        let normClass = normSum >= 5 ? 'norm-green' : (normSum >= 3 ? 'norm-yellow' : 'norm-red');
-        
-        // Если это ты, выделяем строку зеленым или добавляем метку
-        const rowStyle = person.isMe ? 'style="border-left: 3px solid #22c55e;"' : '';
-
-        tbody.innerHTML += `
-            <tr ${rowStyle}>
-                <td class="id">#${index + 1}</td>
-                <td><div class="avatar">${person.nick[0]}</div><span class="nick">${person.nick}</span> ${person.isMe ? '<span style="color:#22c55e;font-size:10px;margin-left:5px;">(Вы)</span>' : ''}</td>
-                <td><span class="rank">${person.rank}</span></td>
-                <td style="color:#a1a1aa; font-family:monospace;">${person.steamid}</td>
-                <td><span class="badge adm">${person.adm || 0}</span></td>
-                <td><span class="badge sl">${person.sl || 0}</span></td>
-                <td><span class="norm-block ${normClass}">${normSum} / 5</span></td>
-                <td><span class="badge sp">${person.sp || 0}</span></td>
-                <td><span class="badge pay">${person.pay || 0} Д</span></td>
-            </tr>`;
-    });
+// Ссылка на профиль
+function getSteamProfileUrl(input) {
+    const steam64 = toSteam64(input);
+    if (!steam64) return '#';
+    return `https://steamcommunity.com/profiles/${steam64}`;
 }
 
-function renderStats(staff) {
-    const grid = document.getElementById('stats-grid');
-    grid.innerHTML = '';
-    staff.forEach(p => {
-        grid.innerHTML += `
-            <div class="stat-card">
-                <h3 style="font-size: 16px; margin-bottom: 10px; display:flex; align-items:center; gap:10px;">
-                    <div class="avatar" style="margin:0;">${p.nick[0]}</div> ${p.nick} ${p.isMe ? '(Вы)' : ''}
-                </h3>
-                <div class="stat-row"><span>Отчёты об админах:</span><b>${p.adm || 0}</b></div>
-                <div class="stat-row"><span>Слежка по указ.:</span><b>${p.sl || 0}</b></div>
-                <div class="stat-row"><span>Список пидормотов:</span><b>${p.sp || 0}</b></div>
-                <div class="stat-row"><span>Зарплата:</span><span>${p.pay || 0} Д</span></div>
-            </div>`;
-    });
-}
-
-window.switchTab = (tabId, btnElement) => {
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + tabId).classList.add('active');
-    btnElement.classList.add('active');
+// --- НАВИГАЦИЯ ---
+window.switchPage = (pageId, element) => {
+    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + pageId).classList.add('active');
+    if (element && element.classList.contains('nav-item')) element.classList.add('active');
+    if(pageId === 'activity') renderActivityChart();
+    if(pageId === 'changelog') loadChangelog();
 };
 
-initApp();
-</script>
+window.toggleNotifications = () => {
+    document.getElementById('notify-dropdown').classList.toggle('open');
+    document.getElementById('notify-dot').style.display = 'none';
+};
+window.toggleProfileMenu = () => document.getElementById('profile-dropdown').classList.toggle('open');
+window.closeProfileMenu = () => document.getElementById('profile-dropdown').classList.remove('open');
+window.logout = () => { alert("Вы вышли из аккаунта (демо)"); window.location.reload(); };
 
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.user-badge') && !e.target.closest('.profile-dropdown')) closeProfileMenu();
+    if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
+});
+
+window.toggleGlassMode = (checkbox) => {
+    if (checkbox.checked) {
+        document.body.classList.remove('no-glass-mode');
+        document.body.classList.add('glass-mode');
+        localStorage.setItem('glassMode', 'on');
+    } else {
+        document.body.classList.remove('glass-mode');
+        document.body.classList.add('no-glass-mode');
+        localStorage.setItem('glassMode', 'off');
+    }
+};
+if (localStorage.getItem('glassMode') === 'off') {
+    document.body.classList.remove('glass-mode');
+    document.body.classList.add('no-glass-mode');
+    document.getElementById('toggle-glass').checked = false;
+}
+
+// --- ЗАГРУЗКА ПРОФИЛЯ ---
+async function loadProfile() {
+    // Ищем тебя в базе. В базе ты хранишься как 64-бит.
+    const { data: staff } = await supabase.from('staff').select('*');
+    const me = staff.find(s => s.steamid === MY_STEAM_ID || toSteam64(s.steamid) === MY_STEAM_ID);
+    
+    if (me) {
+        currentUser = me;
+        document.getElementById('header-name').textContent = me.nick;
+        document.getElementById('header-rank').textContent = me.rank;
+        
+        if (me.role === 'admin') {
+            document.getElementById('nav-tools').style.display = 'flex';
+            document.getElementById('nav-logs').style.display = 'flex';
+            document.getElementById('btn-add-changelog').style.display = 'block';
+        }
+    } else {
+        document.getElementById('header-name').textContent = "Неизвестный";
+    }
+
+    setTimeout(() => {
+        document.getElementById('notify-dot').style.display = 'block';
+        document.getElementById('notify-list').innerHTML = `
+            <div class="notify-item">Вас занесли в таблицу состава (${currentUser?.rank || 'Неизвестно'})<span>Только что</span></div>
+            <div class="notify-item">Вам назначены права: ${currentUser?.role === 'admin' ? 'Полный доступ' : 'Обычный пользователь'}<span>Только что</span></div>
+            <div class="notify-item">Вы успешно авторизовались! Ознакомьтесь с сайтом!<span>Только что</span></div>
+        `;
+    }, 1000);
+}
+
+// --- ЗАГРУЗКА ДАННЫХ ---
+async function loadData() {
+    const { data: staff } = await supabase.from('staff').select('*');
+    globalStaff = staff || [];
+    renderTable(); renderStats(); renderToolsSelect(); loadLogs();
+}
+
+function renderTable() {
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = globalStaff.map((p) => {
+        const normSum = p.week || 0;
+        const normClass = normSum >= 5 ? 'n-green' : (normSum >= 3 ? 'n-yellow' : 'n-red');
+        // Показываем красивый 32-битный ID
+        const displayId = toSteam32(p.steamid);
+        return `
+            <tr>
+                <td><div class="user-cell"><img class="t-avatar" src="https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg"><div><div class="t-name">${p.nick}</div><div class="t-rank">${p.rank}</div></div></div></td>
+                <td>${p.rank}</td>
+                <td><a href="${getSteamProfileUrl(p.steamid)}" target="_blank" class="steam-link">${displayId}</a></td>
+                <td><span class="badge b-adm">${p.adm || 0}</span></td>
+                <td><span class="badge b-sl">${p.sl || 0}</span></td>
+                <td><span class="norm ${normClass}">${normSum} / 5</span></td>
+                <td><span class="badge b-sp">${p.sp || 0}</span></td>
+                <td><span class="badge b-pay">${p.pay || 0} Д</span></td>
+                <td>
+                    <button class="btn-report" onclick="openReport('adm','${p.nick}')">Отчёт</button>
+                    <button class="btn-report" onclick="openReport('sl','${p.nick}')">Слежка</button>
+                    <button class="btn-report" onclick="openReport('sp','${p.nick}')">СП</button>
+                </td>
+            </tr>`;
+    }).join('');
+}
+
+function renderStats() {
+    document.getElementById('stats-grid').innerHTML = globalStaff.map(p => `
+        <div class="stat-box glass">
+            <div class="stat-header"><img class="t-avatar" src="https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg"><div><div class="t-name">${p.nick}</div><div class="t-rank">${p.rank}</div></div></div>
+            <div class="stat-row"><span>Отчёты об админах:</span><b>${p.adm || 0}</b></div>
+            <div class="stat-row"><span>Слежка по указ.:</span><b>${p.sl || 0}</b></div>
+            <div class="stat-row"><span>Список пидормотов:</span><b>${p.sp || 0}</b></div>
+            <div class="stat-row"><span>Зарплата:</span><span>${p.pay || 0} Д</span></div>
+        </div>
+    `).join('');
+}
+
+function renderActivityChart() {
+    const chartContainer = document.getElementById('bar-chart');
+    let dataToShow = globalStaff.map(s => ({ label: s.nick, value: (s.adm || 0) + (s.sl || 0) }));
+    if(dataToShow.length === 0) return chartContainer.innerHTML = '<div class="loader">Нет данных.</div>';
+    dataToShow.sort((a, b) => b.value - a.value);
+    const maxVal = Math.max(...dataToShow.map(d => d.value), 1);
+    chartContainer.innerHTML = dataToShow.map(item => `
+        <div class="bar-wrapper">
+            <div class="bar" style="height: ${(item.value / maxVal) * 100}%;"><div class="bar-value">${item.value}</div></div>
+            <div class="bar-label">${item.label}</div>
+        </div>
+    `).join('');
+}
+
+function renderToolsSelect() {
+    const select = document.getElementById('edit-select');
+    select.innerHTML = '<option value="">Выберите для редактирования...</option>' + globalStaff.map(p => `<option value="${p.id}">${p.nick}</option>`).join('');
+}
+
+window.clearForm = () => {
+    document.getElementById('edit-id').value = '';
+    document.getElementById('edit-nick').value = '';
+    document.getElementById('edit-steamid').value = '';
+    document.getElementById('edit-rank').value = 'Следящий';
+    document.getElementById('edit-game-rank').value = 'Игрок';
+    document.getElementById('edit-admin-rights').checked = false;
+    document.getElementById('edit-can-edit-reports').checked = false;
+    document.getElementById('btn-delete-staff').style.display = 'none';
+};
+
+window.fillEditForm = () => {
+    const id = document.getElementById('edit-select').value;
+    if (!id) { clearForm(); return; }
+    const p = globalStaff.find(s => s.id == id);
+    document.getElementById('edit-id').value = p.id;
+    document.getElementById('edit-nick').value = p.nick;
+    // В поле ввода показываем красивый 32-битный формат
+    document.getElementById('edit-steamid').value = toSteam32(p.steamid);
+    document.getElementById('edit-rank').value = p.rank;
+    document.getElementById('edit-game-rank').value = p.game_rank || 'Игрок';
+    document.getElementById('edit-admin-rights').checked = p.role === 'admin';
+    document.getElementById('edit-can-edit-reports').checked = p.can_edit_reports || false;
+    document.getElementById('btn-delete-staff').style.display = 'block';
+};
+
+window.saveStaff = async () => {
+    const id = document.getElementById('edit-id').value;
+    // При сохранении конвертируем любой введенный формат в 64-битный для базы
+    const inputSteamId = document.getElementById('edit-steamid').value;
+    const steam64 = toSteam64(inputSteamId);
+
+    const updates = {
+        nick: document.getElementById('edit-nick').value,
+        steamid: steam64, // Сохраняем всегда в 64-бит
+        rank: document.getElementById('edit-rank').value,
+        game_rank: document.getElementById('edit-game-rank').value,
+        role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user',
+        can_edit_reports: document.getElementById('edit-can-edit-reports').checked
+    };
+    if (!updates.nick || !updates.steamid) return alert("Заполните ник и SteamID!");
+
+    if (id) {
+        await supabase.from('staff').update(updates).eq('id', id);
+        if (steam64 === MY_STEAM_ID) {
+            document.getElementById('header-name').textContent = updates.nick;
+            document.getElementById('header-rank').textContent = updates.rank;
+            if (updates.role === 'admin') {
+                document.getElementById('nav-tools').style.display = 'flex';
+                document.getElementById('nav-logs').style.display = 'flex';
+                document.getElementById('btn-add-changelog').style.display = 'block';
+            } else {
+                document.getElementById('nav-tools').style.display = 'none';
+                document.getElementById('nav-logs').style.display = 'none';
+                document.getElementById('btn-add-changelog').style.display = 'none';
+            }
+        }
+    } else {
+        updates.adm = 0; updates.sl = 0; updates.sp = 0; updates.week = 0; updates.pay = 0;
+        await supabase.from('staff').insert([updates]);
+    }
+    await supabase.from('logs').insert([{ action: `Сохранен ${updates.nick}`, date: new Date().toLocaleString('ru-RU') }]);
+    alert("Сохранено!"); clearForm(); loadData();
+};
+
+window.deleteStaff = async () => {
+    const id = document.getElementById('edit-id').value;
+    if (!id) return;
+    if (!confirm("Удалить этого следящего?")) return;
+    await supabase.from('staff').delete().eq('id', id);
+    await supabase.from('logs').insert([{ action: `Удален пользователь`, date: new Date().toLocaleString('ru-RU') }]);
+    alert("Удалено!"); clearForm(); loadData();
+};
+
+async function loadLogs() {
+    const { data: logs } = await supabase.from('logs').select('*').order('id', { ascending: false });
+    document.getElementById('logs-list').innerHTML = (logs || []).map(l => `<div class="log-item glass"><div class="log-time">${l.date}</div><div>${l.action}</div></div>`).join('') || '<div class="loader">Пусто.</div>';
+}
+
+async function loadChangelog() {
+    const { data: logs } = await supabase.from('changelog').select('*').order('id', { ascending: false });
+    document.getElementById('changelog-list').innerHTML = (logs || []).map(l => `
+        <div class="tool-card glass" style="border-left: 3px solid #ef4444;">
+            <h3>Версия ${l.version} <span style="font-size:12px;color:#64748b;">${l.date}</span></h3>
+            <p style="white-space:pre-wrap;">${l.content}</p>
+        </div>
+    `).join('') || '<div class="loader">Обновлений нет.</div>';
+}
+
+window.openChangelogModal = () => document.getElementById('changelogModal').classList.add('open');
+window.closeModal = (id) => document.getElementById(id).classList.remove('open');
+
+document.getElementById('changelogForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const version = document.getElementById('log-version').value;
+    const content = document.getElementById('log-content').value;
+    if (!version || !content) return alert("Заполните поля!");
+    await supabase.from('changelog').insert([{ version, content, date: new Date().toLocaleString('ru-RU') }]);
+    closeModal('changelogModal'); loadChangelog();
+});
+
+window.openReport = (type, nick) => {
+    document.getElementById('reportType').value = type;
+    document.getElementById('reportReporter').value = nick;
+    document.getElementById('modalTitle').textContent = type === 'adm' ? 'Отчёт: слежка за админом' : (type === 'sl' ? 'Слежка по указаниям' : 'Список пидормотов');
+    document.getElementById('reportModal').classList.add('open');
+};
+
+document.getElementById('reportForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const data = {
+        type: f.type.value, reporter: f.reporter.value, adminNick: f.adminNick.value,
+        steamId: toSteam32(toSteam64(f.steamId.value)), // В отчетах тоже сохраняем красиво
+        rank: f.rank.value, time: f.time.value,
+        rule: f.rule.value || '—', suspicious: f.suspicious.value || '—', continue: f.continue.value || '—',
+        status: 'pending', date: new Date().toLocaleString('ru-RU')
+    };
+    await supabase.from('reports').insert([data]);
+    await supabase.from('logs').insert([{ action: `Новый отчет от ${f.reporter.value}`, date: new Date().toLocaleString('ru-RU') }]);
+    alert("Отчет отправлен!"); closeModal('reportModal'); f.reset();
+});
+
+loadProfile();
+loadData();
+</script>
 </body>
 </html>
