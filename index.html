@@ -83,6 +83,8 @@ body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #
 .rank-glava::before { content: '👑 '; font-size: 14px; }
 .rank-zam { color: #ef4444; font-weight: 800; }
 .rank-sled { color: #22c55e; white-space: nowrap; }
+.rank-curator { color: #a855f7; font-weight: 800; text-shadow: 0 0 10px rgba(168,85,247,0.5); white-space: nowrap; }
+.rank-sudo { color: #ec4899; font-weight: 800; text-shadow: 0 0 10px rgba(236,72,153,0.5); white-space: nowrap; }
 .badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; text-align: center; min-width: 40px;}
 .b-adm { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
 .b-sl { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
@@ -266,8 +268,11 @@ input:checked + .slider:before { transform: translateX(24px); }
                 <label>Роль в отделе</label>
                 <select id="edit-rank">
                     <option value="Следящий">Следящий</option>
+                    <option value="Куратор">Куратор</option>
+                    <option value="Судо-Куратор">Судо-Куратор</option>
                     <option value="Зам. главы следящих">Зам. главы следящих</option>
                     <option value="Глава следящих">Глава следящих</option>
+                    <option value="Табличник">Табличник</option>
                 </select>
                 <label>Роль в игре</label>
                 <select id="edit-game-rank">
@@ -277,11 +282,16 @@ input:checked + .slider:before { transform: translateX(24px); }
                     <option value="Оператор">Оператор</option>
                     <option value="Сеньор Админ">Сеньор Админ</option>
                     <option value="Администратор">Администратор</option>
+                    <option value="Куратор">Куратор</option>
+                    <option value="Судо-Куратор">Судо-Куратор</option>
                 </select>
                 
-                <div style="display:flex; gap:10px; margin-top:15px;">
+                <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
                     <label style="display:flex; align-items:center; gap:5px; margin:0; cursor:pointer;">
                         <input type="checkbox" id="edit-admin-rights" style="width:auto;"> Права Админа сайта
+                    </label>
+                    <label style="display:flex; align-items:center; gap:5px; margin:0; cursor:pointer;">
+                        <input type="checkbox" id="edit-is-boss" style="width:auto;"> <b style="color:#fbbf24;">Руководство (без отчётов/нормы)</b>
                     </label>
                 </div>
 
@@ -481,7 +491,7 @@ async function loadProfile() {
         document.getElementById('header-rank').textContent = me.rank;
         if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
         
-        if (me.role === 'admin' || me.rank === 'Глава следящих' || me.rank === 'Зам. главы следящих') {
+        if (me.role === 'admin' || me.rank === 'Глава следящих' || me.rank === 'Зам. главы следящих' || me.rank === 'Судо-Куратор' || me.rank === 'Куратор') {
             document.getElementById('nav-reports').style.display = 'flex';
             document.getElementById('nav-tools').style.display = 'flex';
         }
@@ -512,7 +522,9 @@ function renderTable() {
         if (normSum >= 5) normClass = 'n-green';
         else if (normSum >= 4) normClass = 'n-yellow';
         
-        const isBoss = (p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник');
+        // Учитываем флаг is_boss для скрытия отчетов
+        const isBoss = p.is_boss || p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник' || p.rank === 'Судо-Куратор' || p.rank === 'Куратор';
+        
         const normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
         
         const displayId = toSteam32(p.steamid);
@@ -521,6 +533,8 @@ function renderTable() {
         let rankClass = 'rank-sled';
         if (p.rank === 'Глава следящих') rankClass = 'rank-glava';
         else if (p.rank === 'Зам. главы следящих') rankClass = 'rank-zam';
+        else if (p.rank === 'Судо-Куратор') rankClass = 'rank-sudo';
+        else if (p.rank === 'Куратор') rankClass = 'rank-curator';
 
         let statusHtml = '';
         if (p.status === 'Активен') statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
@@ -563,7 +577,8 @@ function renderTable() {
 
 function renderStats() {
     document.getElementById('stats-grid').innerHTML = globalStaff.map(p => {
-        const isBoss = (p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник');
+        const isBoss = p.is_boss || p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник' || p.rank === 'Судо-Куратор' || p.rank === 'Куратор';
+        
         const admHtml = isBoss ? '<span style="color:#64748b;">—</span>' : p.adm || 0;
         const slHtml = isBoss ? '<span style="color:#64748b;">—</span>' : p.sl || 0;
         const payHtml = isBoss ? '<span style="color:#64748b;">—</span>' : `${p.pay || 0} ДВ`;
@@ -587,7 +602,7 @@ function renderStats() {
 
 function renderActivityChart() {
     const chartContainer = document.getElementById('bar-chart');
-    let dataToShow = globalStaff.filter(s => s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих' && s.rank !== 'Табличник').map(s => ({ label: s.nick, value: (s.adm || 0) + (s.sl || 0) }));
+    let dataToShow = globalStaff.filter(s => !s.is_boss && s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих' && s.rank !== 'Табличник' && s.rank !== 'Судо-Куратор' && s.rank !== 'Куратор').map(s => ({ label: s.nick, value: (s.adm || 0) + (s.sl || 0) }));
     if(dataToShow.length === 0) return chartContainer.innerHTML = '<div class="loader">Нет данных.</div>';
     dataToShow.sort((a, b) => b.value - a.value);
     const maxVal = Math.max(...dataToShow.map(d => d.value), 1);
@@ -617,6 +632,7 @@ window.fillEditForm = () => {
     document.getElementById('edit-rank').value = p.rank;
     document.getElementById('edit-game-rank').value = p.game_rank || 'Игрок';
     document.getElementById('edit-admin-rights').checked = p.role === 'admin';
+    document.getElementById('edit-is-boss').checked = p.is_boss || false;
     document.getElementById('btn-delete-staff').style.display = 'block';
 };
 
@@ -631,7 +647,8 @@ window.saveStaff = async () => {
         status: document.getElementById('edit-status').value,
         rank: document.getElementById('edit-rank').value,
         game_rank: document.getElementById('edit-game-rank').value,
-        role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user'
+        role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user',
+        is_boss: document.getElementById('edit-is-boss').checked
     };
     if (!updates.nick || !updates.steamid) return alert("Заполните ник и SteamID!");
     if (id) {
@@ -654,7 +671,7 @@ window.resetWeek = async () => {
     if (!confirm("Сбросить НЕДЕЛЮ? (Отчеты за неделю обнулятся, ДВ останется)")) return;
     const { data: staff } = await supabase.from('staff').select('*');
     for(let s of staff) {
-        if(s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих') {
+        if(!s.is_boss && s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих') {
             await supabase.from('staff').update({ week: 0, adm: 0, sl: 0 }).eq('id', s.id);
         }
     }
