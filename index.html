@@ -13,45 +13,30 @@ body {
     position: relative; overflow-x: hidden;
 }
 
-/* --- УЮТНЫЙ ФОН (Американские домики с тыквами) --- */
+/* --- УЮТНЫЙ ФОН --- */
 .bg-slideshow {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -2; 
-    background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop');
-    background-size: cover; background-position: center;
-    filter: brightness(0.4) contrast(1.1);
+    z-index: -2; background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover; background-position: center; filter: brightness(0.4) contrast(1.1);
 }
 .bg-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at center, transparent 20%, rgba(5, 5, 10, 0.95) 100%); 
-    z-index: -1;
+    background: radial-gradient(circle at center, transparent 20%, rgba(5, 5, 10, 0.95) 100%); z-index: -1;
 }
 
-/* --- СТЕКЛО --- */
-.glass-mode .glass {
-    background: rgba(15, 19, 26, 0.4) !important;
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-.no-glass-mode .glass {
-    background: #0f131a !important;
-    backdrop-filter: none; -webkit-backdrop-filter: none;
-    border: 1px solid #1f2937 !important;
-}
+.glass-mode .glass { background: rgba(15, 19, 26, 0.4) !important; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1) !important; }
+.no-glass-mode .glass { background: #0f131a !important; backdrop-filter: none; border: 1px solid #1f2937 !important; }
 .no-glass-mode .bg-slideshow { filter: blur(8px) brightness(0.3); }
 
-/* --- ДЕКОР --- */
 .spider-web { position: fixed; z-index: 0; pointer-events: none; opacity: 0.15; }
 .web-tl { top: 0; left: 0; width: 200px; height: 200px; background: radial-gradient(circle at 0 0, transparent 50%, #fff 51%, transparent 52%), repeating-conic-gradient(from 90deg at 0 0, transparent 0 10deg, #fff 10deg 11deg); }
 .web-tr { top: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle at 100% 0, transparent 50%, #fff 51%, transparent 52%), repeating-conic-gradient(from 180deg at 100% 0, transparent 0 10deg, #fff 10deg 11deg); }
-
 .bat { position: fixed; z-index: 0; pointer-events: none; font-size: 24px; opacity: 0.3; animation: fly 20s linear infinite; }
-.bat-1 { top: 10%; left: -50px; animation-duration: 25s; animation-delay: 0s; }
+.bat-1 { top: 10%; left: -50px; animation-duration: 25s; }
 .bat-2 { top: 30%; left: -50px; animation-duration: 35s; animation-delay: 5s; font-size: 18px;}
-.bat-3 { top: 70%; left: -50px; animation-duration: 20s; animation-delay: 12s; font-size: 30px;}
 @keyframes fly { 0% { transform: translateX(-50px) translateY(0) rotate(0deg); } 50% { transform: translateX(50vw) translateY(-50px) rotate(10deg); } 100% { transform: translateX(105vw) translateY(20px) rotate(-10deg); } }
 
-.banner { text-align: center; margin-bottom: 30px; padding: 20px 0; }
+.banner { text-align: center; margin-bottom: 20px; padding: 20px 0; }
 .banner h1 { font-size: 36px; font-weight: 900; color: #fff; text-shadow: 0 0 20px rgba(255, 100, 0, 0.8); letter-spacing: 4px; text-transform: uppercase; }
 
 .top-header { background: rgba(15, 19, 26, 0.6); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 64px; position: sticky; top: 0; z-index: 100; }
@@ -92,32 +77,21 @@ body {
 .page-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 .page-title::before { content: ''; width: 4px; height: 24px; background: #ff6600; border-radius: 2px; }
 
-/* --- СВЕТЯЩАЯСЯ ОБВОДКА (САМА ТАБЛИЦА ТЕМНАЯ) --- */
+/* --- ЛЕГЕНДА --- */
+.legend { display: flex; gap: 20px; margin-bottom: 20px; background: rgba(15, 19, 26, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+.legend span { font-size: 13px; color: #cbd5e1; display: flex; align-items: center; gap: 5px; }
+.legend b { color: #fff; }
+
+/* --- ТАБЛИЦА С ОБВОДКОЙ --- */
 .table-wrapper {
-    position: relative; border-radius: 16px;
-    /* Плавная анимация цвета обводки */
+    position: relative; border-radius: 16px; padding: 3px;
     animation: borderGlowColor 4s linear infinite;
-    /* Свет исходит из-под обводки (тень наружу) */
-    box-shadow: 
-        0 0 20px rgba(239, 68, 68, 0.6), 
-        0 0 40px rgba(245, 158, 11, 0.4),
-        0 0 80px rgba(251, 191, 36, 0.2);
-    padding: 3px; /* Толщина обводки */
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(245, 158, 11, 0.4), 0 0 80px rgba(251, 191, 36, 0.2);
 }
-@keyframes borderGlowColor {
-    0% { background-color: #ef4444; } /* Красный */
-    33% { background-color: #f59e0b; } /* Оранжевый */
-    66% { background-color: #fbbf24; } /* Жёлтый */
-    100% { background-color: #ef4444; } /* Красный */
-}
+@keyframes borderGlowColor { 0% { background-color: #ef4444; } 33% { background-color: #f59e0b; } 66% { background-color: #fbbf24; } 100% { background-color: #ef4444; } }
 
-.table-card {
-    border-radius: 13px; overflow: hidden; position: relative;
-    background: rgba(15, 19, 26, 0.95); /* Темная, непрозрачная подложка */
-    backdrop-filter: blur(10px);
-}
-
-.table-row { display: grid; grid-template-columns: 2.5fr 1.2fr 1.2fr 1fr 0.6fr 0.6fr 0.8fr 0.6fr 0.8fr 1.8fr; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; position: relative; z-index: 2;}
+.table-card { border-radius: 13px; overflow: hidden; background: rgba(15, 19, 26, 0.95); backdrop-filter: blur(10px); }
+.table-row { display: grid; grid-template-columns: 2.5fr 1.2fr 1.2fr 1fr 0.6fr 0.8fr 0.8fr 1.8fr; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; }
 .table-row:hover { background: rgba(255, 255, 255, 0.05); }
 .table-header { background: rgba(19, 25, 36, 0.9); font-size: 11px; text-transform: uppercase; color: #cbd5e1; font-weight: 700; padding: 16px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
 .table-header > div { text-align: center; }
@@ -127,14 +101,14 @@ body {
 
 .user-cell { display: flex; align-items: center; gap: 12px; }
 .t-avatar { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; background: #1e293b; }
-.t-name { font-weight: 600; color: #fff; text-align: left; }
-.t-rank { font-size: 12px; color: #94a3b8; display: flex; align-items: center; gap: 5px; }
+.t-name { font-weight: 600; color: #fff; text-align: left; display: flex; flex-direction: column; }
+.t-rank { font-size: 11px; color: #94a3b8; display: flex; align-items: center; gap: 5px; }
+.game-rank { font-size: 10px; color: #ff6600; font-weight: bold; text-transform: uppercase;}
 
 .status-badge { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; white-space: nowrap; width: 100%; max-width: 100px;}
 .status-active { color: #22c55e; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); }
 .status-frozen { color: #3b82f6; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); }
 .status-vacation { color: #6366f1; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); }
-
 .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
 .dot.blink { animation: blink 1.5s infinite; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -147,12 +121,12 @@ body {
 .badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; text-align: center; min-width: 40px;}
 .b-adm { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
 .b-sl { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
-.b-sp { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
 .b-pay { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
 .norm { padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; display: inline-block; min-width: 55px; text-align: center;}
 .n-red { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444; }
 .n-yellow { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid #f59e0b; }
 .n-green { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid #22c55e; }
+.n-none { color: #64748b; font-style: italic; background: transparent; border: none; }
 a.steam-link { color: #94a3b8; text-decoration: none; border-bottom: 1px dashed #3b82f6; }
 a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
 
@@ -160,7 +134,15 @@ a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
 .btn-report { padding: 6px 8px; background: rgba(59,130,246,0.1); border: 1px solid #3b82f6; color: #3b82f6; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap;}
 .btn-report:hover { background: #3b82f6; color: #fff; }
 
-/* ОСТАЛЬНОЕ */
+/* СТАТИСТИКА */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.stat-box { border-radius: 16px; padding: 25px; display: flex; flex-direction: column; gap: 15px;}
+.stat-header { display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;}
+.stat-row { display: flex; justify-content: space-between; font-size: 14px; color: #cbd5e1; line-height: 1.5;}
+.stat-row b { color: #fff; }
+.stat-row:last-child { margin-top: 10px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 16px; color: #3b82f6; font-weight: 700; }
+
+/* ИНСТРУМЕНТЫ */
 .tool-card { border-radius: 16px; padding: 24px; margin-bottom: 20px; }
 .tool-card h3 { color: #fff; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
 .tool-card label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; margin-top: 10px; }
@@ -169,6 +151,8 @@ a.steam-link:hover { color: #3b82f6; border-bottom-color: #fff; }
 .btn:hover { background: #2563eb; }
 .btn-red { background: #ef4444; }
 .btn-red:hover { background: #dc2626; }
+.btn-green { background: #22c55e; color: #0f131a;}
+.btn-green:hover { background: #16a34a; }
 
 .settings-card { border-radius: 16px; padding: 30px; }
 .settings-card h3 { color: #fff; margin-bottom: 20px; font-size: 18px; }
@@ -190,31 +174,36 @@ input:checked + .slider:before { transform: translateX(24px); }
 .modal input, .modal select, .modal textarea { width: 100%; padding: 10px; background: #0b0e14; border: 1px solid #334155; border-radius: 8px; color: #fff; font-family: inherit; margin-bottom: 5px; }
 .modal textarea { resize: vertical; min-height: 60px; }
 
-.bar-chart { display: flex; align-items: flex-end; height: 300px; gap: 20px; padding-top: 40px; border-bottom: 2px solid rgba(255,255,255,0.1); overflow-x: auto; }
-.bar-wrapper { display: flex; flex-direction: column; align-items: center; min-width: 80px; height: 100%; justify-content: flex-end; }
-.bar { width: 50px; background: linear-gradient(180deg, #3b82f6, #1d4ed8); border-radius: 8px 8px 0 0; position: relative; }
-.bar-value { position: absolute; top: -30px; width: 100%; text-align: center; font-size: 14px; font-weight: 800; color: #fff; }
-.bar-label { margin-top: 12px; font-size: 12px; color: #cbd5e1; text-align: center; font-weight: 600; }
+/* ОТЧЕТЫ */
+.report-card { background: rgba(15, 19, 26, 0.8); border: 1px solid #1f2937; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #ff9f43;}
+.report-card.approved { border-left-color: #22c55e; opacity: 0.7;}
+.report-card h3 { color: #fff; margin-bottom: 10px; font-size: 16px; display: flex; justify-content: space-between;}
+.report-card p { font-size: 14px; color: #cbd5e1; margin-bottom: 5px;}
+.report-card b { color: #fff; }
+.btn-approve { background: rgba(34,197,94,0.2); border: 1px solid #22c55e; color: #22c55e; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px;}
+.btn-approve:hover { background: #22c55e; color: #000;}
+.btn-reject { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #ef4444; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;}
+.btn-reject:hover { background: #ef4444; color: #fff;}
 </style>
 </head>
 <body class="glass-mode">
 
-<!-- ДЕКОР -->
 <div class="spider-web web-tl"></div>
 <div class="spider-web web-tr"></div>
 <div class="bat bat-1">🦇</div>
 <div class="bat bat-2">🦇</div>
-<div class="bat bat-3">🦇</div>
 
 <div class="bg-slideshow"></div>
 <div class="bg-overlay"></div>
 
+<!-- ЭКРАН БЛОКИРОВКИ -->
 <div id="auth-screen" style="display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10;">
     <h1 style="color: #fff; font-size: 48px; font-weight: 900; text-shadow: 0 0 20px rgba(255, 100, 0, 0.8); margin-bottom: 20px;">ДОСТУП ЗАКРЫТ</h1>
     <p style="color: #94a3b8; margin-bottom: 30px;">Войдите через Steam, чтобы просмотреть таблицу.</p>
-    <a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-sound" style="padding: 15px 30px; background: #ef4444; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 18px; transition: 0.3s;">Войти через Steam</a>
+    <a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-sound" style="padding: 15px 30px; background: #ff6600; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 18px; transition: 0.3s;">Войти через Steam</a>
 </div>
 
+<!-- ОСНОВНОЙ САЙТ -->
 <div id="main-site" style="display: none; position: relative; z-index: 10;">
     <header class="top-header glass">
         <div class="logo"><span class="logo-icon">🎃</span> СЛЕДЯЩИЕ</div>
@@ -222,9 +211,8 @@ input:checked + .slider:before { transform: translateX(24px); }
             <div class="nav-item nav-sound active" onclick="switchPage('table', this)">Состав</div>
             <div class="nav-item nav-sound" onclick="switchPage('stats', this)">Статистика</div>
             <div class="nav-item nav-sound" onclick="switchPage('activity', this)">Активность</div>
-            <div class="nav-item nav-sound" onclick="switchPage('changelog', this)">Обновления</div>
+            <div class="nav-item nav-sound" onclick="switchPage('reports_check', this)" id="nav-reports" style="display:none;">Отчеты</div>
             <div class="nav-item nav-sound" onclick="switchPage('tools', this)" id="nav-tools" style="display:none;">Инструменты</div>
-            <div class="nav-item nav-sound" onclick="switchPage('logs', this)" id="nav-logs" style="display:none;">Журнал</div>
         </nav>
         <div class="header-user">
             <button class="btn-icon btn-sound" onclick="toggleNotifications()">🔔 <div class="notify-dot" id="notify-dot"></div></button>
@@ -252,45 +240,63 @@ input:checked + .slider:before { transform: translateX(24px); }
     </div>
 
     <main class="container">
+        <!-- ВКЛАДКА: СОСТАВ -->
         <div id="page-table" class="tab-page active">
+            <div class="legend">
+                <span>👁️ Слежка за админами: <b>+10 ДВ, -5 тикетов</b></span>
+                <span>📋 Слежка по указаниям: <b>+10 ДВ, -5 тикетов</b></span>
+            </div>
+            
             <div class="table-wrapper">
                 <div class="table-card">
                     <div class="table-row table-header">
-                        <div>Следящий</div><div>Ранг</div><div>SteamID</div><div>Статус</div><div>Адм.</div><div>Слежка</div><div>Норма</div><div>СП</div><div>Зарплата</div><div>Действие</div>
+                        <div>Следящий</div><div>Ранг в отделе</div><div>SteamID</div><div>Статус</div><div>Адм.</div><div>Указ.</div><div>Норма</div><div>Действие</div>
                     </div>
-                    <div id="table-body">
-                        <div class="loader">Загрузка...</div>
-                    </div>
+                    <div id="table-body"><div class="loader">Загрузка...</div></div>
                 </div>
             </div>
         </div>
 
+        <!-- ВКЛАДКА: СТАТИСТИКА -->
         <div id="page-stats" class="tab-page">
-            <h1 class="page-title">Статистика</h1>
+            <h1 class="page-title">Статистика за месяц</h1>
             <div class="stats-grid" id="stats-grid"></div>
         </div>
 
+        <!-- ВКЛАДКА: АКТИВНОСТЬ -->
         <div id="page-activity" class="tab-page">
             <h1 class="page-title">Активность</h1>
             <div class="tool-card glass"><div class="bar-chart" id="bar-chart"></div></div>
         </div>
 
-        <div id="page-changelog" class="tab-page">
-            <h1 class="page-title">Обновления</h1>
-            <button class="btn btn-sound" id="btn-add-changelog" onclick="openChangelogModal()" style="margin-bottom: 20px; display: none;">+ Добавить обновление</button>
-            <div id="changelog-list"></div>
+        <!-- ВКЛАДКА: ОТЧЕТЫ НА ПРОВЕРКЕ (Админ) -->
+        <div id="page-reports_check" class="tab-page">
+            <h1 class="page-title">Отчеты на проверке</h1>
+            <div id="pending-list"></div>
+            <h1 class="page-title" style="margin-top: 30px;">История отчетов</h1>
+            <div id="history-list"></div>
         </div>
 
+        <!-- ВКЛАДКА: ИНСТРУМЕНТЫ (Админ) -->
         <div id="page-tools" class="tab-page">
-            <h1 class="page-title">Инструменты</h1>
+            <h1 class="page-title">Инструменты управления</h1>
+            
+            <div class="tool-card glass">
+                <h3>Сбросы (Только для Админа)</h3>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-sound" onclick="resetWeek()">Сбросить НЕДЕЛЮ (Оставить ЗП)</button>
+                    <button class="btn btn-red btn-sound" onclick="resetMonth()">Сбросить МЕСЯЦ (Обнулить всё)</button>
+                </div>
+            </div>
+
             <div class="tool-card glass">
                 <h3>Добавить / Изменить следящего</h3>
                 <select id="edit-select" onchange="fillEditForm()" style="margin-bottom: 15px;"><option value="">Выберите для редактирования...</option></select>
                 
                 <input type="hidden" id="edit-id">
                 <label>Ник</label><input type="text" id="edit-nick">
-                <label>SteamID (Любой формат)</label><input type="text" id="edit-steamid">
-                <label>Ссылка на аватарку (URL)</label><input type="text" id="edit-avatar" placeholder="https://...">
+                <label>SteamID</label><input type="text" id="edit-steamid">
+                <label>Ссылка на аватарку</label><input type="text" id="edit-avatar" placeholder="https://...">
                 <label>Статус</label>
                 <select id="edit-status">
                     <option value="Активен">Активен</option>
@@ -302,13 +308,14 @@ input:checked + .slider:before { transform: translateX(24px); }
                     <option value="Следящий">Следящий</option>
                     <option value="Зам. главы следящих">Зам. главы следящих</option>
                     <option value="Глава следящих">Глава следящих</option>
-                    <option value="Табличник">Табличник</option>
                 </select>
                 <label>Роль в игре</label>
                 <select id="edit-game-rank">
                     <option value="Игрок">Игрок</option>
                     <option value="Модератор">Модератор</option>
+                    <option value="Ассистент">Ассистент</option>
                     <option value="Оператор">Оператор</option>
+                    <option value="Сеньор Админ">Сеньор Админ</option>
                     <option value="Администратор">Администратор</option>
                 </select>
                 
@@ -316,31 +323,22 @@ input:checked + .slider:before { transform: translateX(24px); }
                     <label style="display:flex; align-items:center; gap:5px; margin:0; cursor:pointer;">
                         <input type="checkbox" id="edit-admin-rights" style="width:auto;"> Права Админа сайта
                     </label>
-                    <label style="display:flex; align-items:center; gap:5px; margin:0; cursor:pointer;">
-                        <input type="checkbox" id="edit-can-edit-reports" style="width:auto;"> Может менять отчеты
-                    </label>
                 </div>
 
                 <div style="display:flex; gap:10px; margin-top:20px;">
                     <button class="btn btn-sound" onclick="saveStaff()">Сохранить</button>
                     <button class="btn btn-red btn-sound" onclick="deleteStaff()" id="btn-delete-staff" style="display:none;">Удалить</button>
                 </div>
-                <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-                <button class="btn btn-sound" onclick="clearForm()" style="width:100%; background:#22c55e;">+ Добавить нового</button>
             </div>
         </div>
 
-        <div id="page-logs" class="tab-page">
-            <h1 class="page-title">Журнал</h1>
-            <div id="logs-list"></div>
-        </div>
-
+        <!-- ВКЛАДКА: НАСТРОЙКИ -->
         <div id="page-settings" class="tab-page">
             <h1 class="page-title">Настройки</h1>
             <div class="settings-card glass">
                 <h3>Внешний вид</h3>
                 <div class="setting-row">
-                    <span class="setting-label">Прозрачность интерфейса (Glassmorphism)</span>
+                    <span class="setting-label">Прозрачность интерфейса</span>
                     <label class="toggle-switch">
                         <input type="checkbox" id="toggle-glass" checked onchange="toggleGlassMode(this)">
                         <span class="slider"></span>
@@ -359,7 +357,7 @@ input:checked + .slider:before { transform: translateX(24px); }
     </main>
 </div>
 
-<!-- МОДАЛКА ОТЧЕТА -->
+<!-- МОДАЛКА НАПИСАНИЯ ОТЧЕТА -->
 <div class="modal-overlay" id="reportModal">
     <div class="modal">
         <h2 id="modalTitle">Отчёт</h2>
@@ -375,35 +373,22 @@ input:checked + .slider:before { transform: translateX(24px); }
             <label>7. Продолжать слежку?</label><textarea name="continue"></textarea>
             <div style="display:flex; gap:10px; margin-top:20px;">
                 <button type="button" class="btn btn-red" onclick="closeModal('reportModal')" style="flex:1;">Отмена</button>
-                <button type="submit" class="btn btn-sound" style="flex:1;">Отправить</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- МОДАЛКА ОБНОВЛЕНИЙ -->
-<div class="modal-overlay" id="changelogModal">
-    <div class="modal">
-        <h2>Новое обновление</h2>
-        <form id="changelogForm">
-            <label>Версия</label><input type="text" id="log-version" placeholder="v16.7">
-            <label>Что изменилось?</label><textarea id="log-content" rows="6"></textarea>
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button type="button" class="btn btn-red" onclick="closeModal('changelogModal')" style="flex:1;">Отмена</button>
-                <button type="submit" class="btn btn-sound" style="flex:1;">Опубликовать</button>
+                <button type="submit" class="btn btn-sound" style="flex:1;">Отправить на проверку</button>
             </div>
         </form>
     </div>
 </div>
 
 <script type="module">
-// --- ВСТРОЕННАЯ ПРОВЕРКА ССЫЛКИ ОТ СЕРВЕРА ---
+// --- ПРОВЕРКА ВХОДА ---
 if (window.location.hash.startsWith('#steamid=')) {
-    localStorage.setItem('isLoggedIn', 'true'); 
+    const id = window.location.hash.substring(9);
+    localStorage.setItem('my_steam_id', id);
+    localStorage.setItem('isLoggedIn', 'true');
     window.history.replaceState(null, null, window.location.pathname); 
 }
 
-const MY_STEAM_ID = "76561199816021510"; 
+const MY_STEAM_ID = localStorage.getItem('my_steam_id') || "76561199816021510"; 
 
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_publishable_FyFuciAgrbhv4qNvhjqWwg_PgFMa50g');
@@ -411,36 +396,24 @@ const supabase = createClient('https://gqmrwtcztqluaqltuhss.supabase.co', 'sb_pu
 let globalStaff = [];
 let currentUser = null;
 
-// --- ЗВУКОВАЯ СИСТЕМА (ТОЛЬКО ХЭЛЛОУИН) ---
+// --- ЗВУКИ ---
 const sounds = {
-    hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', // Скрип
-    click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', // Стук
-    notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' // Колокольчик
+    hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
+    click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
+    notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'
 };
-
 let isMuted = localStorage.getItem('isMuted') === 'true';
 document.getElementById('toggle-mute').checked = isMuted;
 
-// Разблокировка звука при первом клике
 document.body.addEventListener('click', () => {
-    const audio = new Audio(sounds['click']);
-    audio.volume = 0;
-    audio.play().catch(() => {});
+    const audio = new Audio(sounds['click']); audio.volume = 0; audio.play().catch(() => {});
 }, { once: true });
 
 function playSound(type) {
     if (isMuted) return;
-    const audio = new Audio(sounds[type]);
-    audio.volume = 0.4;
-    audio.play().catch(() => {});
+    const audio = new Audio(sounds[type]); audio.volume = 0.4; audio.play().catch(() => {});
 }
-
-window.toggleMute = (checkbox) => {
-    isMuted = checkbox.checked;
-    localStorage.setItem('isMuted', isMuted);
-    if (!isMuted) playSound('click');
-};
-
+window.toggleMute = (cb) => { isMuted = cb.checked; localStorage.setItem('isMuted', isMuted); if(!isMuted) playSound('click'); };
 document.querySelectorAll('.nav-sound').forEach(el => {
     el.addEventListener('mouseenter', () => playSound('hover'));
     el.addEventListener('click', () => playSound('click'));
@@ -449,7 +422,7 @@ document.querySelectorAll('.btn-sound').forEach(el => {
     el.addEventListener('mouseenter', () => playSound('hover'));
 });
 
-// --- КОНВЕРТЕРЫ STEAMID ---
+// --- STEAM КОНВЕРТЕРЫ ---
 function toSteam64(input) {
     if (!input) return null;
     const str = input.trim();
@@ -479,7 +452,7 @@ function getSteamProfileUrl(input) {
     return `https://steamcommunity.com/profiles/${steam64}`;
 }
 
-// --- ЛОГИКА АВТОРИЗАЦИИ ---
+// --- ИНИЦИАЛИЗАЦИЯ ---
 window.onload = () => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     if (!isLoggedIn) {
@@ -490,102 +463,129 @@ window.onload = () => {
         document.getElementById('main-site').style.display = 'block';
         loadProfile();
         loadData();
+        loadReports(); // Загружаем отчеты
     }
 };
-window.logout = () => { localStorage.removeItem('isLoggedIn'); window.location.reload(); };
+window.logout = () => { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('my_steam_id'); window.location.reload(); };
 
+// --- ЛОГИКА ИНТЕРФЕЙСА ---
 window.switchPage = (pageId, element) => {
     document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('page-' + pageId).classList.add('active');
     if (element && element.classList.contains('nav-item')) element.classList.add('active');
     if(pageId === 'activity') renderActivityChart();
-    if(pageId === 'changelog') loadChangelog();
     playSound('click');
 };
 window.toggleNotifications = () => { document.getElementById('notify-dropdown').classList.toggle('open'); document.getElementById('notify-dot').style.display = 'none'; };
 window.toggleProfileMenu = () => document.getElementById('profile-dropdown').classList.toggle('open');
 window.closeProfileMenu = () => document.getElementById('profile-dropdown').classList.remove('open');
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.user-badge') && !e.target.closest('.profile-dropdown')) closeProfileMenu();
-    if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
-});
-window.toggleGlassMode = (checkbox) => {
-    if (checkbox.checked) { document.body.classList.remove('no-glass-mode'); document.body.classList.add('glass-mode'); localStorage.setItem('glassMode', 'on'); }
+window.closeModal = (id) => { document.getElementById(id).classList.remove('open'); playSound('click'); };
+window.toggleGlassMode = (cb) => {
+    if (cb.checked) { document.body.classList.remove('no-glass-mode'); document.body.classList.add('glass-mode'); localStorage.setItem('glassMode', 'on'); }
     else { document.body.classList.remove('glass-mode'); document.body.classList.add('no-glass-mode'); localStorage.setItem('glassMode', 'off'); }
 };
 if (localStorage.getItem('glassMode') === 'off') { document.body.classList.remove('glass-mode'); document.body.classList.add('no-glass-mode'); document.getElementById('toggle-glass').checked = false; }
 
-// --- ЗАГРУЗКА ---
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.user-badge') && !e.target.closest('.profile-dropdown')) closeProfileMenu();
+    if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
+});
+
+// --- ЗАГРУЗКА ПРОФИЛЯ ---
 async function loadProfile() {
     const { data: staff } = await supabase.from('staff').select('*');
+    // Ищем того, кто зашел (сравниваем 64-битные ID для надежности)
     const me = staff.find(s => s.steamid === MY_STEAM_ID || toSteam64(s.steamid) === MY_STEAM_ID);
+    
     if (me) {
         currentUser = me;
         document.getElementById('header-name').textContent = me.nick;
         document.getElementById('header-rank').textContent = me.rank;
         if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
-        if (me.role === 'admin') {
+        
+        // Если Админ - показываем вкладки
+        if (me.role === 'admin' || me.rank === 'Глава следящих') {
+            document.getElementById('nav-reports').style.display = 'flex';
             document.getElementById('nav-tools').style.display = 'flex';
-            document.getElementById('nav-logs').style.display = 'flex';
-            document.getElementById('btn-add-changelog').style.display = 'block';
         }
     } else {
         document.getElementById('header-name').textContent = "Неизвестный";
+        alert("Вас нет в базе! Доступ только для просмотра.");
     }
+    // Приветствие
     setTimeout(() => {
         document.getElementById('notify-dot').style.display = 'block';
         document.getElementById('notify-list').innerHTML = `
-            <div class="notify-item">Вас занесли в таблицу состава (${currentUser?.rank || 'Неизвестно'})<span>Только что</span></div>
-            <div class="notify-item">Вам назначены права: ${currentUser?.role === 'admin' ? 'Полный доступ' : 'Обычный пользователь'}<span>Только что</span></div>
-            <div class="notify-item">Вы успешно авторизовались! Ознакомьтесь с сайтом!<span>Только что</span></div>
+            <div class="notify-item">Вы успешно авторизовались как ${currentUser?.nick || 'Гость'}.<span>Только что</span></div>
         `;
         playSound('notify');
     }, 1000);
 }
 
+// --- ОТРИСОВКА ТАБЛИЦЫ ---
 async function loadData() {
     const { data: staff } = await supabase.from('staff').select('*');
     globalStaff = staff || [];
-    renderTable(); renderStats(); renderToolsSelect(); loadLogs();
+    renderTable(); renderStats(); renderToolsSelect();
 }
 
 function renderTable() {
     const tbody = document.getElementById('table-body');
     tbody.innerHTML = globalStaff.map((p) => {
         const normSum = p.week || 0;
-        const normClass = normSum >= 5 ? 'n-green' : (normSum >= 3 ? 'n-yellow' : 'n-red');
+        // Логика светофора
+        let normClass = 'n-red';
+        if (normSum >= 5) normClass = 'n-green';
+        else if (normSum >= 4) normClass = 'n-yellow';
+        
+        // У Главы и Зама нет нормы
+        const isBoss = (p.rank === 'Глава следящих' || p.rank === 'Зам. главы следящих' || p.rank === 'Табличник');
+        const normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
+        
         const displayId = toSteam32(p.steamid);
         const avatar = p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
-        let statusHtml = ''; let rankClass = 'rank-sled'; let nameColor = '';
-
+        
+        let rankClass = 'rank-sled';
         if (p.rank === 'Глава следящих') rankClass = 'rank-glava';
         else if (p.rank === 'Зам. главы следящих') rankClass = 'rank-zam';
-        else rankClass = 'rank-sled';
 
-        if (p.status === 'Активен') { statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`; if (p.rank === 'Следящий') nameColor = 'color: #22c55e;'; }
-        else if (p.status === 'Мороз') { statusHtml = `<span class="status-badge status-frozen">❄️ Мороз</span>`; if (p.rank === 'Следящий') nameColor = 'color: #3b82f6;'; }
-        else if (p.status === 'Отпуск') { statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`; if (p.rank === 'Следящий') nameColor = 'color: #6366f1;'; }
-        else { statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`; }
+        let statusHtml = '';
+        if (p.status === 'Активен') statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
+        else if (p.status === 'Мороз') statusHtml = `<span class="status-badge status-frozen">❄️ Мороз</span>`;
+        else if (p.status === 'Отпуск') statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`;
+        else statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
+
+        // Кнопки отчета
+        const actionsHtml = isBoss ? '<span style="color:#64748b;font-size:12px;">—</span>' : `
+            <div class="actions-cell">
+                <button class="btn-report btn-sound" onclick="openReport('adm','${p.nick}')">Админ</button>
+                <button class="btn-report btn-sound" onclick="openReport('sl','${p.nick}')">Указание</button>
+            </div>`;
 
         return `
             <div class="table-row">
-                <div class="table-cell"><div class="user-cell"><img class="t-avatar" src="${avatar}"><div><div class="t-name" style="${nameColor}">${p.nick}</div><div class="t-rank">${p.rank}</div></div></div></div>
-                <div class="table-cell"><span class="${rankClass}">${p.rank}</span></div>
+                <div class="table-cell">
+                    <div class="user-cell">
+                        <img class="t-avatar" src="${avatar}">
+                        <div class="t-name">
+                            ${p.nick}
+                            <span class="t-rank"><span class="${rankClass}">${p.rank}</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-cell">
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                        <span class="${rankClass}">${p.rank}</span>
+                        ${p.game_rank ? `<span class="game-rank">${p.game_rank}</span>` : ''}
+                    </div>
+                </div>
                 <div class="table-cell"><a href="${getSteamProfileUrl(p.steamid)}" target="_blank" class="steam-link">${displayId}</a></div>
                 <div class="table-cell">${statusHtml}</div>
                 <div class="table-cell"><span class="badge b-adm">${p.adm || 0}</span></div>
                 <div class="table-cell"><span class="badge b-sl">${p.sl || 0}</span></div>
-                <div class="table-cell"><span class="norm ${normClass}">${normSum} / 5</span></div>
-                <div class="table-cell"><span class="badge b-sp">${p.sp || 0}</span></div>
-                <div class="table-cell"><span class="badge b-pay">${p.pay || 0} Д</span></div>
-                <div class="table-cell">
-                    <div class="actions-cell">
-                        <button class="btn-report btn-sound" onclick="openReport('adm','${p.nick}')">Отчёт</button>
-                        <button class="btn-report btn-sound" onclick="openReport('sl','${p.nick}')">Слежка</button>
-                        <button class="btn-report btn-sound" onclick="openReport('sp','${p.nick}')">СП</button>
-                    </div>
-                </div>
+                <div class="table-cell">${normHtml}</div>
+                <div class="table-cell">${actionsHtml}</div>
             </div>`;
     }).join('');
 }
@@ -593,18 +593,23 @@ function renderTable() {
 function renderStats() {
     document.getElementById('stats-grid').innerHTML = globalStaff.map(p => `
         <div class="stat-box glass">
-            <div class="stat-header"><img class="t-avatar" src="${p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'}"><div><div class="t-name">${p.nick}</div><div class="t-rank">${p.rank}</div></div></div>
-            <div class="stat-row"><span>Отчёты об админах:</span><b>${p.adm || 0}</b></div>
-            <div class="stat-row"><span>Слежка по указ.:</span><b>${p.sl || 0}</b></div>
-            <div class="stat-row"><span>Список пидормотов:</span><b>${p.sp || 0}</b></div>
-            <div class="stat-row"><span>Зарплата:</span><span>${p.pay || 0} Д</span></div>
+            <div class="stat-header">
+                <img class="t-avatar" src="${p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'}">
+                <div>
+                    <div class="t-name">${p.nick}</div>
+                    <div class="t-rank" style="color:#ff9f43;">${p.rank} ${p.game_rank ? '/ '+p.game_rank : ''}</div>
+                </div>
+            </div>
+            <div class="stat-row"><span>Слежка за админами:</span><b>${p.adm || 0}</b></div>
+            <div class="stat-row"><span>Слежка по указаниям:</span><b>${p.sl || 0}</b></div>
+            <div class="stat-row"><span>Зарплата за месяц:</span><span>${p.pay || 0} ДВ</span></div>
         </div>
     `).join('');
 }
 
 function renderActivityChart() {
     const chartContainer = document.getElementById('bar-chart');
-    let dataToShow = globalStaff.map(s => ({ label: s.nick, value: (s.adm || 0) + (s.sl || 0) }));
+    let dataToShow = globalStaff.filter(s => s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих').map(s => ({ label: s.nick, value: (s.adm || 0) + (s.sl || 0) }));
     if(dataToShow.length === 0) return chartContainer.innerHTML = '<div class="loader">Нет данных.</div>';
     dataToShow.sort((a, b) => b.value - a.value);
     const maxVal = Math.max(...dataToShow.map(d => d.value), 1);
@@ -616,27 +621,15 @@ function renderActivityChart() {
     `).join('');
 }
 
+// --- ИНСТРУМЕНТЫ ---
 function renderToolsSelect() {
     const select = document.getElementById('edit-select');
     select.innerHTML = '<option value="">Выберите для редактирования...</option>' + globalStaff.map(p => `<option value="${p.id}">${p.nick}</option>`).join('');
 }
 
-window.clearForm = () => {
-    document.getElementById('edit-id').value = '';
-    document.getElementById('edit-nick').value = '';
-    document.getElementById('edit-steamid').value = '';
-    document.getElementById('edit-avatar').value = '';
-    document.getElementById('edit-status').value = 'Активен';
-    document.getElementById('edit-rank').value = 'Следящий';
-    document.getElementById('edit-game-rank').value = 'Игрок';
-    document.getElementById('edit-admin-rights').checked = false;
-    document.getElementById('edit-can-edit-reports').checked = false;
-    document.getElementById('btn-delete-staff').style.display = 'none';
-};
-
 window.fillEditForm = () => {
     const id = document.getElementById('edit-select').value;
-    if (!id) { clearForm(); return; }
+    if (!id) { document.getElementById('btn-delete-staff').style.display = 'none'; return; }
     const p = globalStaff.find(s => s.id == id);
     document.getElementById('edit-id').value = p.id;
     document.getElementById('edit-nick').value = p.nick;
@@ -646,14 +639,12 @@ window.fillEditForm = () => {
     document.getElementById('edit-rank').value = p.rank;
     document.getElementById('edit-game-rank').value = p.game_rank || 'Игрок';
     document.getElementById('edit-admin-rights').checked = p.role === 'admin';
-    document.getElementById('edit-can-edit-reports').checked = p.can_edit_reports || false;
     document.getElementById('btn-delete-staff').style.display = 'block';
 };
 
 window.saveStaff = async () => {
     const id = document.getElementById('edit-id').value;
-    const inputSteamId = document.getElementById('edit-steamid').value;
-    const steam64 = toSteam64(inputSteamId);
+    const steam64 = toSteam64(document.getElementById('edit-steamid').value);
     const updates = {
         nick: document.getElementById('edit-nick').value,
         steamid: steam64,
@@ -661,68 +652,50 @@ window.saveStaff = async () => {
         status: document.getElementById('edit-status').value,
         rank: document.getElementById('edit-rank').value,
         game_rank: document.getElementById('edit-game-rank').value,
-        role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user',
-        can_edit_reports: document.getElementById('edit-can-edit-reports').checked
+        role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user'
     };
     if (!updates.nick || !updates.steamid) return alert("Заполните ник и SteamID!");
     if (id) {
         await supabase.from('staff').update(updates).eq('id', id);
-        if (steam64 === MY_STEAM_ID) {
-            document.getElementById('header-name').textContent = updates.nick;
-            document.getElementById('header-rank').textContent = updates.rank;
-            if (updates.avatar) document.getElementById('header-avatar').src = updates.avatar;
-        }
     } else {
-        updates.adm = 0; updates.sl = 0; updates.sp = 0; updates.week = 0; updates.pay = 0;
+        updates.adm = 0; updates.sl = 0; updates.week = 0; updates.pay = 0;
         await supabase.from('staff').insert([updates]);
     }
-    await supabase.from('logs').insert([{ action: `Сохранен ${updates.nick}`, date: new Date().toLocaleString('ru-RU') }]);
-    playSound('click');
-    alert("Сохранено!"); clearForm(); loadData();
+    alert("Сохранено!"); loadData();
 };
 
 window.deleteStaff = async () => {
     const id = document.getElementById('edit-id').value;
-    if (!id) return;
-    if (!confirm("Удалить этого следящего?")) return;
+    if (!id || !confirm("Удалить этого следящего?")) return;
     await supabase.from('staff').delete().eq('id', id);
-    await supabase.from('logs').insert([{ action: `Удален пользователь`, date: new Date().toLocaleString('ru-RU') }]);
-    playSound('click');
-    alert("Удалено!"); clearForm(); loadData();
+    alert("Удалено!"); loadData();
 };
 
-async function loadLogs() {
-    const { data: logs } = await supabase.from('logs').select('*').order('id', { ascending: false });
-    document.getElementById('logs-list').innerHTML = (logs || []).map(l => `<div class="log-item glass"><div class="log-time">${l.date}</div><div>${l.action}</div></div>`).join('') || '<div class="loader">Пусто.</div>';
-}
+window.resetWeek = async () => {
+    if (!confirm("Сбросить НЕДЕЛЮ? (Отчеты за неделю обнулятся, ДВ останется)")) return;
+    const { data: staff } = await supabase.from('staff').select('*');
+    for(let s of staff) {
+        if(s.rank !== 'Глава следящих' && s.rank !== 'Зам. главы следящих') {
+            await supabase.from('staff').update({ week: 0, adm: 0, sl: 0 }).eq('id', s.id);
+        }
+    }
+    alert("Неделя сброшена!"); loadData();
+};
 
-async function loadChangelog() {
-    const { data: logs } = await supabase.from('changelog').select('*').order('id', { ascending: false });
-    document.getElementById('changelog-list').innerHTML = (logs || []).map(l => `
-        <div class="tool-card glass" style="border-left: 3px solid #ef4444;">
-            <h3>Версия ${l.version} <span style="font-size:12px;color:#64748b;">${l.date}</span></h3>
-            <p style="white-space:pre-wrap;">${l.content}</p>
-        </div>
-    `).join('') || '<div class="loader">Обновлений нет.</div>';
-}
+window.resetMonth = async () => {
+    if (!confirm("СБРОСИТЬ ВСЁ? (Обнулятся все отчеты и зарплата)")) return;
+    const { data: staff } = await supabase.from('staff').select('*');
+    for(let s of staff) {
+        await supabase.from('staff').update({ week: 0, adm: 0, sl: 0, pay: 0 }).eq('id', s.id);
+    }
+    alert("Месяц сброшен!"); loadData();
+};
 
-window.openChangelogModal = () => { document.getElementById('changelogModal').classList.add('open'); playSound('click'); };
-window.closeModal = (id) => { document.getElementById(id).classList.remove('open'); playSound('click'); };
-
-document.getElementById('changelogForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const version = document.getElementById('log-version').value;
-    const content = document.getElementById('log-content').value;
-    if (!version || !content) return alert("Заполните поля!");
-    await supabase.from('changelog').insert([{ version, content, date: new Date().toLocaleString('ru-RU') }]);
-    playSound('click');
-    closeModal('changelogModal'); loadChangelog();
-});
-
+// --- ОТЧЕТЫ (СИСТЕМА ПРОВЕРКИ) ---
 window.openReport = (type, nick) => {
     document.getElementById('reportType').value = type;
     document.getElementById('reportReporter').value = nick;
-    document.getElementById('modalTitle').textContent = type === 'adm' ? 'Отчёт: слежка за админом' : (type === 'sl' ? 'Слежка по указаниям' : 'Список пидормотов');
+    document.getElementById('modalTitle').textContent = type === 'adm' ? 'Отчёт: Слежка за админом' : 'Отчёт: Слежка по указаниям';
     document.getElementById('reportModal').classList.add('open');
     playSound('click');
 };
@@ -738,10 +711,68 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
         status: 'pending', date: new Date().toLocaleString('ru-RU')
     };
     await supabase.from('reports').insert([data]);
-    await supabase.from('logs').insert([{ action: `Новый отчет от ${f.reporter.value}`, date: new Date().toLocaleString('ru-RU') }]);
     playSound('notify');
-    alert("Отчет отправлен!"); closeModal('reportModal'); f.reset();
+    alert("Отчет отправлен на проверку!"); closeModal('reportModal'); f.reset();
 });
+
+async function loadReports() {
+    const { data: reports } = await supabase.from('reports').select('*').order('id', { ascending: false });
+    if (!reports) return;
+
+    const pending = reports.filter(r => r.status === 'pending');
+    const history = reports.filter(r => r.status !== 'pending');
+
+    // Отрисовка на проверку
+    document.getElementById('pending-list').innerHTML = pending.map(r => `
+        <div class="report-card">
+            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#ff9f43;font-size:12px;">На проверке</span></h3>
+            <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
+            <p><b>Нарушитель:</b> ${r.adminNick} (${r.steamId}) • ${r.rank}</p>
+            <p><b>Время:</b> ${r.time} | <b>Нарушение:</b> ${r.rule} | <b>Действия:</b> ${r.suspicious}</p>
+            <div style="margin-top:15px;">
+                <button class="btn-approve" onclick="approveReport(${r.id}, '${r.reporter}', '${r.type}')">Принять (+10 ДВ)</button>
+                <button class="btn-reject" onclick="rejectReport(${r.id})">Отклонить</button>
+            </div>
+        </div>
+    `).join('') || '<p style="color:#64748b;">Нет отчетов на проверке.</p>';
+
+    // Отрисовка истории
+    document.getElementById('history-list').innerHTML = history.map(r => `
+        <div class="report-card approved">
+            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'Слежка по указаниям'} <span style="color:#22c55e;font-size:12px;">Принят</span></h3>
+            <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
+            <p><b>Нарушитель:</b> ${r.adminNick} (${r.steamId})</p>
+        </div>
+    `).join('') || '<p style="color:#64748b;">История пуста.</p>';
+}
+
+window.approveReport = async (id, reporterNick, type) => {
+    // 1. Меняем статус отчета
+    await supabase.from('reports').update({ status: 'approved' }).eq('id', id);
+    
+    // 2. Начисляем баллы автору
+    const { data: staff } = await supabase.from('staff').select('*').eq('nick', reporterNick).single();
+    if (staff) {
+        const updates = {
+            week: (staff.week || 0) + 1,
+            pay: (staff.pay || 0) + 10
+        };
+        if (type === 'adm') updates.adm = (staff.adm || 0) + 1;
+        else updates.sl = (staff.sl || 0) + 1;
+        
+        await supabase.from('staff').update(updates).eq('id', staff.id);
+    }
+    alert("Отчет принят! Баллы начислены.");
+    loadData();
+    loadReports();
+};
+
+window.rejectReport = async (id) => {
+    await supabase.from('reports').update({ status: 'rejected' }).eq('id', id);
+    alert("Отчет отклонен.");
+    loadReports();
+};
+
 </script>
 </body>
 </html>
