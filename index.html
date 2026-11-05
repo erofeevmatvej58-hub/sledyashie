@@ -392,6 +392,8 @@ if (window.location.hash.startsWith('#steamid=')) {
     localStorage.setItem('isLoggedIn', 'true');
     window.history.replaceState(null, null, window.location.pathname); 
 }
+// Принудительно приводим MY_STEAM_ID к 64-битному формату (17 цифр)
+MY_STEAM_ID = toSteam64(MY_STEAM_ID);
 if (!MY_STEAM_ID) MY_STEAM_ID = "00000000000000000";
 
 let globalStaff = [];
@@ -418,13 +420,23 @@ document.querySelectorAll('.nav-sound, .btn, .btn-report').forEach(el => {
     el.addEventListener('click', () => playSound('click'));
 });
 
+// УЛУЧШЕННАЯ ФУНКЦИЯ КОНВЕРТАЦИИ СТИМА
 function toSteam64(input) {
-    if (!input) return '—'; const str = String(input).trim();
+    if (!input) return '00000000000000000'; 
+    const str = String(input).trim();
+    // Если уже 17 цифр (7656...)
     if (/^7656\d{13}$/.test(str)) return str;
+    // Если формат STEAM_0:X:XXXXX
     const matchSteam = str.match(/^STEAM_(\d):(\d):(\d+)$/i);
     if (matchSteam) return (BigInt("76561197960265728") + (BigInt(matchSteam[3]) * 2n) + BigInt(matchSteam[2])).toString();
-    if (/^\d+$/.test(str)) return str; return str;
+    // Если формат [U:1:XXXXX]
+    const matchU = str.match(/^\[U:(\d):(\d+)\]$/i);
+    if (matchU) return (BigInt("76561197960265728") + BigInt(matchU[2])).toString();
+    // Если просто цифры
+    if (/^\d+$/.test(str)) return str; 
+    return "00000000000000000";
 }
+
 function toSteam32(steam64) {
     if (!steam64 || steam64 === '—' || !/^\d+$/.test(steam64)) return '—';
     try { const big = BigInt(steam64) - BigInt("76561197960265728"); return `STEAM_0:${big % 2n}:${(big - (big % 2n)) / 2n}`; } catch(e) { return steam64; }
@@ -449,8 +461,8 @@ window.onload = async () => {
 window.logout = () => { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('my_steam_id'); window.location.reload(); };
 
 document.getElementById('btn-my-profile').addEventListener('click', () => {
-    if (MY_STEAM_ID && MY_STEAM_ID.length > 10) {
-        window.open('https://steamcommunity.com/profiles/' + toSteam64(MY_STEAM_ID), '_blank');
+    if (MY_STEAM_ID && MY_STEAM_ID !== "00000000000000000") {
+        window.open('https://steamcommunity.com/profiles/' + MY_STEAM_ID, '_blank');
     } else {
         alert("Вы не авторизованы через Steam.");
     }
@@ -478,11 +490,14 @@ document.addEventListener('click', (e) => {
 
 async function loadProfile() {
     const { data: staff } = await supabase.from('staff').select('*');
+    
+    // ЖЕСТКАЯ ПРОВЕРКА: Конвертируем и мой ID, и ID из базы в 17 цифр перед сравнением
     const me = staff.find(s => toSteam64(s.steamid) === MY_STEAM_ID);
     
     if (me) {
         currentUser = me;
         isAdmin = me.role === 'admin' || ['Глава следящих', 'Зам. главы следящих'].includes(me.rank);
+        
         document.getElementById('header-name').textContent = me.nick;
         document.getElementById('header-rank').textContent = me.rank;
         if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
@@ -492,7 +507,7 @@ async function loadProfile() {
             document.getElementById('add-update-block').style.display = 'block';
         }
 
-        // ПРИВЕТСТВЕННОЕ УВЕДОМЛЕНИЕ ПРИ ВХОДЕ (Если его еще нет)
+        // ПРИВЕТСТВЕННОЕ УВЕДОМЛЕНИЕ ПРИ ВХОДЕ
         const { data: existingNotifs } = await supabase.from('notifications').select('*').eq('target_steamid', MY_STEAM_ID);
         const hasGreeting = existingNotifs && existingNotifs.some(n => n.message.includes('Здравствуйте, вы были добавлены'));
         
@@ -505,8 +520,7 @@ async function loadProfile() {
         document.getElementById('header-name').textContent = "Гость";
     }
     
-    // Перерисовываем таблицу ТОЛЬКО когда точно знаем, кто мы
-    renderTable(); 
+    renderTable(); // Перерисовываем таблицу ТОЛЬКО когда точно знаем, кто мы
 }
 
 async function loadData() {
@@ -536,6 +550,7 @@ function renderTable() {
         let steamLink = `<a href="https://steamcommunity.com/profiles/${toSteam64(p.steamid)}" target="_blank" class="steam-link">${toSteam32(p.steamid)}</a>`;
 
         let actionsHtml = '';
+        // Проверка с конвертацией
         if (isBoss) {
              actionsHtml = `<span style="color:#64748b;font-size:12px;">—</span>`;
         } else if (isAdmin || toSteam64(p.steamid) === MY_STEAM_ID) {
@@ -704,7 +719,7 @@ async function loadReports() {
                     <button class="btn-reject" onclick="rejectReport(${r.id}, '${r.steamid}')">Отклонить</button>
                     <button class="btn btn-orange" style="padding:8px 16px;" onclick="editReport(${r.id})">Редактировать</button>
                 ` : `
-                    ${currentUser && toSteam64(currentUser.steamid) === toSteam64(r.steamid) ? `<button class="btn btn-orange" style="padding:8px 16px;" onclick="editReport(${r.id})">Редактировать мой отчет</button>` : ''}
+                    ${currentUser && toSteam64(currentUser.steamid) === MY_STEAM_ID ? `<button class="btn btn-orange" style="padding:8px 16px;" onclick="editReport(${r.id})">Редактировать мой отчет</button>` : ''}
                 `}
             </div>
         </div>
@@ -728,13 +743,13 @@ window.approveReport = async (id, reporterNick, type, reporterSteam) => {
         if (type === 'adm') updates.adm = (staff.adm || 0) + 1; else updates.sl = (staff.sl || 0) + 1;
         await supabase.from('staff').update(updates).eq('id', staff.id);
     }
-    await supabase.rpc('send_notification', { p_target: reporterSteam, p_message: 'Ваш отчет был ПРИНЯТ! Начислено +10 ДВ.' });
+    await supabase.rpc('send_notification', { p_target: toSteam64(reporterSteam), p_message: 'Ваш отчет был ПРИНЯТ! Начислено +10 ДВ.' });
     alert("Принято!"); loadData(); loadReports();
 };
 
 window.rejectReport = async (id, reporterSteam) => {
     await supabase.from('reports').update({ status: 'rejected' }).eq('id', id);
-    await supabase.rpc('send_notification', { p_target: reporterSteam, p_message: 'Ваш отчет был ОТКЛОНЕН.' });
+    await supabase.rpc('send_notification', { p_target: toSteam64(reporterSteam), p_message: 'Ваш отчет был ОТКЛОНЕН.' });
     alert("Отклонено."); loadReports();
 };
 
