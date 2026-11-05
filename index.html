@@ -7,32 +7,33 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #0b0e14; color: #e2e8f0; min-height: 100vh; position: relative; overflow-x: hidden; }
-.bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; filter: brightness(0.4) contrast(1.1); }
+.bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; filter: brightness(0.4) contrast(1.1); transition: 0.3s ease; }
 .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 20%, rgba(5, 5, 10, 0.95) 100%); z-index: -1; }
-.glass-mode .glass { background: rgba(15, 19, 26, 0.4) !important; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1) !important; }
-.no-glass-mode .glass { background: #0f131a !important; backdrop-filter: none; border: 1px solid #1f2937 !important; }
-.no-glass-mode .bg-slideshow { filter: blur(8px) brightness(0.3); }
-.banner { text-align: center; margin-bottom: 20px; padding: 20px 0; }
-.banner h1 { font-size: 36px; font-weight: 900; color: #fff; text-shadow: 0 0 20px rgba(255, 100, 0, 0.8); letter-spacing: 4px; text-transform: uppercase; }
+body.no-glass-mode .bg-slideshow { filter: blur(8px) brightness(0.3); }
+body.glass-mode .bg-slideshow { filter: brightness(0.4) contrast(1.1); }
+
+.glass { background: rgba(15, 19, 26, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+.no-glass-mode .glass { background: #0f131a; backdrop-filter: none; border: 1px solid #1f2937; }
+
 .top-header { background: rgba(15, 19, 26, 0.6); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 64px; position: sticky; top: 0; z-index: 100; }
-.logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; color: #fff; }
-.logo-icon { color: #ff6600; font-size: 24px; }
+.logo { font-weight: 800; font-size: 18px; color: #fff; display: flex; align-items: center; gap: 10px; }
 .header-nav { display: flex; gap: 5px; height: 100%; }
-.nav-item { padding: 0 20px; display: flex; align-items: center; height: 100%; color: #94a3b8; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.2s; border-bottom: 2px solid transparent; text-transform: uppercase; }
+.nav-item { padding: 0 20px; display: flex; align-items: center; height: 100%; color: #ef4444; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: 1px; }
 .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
-.nav-item.active { color: #fff; border-bottom-color: #ff6600; background: rgba(255,102,0,0.1); }
+.nav-item.active { color: #fff; border-bottom-color: #ef4444; background: rgba(239,68,68,0.1); }
+
 .header-user { display: flex; align-items: center; gap: 15px; position: relative; }
 .user-badge { display: flex; align-items: center; gap: 10px; padding: 5px 15px; background: rgba(30, 41, 59, 0.8); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.2s; }
-.user-badge:hover { background: rgba(30, 41, 59, 1); border-color: #ff6600; }
+.user-badge:hover { background: rgba(30, 41, 59, 1); border-color: #ef4444; }
 .user-avatar { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; background: #1e293b; }
-.user-info { display: flex; flex-direction: column; }
 .user-name { font-weight: 700; font-size: 13px; color: #fff; }
-.user-rank { font-size: 10px; color: #ff6600; font-weight: 700; text-transform: uppercase; }
+.user-rank { font-size: 10px; color: #ef4444; font-weight: 700; text-transform: uppercase; }
 .profile-dropdown { position: absolute; top: 55px; right: 0; width: 220px; background: rgba(15, 19, 26, 0.95); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
 .profile-dropdown.open { display: block; animation: fadeIn 0.2s; }
 .profile-item { padding: 12px 20px; font-size: 14px; color: #cbd5e1; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
 .profile-item:hover { background: #1e293b; color: #fff; }
 .profile-item.danger { color: #ef4444; border-top: 1px solid #1f2937; }
+
 .btn-icon { background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; position: relative; }
 .notify-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: none; border: 2px solid #0f131a; }
 .notify-dropdown { position: absolute; top: 55px; right: 0; width: 350px; background: rgba(15, 19, 26, 0.95); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
@@ -40,80 +41,113 @@ body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #
 .notify-header { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-weight: 700; color: #fff; }
 .notify-list { max-height: 350px; overflow-y: auto; }
 .notify-item { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-size: 13px; color: #cbd5e1; line-height: 1.4; }
-.notify-item.unread { background: rgba(59,130,246,0.1); border-left: 3px solid #3b82f6; }
+.notify-item.unread { background: rgba(239,68,68,0.1); border-left: 3px solid #ef4444; }
 .notify-item span { display: block; font-size: 11px; color: #64748b; margin-top: 5px; }
+
 .container { max-width: 1500px; margin: 0 auto 30px; padding: 0 40px; position: relative; z-index: 10; }
 .tab-page { display: none; animation: fadeIn 0.3s ease; }
 .tab-page.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .page-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-.page-title::before { content: ''; width: 4px; height: 24px; background: #ff6600; border-radius: 2px; }
-.table-wrapper { position: relative; border-radius: 16px; padding: 3px; animation: borderGlowColor 4s linear infinite; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
-@keyframes borderGlowColor { 0% { background-color: #ef4444; } 33% { background-color: #f59e0b; } 66% { background-color: #fbbf24; } 100% { background-color: #ef4444; } }
+.page-title::before { content: ''; width: 4px; height: 24px; background: #ef4444; border-radius: 2px; }
+
+/* ТАБЛИЦА */
+.table-wrapper { position: relative; border-radius: 16px; padding: 3px; animation: borderGlowColor 4s linear infinite; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+@keyframes borderGlowColor { 0% { background-color: #ef4444; } 50% { background-color: #f59e0b; } 100% { background-color: #ef4444; } }
 .table-card { border-radius: 13px; overflow: hidden; background: rgba(15, 19, 26, 0.95); }
-.table-row { display: grid; grid-template-columns: 2.5fr 1.2fr 1.2fr 1fr 0.6fr 0.8fr 0.8fr 1.8fr; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.table-row { display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr 0.6fr 0.8fr 0.8fr 1.8fr; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; }
 .table-row:hover { background: rgba(255, 255, 255, 0.05); }
-.table-header { background: rgba(19, 25, 36, 0.9); font-size: 11px; text-transform: uppercase; color: #cbd5e1; font-weight: 700; padding: 16px 10px; }
-.table-cell { padding: 16px 10px; font-size: 14px; display: flex; align-items: center; justify-content: center; }
-.table-cell:nth-child(1) { justify-content: flex-start; padding-left: 15px; }
+.table-header { background: rgba(19, 25, 36, 0.9); font-size: 12px; text-transform: uppercase; color: #cbd5e1; font-weight: 800; padding: 16px 10px; letter-spacing: 1px; }
+.table-header > div { text-align: center; }
+.table-header > div:nth-child(1) { text-align: left; padding-left: 20px; }
+.table-cell { padding: 16px 10px; font-size: 14px; display: flex; align-items: center; justify-content: center; letter-spacing: 0.5px; }
+.table-cell:nth-child(1) { justify-content: flex-start; padding-left: 20px; }
 .user-cell { display: flex; align-items: center; gap: 12px; }
 .t-avatar { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
-.t-name { font-weight: 600; color: #fff; text-align: left; display: flex; flex-direction: column; }
-.t-rank { font-size: 11px; color: #94a3b8; }
-.status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; width: 100%; max-width: 100px; text-align: center;}
+.t-name { font-weight: 700; color: #fff; display: flex; flex-direction: column; }
+
+/* РАНГИ И СТАТУСЫ */
+.rank-sled { color: #ef4444; font-weight: 700; } /* Следящий красный */
+.rank-zam { color: #ff0000; font-weight: 900; text-shadow: 0 0 5px rgba(255,0,0,0.5); } /* Зам ярко-красный */
+.rank-glava { color: #fbbf24; font-weight: 900; text-shadow: 0 0 10px rgba(251,191,36,0.8); } /* Глава золотой */
+.rank-glava::before { content: '👑 '; font-size: 14px; }
+
+.status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; width: 100%; max-width: 100px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;}
 .status-active { color: #22c55e; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); }
 .status-frozen { color: #3b82f6; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); }
 .status-vacation { color: #6366f1; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
-.dot.blink { animation: blink 1.5s infinite; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; display: inline-block; }
+.dot.blink { animation: blink 2s infinite; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-.rank-glava { color: #fbbf24; font-weight: 800; }
-.rank-zam { color: #ef4444; font-weight: 800; }
-.rank-sled { color: #22c55e; }
-.rank-curator { color: #a855f7; font-weight: 800; }
-.rank-sudo { color: #ec4899; font-weight: 800; }
-.badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+
+a.steam-link { color: #94a3b8; text-decoration: none; border-bottom: 1px dashed #ef4444; transition: 0.2s; }
+a.steam-link:hover { color: #ef4444; border-bottom-style: solid; }
+
+.badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; }
 .b-adm { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
 .b-sl { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
-.norm { padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; display: inline-block; min-width: 55px; text-align: center;}
+
+.norm { padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; display: inline-block; min-width: 55px; text-align: center; }
 .n-red { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444; }
 .n-yellow { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid #f59e0b; }
 .n-green { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid #22c55e; }
 .n-none { color: #64748b; font-style: italic; }
-.actions-cell { display: flex; justify-content: center; gap: 5px; width: 100%; flex-wrap: wrap;}
-.btn-report { padding: 6px 8px; background: rgba(59,130,246,0.1); border: 1px solid #3b82f6; color: #3b82f6; border-radius: 6px; cursor: pointer; font-size: 11px; }
-.btn-report:hover { background: #3b82f6; color: #fff; }
+
+.actions-cell { display: flex; justify-content: center; gap: 5px; width: 100%; flex-wrap: wrap; }
+.btn-report { padding: 6px 8px; background: rgba(239,68,68,0.1); border: 1px solid #ef4444; color: #ef4444; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; }
+.btn-report:hover { background: #ef4444; color: #fff; }
+
+/* ИНСТРУМЕНТЫ */
 .tool-card { border-radius: 16px; padding: 24px; margin-bottom: 20px; }
 .tool-card h3 { color: #fff; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
-.tool-card input, .tool-card select, .tool-card textarea { width: 100%; padding: 10px; background: rgba(11, 14, 20, 0.6); border: 1px solid #334155; border-radius: 8px; color: #fff; margin-bottom: 10px;}
-.btn { padding: 10px 20px; background: #3b82f6; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
-.btn:hover { background: #2563eb; }
-.btn-red { background: #ef4444; }
-.btn-red:hover { background: #dc2626; }
+.tool-card label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; margin-top: 10px; }
+.tool-card input, .tool-card select, .tool-card textarea { width: 100%; padding: 10px; background: rgba(11, 14, 20, 0.6); border: 1px solid #334155; border-radius: 8px; color: #fff; margin-bottom: 10px; font-family: inherit; }
+.tool-card input:focus, .tool-card select:focus { outline: none; border-color: #ef4444; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.btn { padding: 10px 20px; background: #ef4444; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.btn:hover { background: #dc2626; }
 .btn-green { background: #22c55e; color: #0b0e14; }
 .btn-green:hover { background: #16a34a; }
 .btn-orange { background: #f59e0b; color: #0b0e14; }
 .btn-orange:hover { background: #d97706; }
+.btn-blue { background: #3b82f6; }
+.btn-blue:hover { background: #2563eb; }
+
+/* ОТЧЕТЫ И ОБНОВЛЕНИЯ */
+.report-card, .update-card { background: rgba(15, 19, 26, 0.8); border: 1px solid #1f2937; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #ef4444; }
+.update-card { border-left-color: #3b82f6; }
+.report-card.approved { border-left-color: #22c55e; opacity: 0.7; }
+.report-card h3, .update-card h3 { color: #fff; margin-bottom: 10px; font-size: 16px; display: flex; justify-content: space-between; }
+.update-card .date { color: #64748b; font-size: 12px; margin-bottom: 10px; display: block; }
+.report-card p, .update-card p { font-size: 14px; color: #cbd5e1; margin-bottom: 5px; line-height: 1.5; }
+.report-card b { color: #fff; }
+.btn-approve { background: rgba(34,197,94,0.2); border: 1px solid #22c55e; color: #22c55e; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px; }
+.btn-approve:hover { background: #22c55e; color: #000; }
+.btn-reject { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #ef4444; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.btn-reject:hover { background: #ef4444; color: #fff; }
+.img-preview { max-width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #232a36; }
+
+/* НАСТРОЙКИ (Ползунки) */
+.settings-card { border-radius: 16px; padding: 30px; max-width: 600px; }
+.settings-card h3 { color: #fff; margin-bottom: 20px; font-size: 18px; }
+.setting-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.setting-row:last-child { border-bottom: none; }
+.setting-label { font-size: 14px; color: #e2e8f0; font-weight: 600; }
+.toggle-switch { position: relative; width: 50px; height: 26px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .4s; border-radius: 26px; }
+.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: #ef4444; }
+input:checked + .slider:before { transform: translateX(24px); }
+
+/* МОДАЛКИ */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
 .modal-overlay.open { display: flex; }
 .modal { background: #0f131a; border: 1px solid #1f2937; border-radius: 16px; padding: 30px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
 .modal h2 { color: #fff; margin-bottom: 20px; }
 .modal label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; margin-top: 10px; }
 .modal input, .modal select, .modal textarea { width: 100%; padding: 10px; background: #0b0e14; border: 1px solid #334155; border-radius: 8px; color: #fff; margin-bottom: 5px; }
-.report-card { background: rgba(15, 19, 26, 0.8); border: 1px solid #1f2937; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #ff9f43;}
-.report-card.approved { border-left-color: #22c55e; opacity: 0.7;}
-.report-card h3 { color: #fff; margin-bottom: 10px; font-size: 16px; display: flex; justify-content: space-between;}
-.report-card p { font-size: 14px; color: #cbd5e1; margin-bottom: 5px;}
-.report-card b { color: #fff; }
-.btn-approve { background: rgba(34,197,94,0.2); border: 1px solid #22c55e; color: #22c55e; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px;}
-.btn-approve:hover { background: #22c55e; color: #000;}
-.btn-reject { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #ef4444; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;}
-.btn-reject:hover { background: #ef4444; color: #fff;}
-.img-preview { max-width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #232a36; }
-.update-card { background: rgba(15, 19, 26, 0.8); border: 1px solid #1f2937; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #3b82f6;}
-.update-card h3 { color: #fff; margin-bottom: 5px; font-size: 18px; }
-.update-card .date { color: #64748b; font-size: 12px; margin-bottom: 15px; display: block;}
-.update-card p { color: #cbd5e1; font-size: 14px; line-height: 1.5; }
 </style>
 </head>
 <body class="glass-mode">
@@ -124,16 +158,16 @@ body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #
 <div id="auth-screen" style="display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10;">
     <h1 style="color: #fff; font-size: 48px; font-weight: 900; text-shadow: 0 0 20px rgba(255, 100, 0, 0.8); margin-bottom: 20px;">ДОСТУП ЗАКРЫТ</h1>
     <p style="color: #94a3b8; margin-bottom: 30px;">Войдите через Steam, чтобы просмотреть таблицу.</p>
-    <a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-sound" style="padding: 15px 30px; background: #ff6600; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 18px;">Войти через Steam</a>
+    <a href="https://otdel-sledyashih.de1.netrun.io/auth/steam" class="btn-sound" style="padding: 15px 30px; background: #ef4444; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 18px;">Войти через Steam</a>
 </div>
 
 <div id="main-site" style="display: none; position: relative; z-index: 10;">
     <header class="top-header glass">
-        <div class="logo"><span class="logo-icon">🎃</span> СЛЕДЯЩИЕ</div>
+        <div class="logo"><span style="color: #ef4444;">🎃</span> СЛЕДЯЩИЕ</div>
         <nav class="header-nav">
             <div class="nav-item nav-sound active" onclick="switchPage('table', this)">Состав</div>
             <div class="nav-item nav-sound" onclick="switchPage('stats', this)">Статистика</div>
-            <div class="nav-item nav-sound" onclick="switchPage('reports_check', this)" id="nav-reports">Отчеты</div>
+            <div class="nav-item nav-sound" onclick="switchPage('reports_check', this)">Отчеты</div>
             <div class="nav-item nav-sound" onclick="switchPage('updates', this)">Обновления</div>
             <div class="nav-item nav-sound" onclick="switchPage('tools', this)" id="nav-tools" style="display:none;">Инструменты</div>
         </nav>
@@ -153,14 +187,15 @@ body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #
             </div>
             <div class="profile-dropdown" id="profile-dropdown">
                 <div class="profile-item" onclick="switchPage('settings', this); closeProfileMenu();">⚙️ Настройки</div>
-                <div class="profile-item" onclick="alert('Ваш профиль в Steam: ' + MY_STEAM_ID); closeProfileMenu();">👤 Мой профиль</div>
-                <div class="profile-item" onclick="alert('Ваша статистика: Отчетов сдано - ' + (currentUser?.week || 0)); closeProfileMenu();">📊 Моя статистика</div>
+                <div class="profile-item" onclick="window.open('https://steamcommunity.com/profiles/' + toSteam64(MY_STEAM_ID), '_blank')">👤 Мой профиль</div>
                 <div class="profile-item danger" onclick="logout()">🚪 Выйти</div>
             </div>
         </div>
     </header>
 
-    <div class="banner"><h1>СЛЕДЯЩИЕ</h1></div>
+    <div style="text-align: center; padding: 20px 0;">
+        <h1 style="font-size: 36px; font-weight: 900; color: #fff; text-shadow: 0 0 20px rgba(239, 68, 68, 0.8); letter-spacing: 4px;">СЛЕДЯЩИЕ</h1>
+    </div>
 
     <main class="container">
         <!-- ТАБЛИЦА -->
@@ -168,9 +203,9 @@ body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #
             <div class="table-wrapper">
                 <div class="table-card">
                     <div class="table-row table-header">
-                        <div>Следящий</div><div>Ранг</div><div>SteamID</div><div>Статус</div><div>Адм.</div><div>Указ.</div><div>Норма</div><div>Действие</div>
+                        <div>Ник</div><div>Ранг в отделе</div><div>SteamID</div><div>Статус</div><div>Адм.</div><div>Указ.</div><div>Норма</div><div>Действие</div>
                     </div>
-                    <div id="table-body"><div class="loader">Загрузка...</div></div>
+                    <div id="table-body"><div style="text-align:center; padding:50px; color:#64748b;">Загрузка...</div></div>
                 </div>
             </div>
         </div>
@@ -178,7 +213,7 @@ body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #
         <!-- СТАТИСТИКА -->
         <div id="page-stats" class="tab-page">
             <h1 class="page-title">Статистика за месяц</h1>
-            <div class="stats-grid" id="stats-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;"></div>
+            <div id="stats-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;"></div>
         </div>
 
         <!-- ОТЧЕТЫ -->
@@ -195,37 +230,83 @@ body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #
             <div id="updates-list"></div>
         </div>
 
-        <!-- ИНСТРУМЕНТЫ (Только для админов) -->
+        <!-- ИНСТРУМЕНТЫ -->
         <div id="page-tools" class="tab-page">
             <h1 class="page-title">Инструменты управления</h1>
             
             <div class="tool-card glass">
                 <h3>Импорт из Union Teams</h3>
-                <textarea id="import-json" rows="4" placeholder='[{"steam": {"steam64_id": "..."}, "server": {"real_name": "...", "department": "Следящие", "rang": "..."}}]'></textarea>
-                <button class="btn btn-green btn-sound" onclick="importFromUnion()" style="width:100%;">Импортировать (не удаляет старых)</button>
+                <textarea id="import-json" rows="3" placeholder='[{"steam": {"steam64_id": "..."}, "server": {"real_name": "...", "department": "Следящие", "rang": "..."}}]'></textarea>
+                <button class="btn btn-green btn-sound" onclick="importFromUnion()" style="width:100%;">Импортировать (старые сохраняются)</button>
             </div>
 
             <div class="tool-card glass">
-                <h3>Добавить / Изменить следящего</h3>
-                <select id="edit-select" onchange="fillEditForm()" style="margin-bottom: 15px;"><option value="">Выберите...</option></select>
+                <h3>Управление Следящим</h3>
+                <select id="edit-select" onchange="fillEditForm()" style="margin-bottom: 15px;"><option value="">Выберите следящего...</option></select>
                 <input type="hidden" id="edit-id">
-                <label>Ник</label><input type="text" id="edit-nick">
-                <label>SteamID</label><input type="text" id="edit-steamid">
-                <label>Ссылка на аватарку</label><input type="text" id="edit-avatar">
-                <label>Ранг в отделе</label>
-                <select id="edit-rank">
-                    <option value="Следящий">Следящий</option><option value="Куратор">Куратор</option>
-                    <option value="Судо-Куратор">Судо-Куратор</option><option value="Зам. главы следящих">Зам. главы</option>
-                    <option value="Глава следящих">Глава</option>
-                </select>
                 
-                <label style="display:flex; align-items:center; gap:10px; margin-top:15px;">
-                    <input type="checkbox" id="edit-admin-rights" style="width:auto;"> Права Админа сайта
+                <div class="grid-2">
+                    <div><label>Ник</label><input type="text" id="edit-nick"></div>
+                    <div><label>SteamID (64)</label><input type="text" id="edit-steamid"></div>
+                </div>
+                
+                <div class="grid-2">
+                    <div><label>Ранг в отделе</label>
+                        <select id="edit-rank">
+                            <option value="Следящий">Следящий</option>
+                            <option value="Зам. главы следящих">Зам. главы следящих</option>
+                            <option value="Глава следящих">Глава следящих</option>
+                        </select>
+                    </div>
+                    <div><label>Ранг в игре</label>
+                        <select id="edit-game-rank">
+                            <option value="Игрок">Игрок</option>
+                            <option value="Ассистент">Ассистент</option>
+                            <option value="Модератор">Модератор</option>
+                            <option value="Администратор">Администратор</option>
+                            <option value="Оператор">Оператор</option>
+                            <option value="Сеньор Админ">Сеньор Админ</option>
+                            <option value="Куратор">Куратор</option>
+                            <option value="Судо-Куратор">Судо-Куратор</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div><label>Статус</label>
+                        <select id="edit-status">
+                            <option value="Активен">Активен</option>
+                            <option value="Мороз">Мороз</option>
+                            <option value="Отпуск">Отпуск</option>
+                        </select>
+                    </div>
+                    <div><label>Позиция (1 = выше всех)</label><input type="number" id="edit-order" value="10"></div>
+                </div>
+
+                <h4 style="color:#ef4444; margin-top:20px; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:5px;">Изменение статов</h4>
+                <div class="grid-2">
+                    <div><label>Норма (Отчеты)</label><input type="number" id="edit-week" value="0"></div>
+                    <div><label>ДВ (ЗП)</label><input type="number" id="edit-pay" value="0"></div>
+                    <div><label>Слежка за админами</label><input type="number" id="edit-adm" value="0"></div>
+                    <div><label>По указаниям</label><input type="number" id="edit-sl" value="0"></div>
+                </div>
+
+                <label style="display:flex; align-items:center; gap:10px; margin-top:20px; cursor:pointer;">
+                    <input type="checkbox" id="edit-admin-rights" style="width:auto; transform:scale(1.2);"> <b style="color:#fbbf24;">Права Админа сайта</b>
                 </label>
 
                 <div style="display:flex; gap:10px; margin-top:20px;">
-                    <button class="btn btn-sound" onclick="saveStaff()">Сохранить</button>
+                    <button class="btn btn-sound" onclick="saveStaff()">Сохранить изменения</button>
                     <button class="btn btn-red btn-sound" onclick="deleteStaff()" id="btn-delete-staff" style="display:none;">Удалить</button>
+                </div>
+            </div>
+
+            <div class="tool-card glass">
+                <h3>Глобальные сбросы</h3>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <button class="btn btn-orange btn-sound" onclick="resetWeek()">Сбросить НЕДЕЛЮ (Норму, Адм, Указ) — ДВ не трогает</button>
+                    <button class="btn btn-blue btn-sound" onclick="resetPay()">Сбросить ДВ (Донат Валюту) — Неделю не трогает</button>
+                    <button class="btn btn-red btn-sound" onclick="resetMonth()">Сбросить ВСЁ (Месяц, ДВ, Норму) — Полный ноль</button>
                 </div>
             </div>
         </div>
@@ -233,15 +314,21 @@ body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #
         <!-- НАСТРОЙКИ -->
         <div id="page-settings" class="tab-page">
             <h1 class="page-title">Настройки</h1>
-            <div class="tool-card glass">
+            <div class="settings-card glass">
                 <h3>Внешний вид и звук</h3>
-                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                    <span>Прозрачность интерфейса</span>
-                    <input type="checkbox" id="toggle-glass" checked onchange="toggleGlassMode(this)">
+                <div class="setting-row">
+                    <span class="setting-label">Прозрачность интерфейса (замыливание фона)</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-glass" checked onchange="toggleGlassMode(this)">
+                        <span class="slider"></span>
+                    </label>
                 </div>
-                <div style="display:flex; justify-content:space-between;">
-                    <span>Отключить звуки</span>
-                    <input type="checkbox" id="toggle-mute" onchange="toggleMute(this)">
+                <div class="setting-row">
+                    <span class="setting-label">Отключить все звуки</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-mute" onchange="toggleMute(this)">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -291,15 +378,32 @@ if (!MY_STEAM_ID) MY_STEAM_ID = "00000000000000000";
 let globalStaff = [];
 let currentUser = null;
 let isAdmin = false;
+let tempReports = [];
 
+// ЗВУКИ
 const sounds = { hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3' };
 let isMuted = localStorage.getItem('isMuted') === 'true';
 document.getElementById('toggle-mute').checked = isMuted;
 function playSound(type) { if (isMuted) return; const audio = new Audio(sounds[type]); audio.volume = 0.3; audio.play().catch(() => {}); }
 window.toggleMute = (cb) => { isMuted = cb.checked; localStorage.setItem('isMuted', isMuted); };
 
+// ЭФФЕКТЫ И НАСТРОЙКИ
+window.toggleGlassMode = (cb) => {
+    if (cb.checked) { document.body.classList.remove('no-glass-mode'); document.body.classList.add('glass-mode'); localStorage.setItem('glassMode', 'on'); }
+    else { document.body.classList.remove('glass-mode'); document.body.classList.add('no-glass-mode'); localStorage.setItem('glassMode', 'off'); }
+};
+if (localStorage.getItem('glassMode') === 'off') { 
+    document.body.classList.remove('glass-mode'); document.body.classList.add('no-glass-mode'); 
+    document.getElementById('toggle-glass').checked = false; 
+}
+document.querySelectorAll('.nav-sound, .btn, .btn-report').forEach(el => {
+    el.addEventListener('mouseenter', () => playSound('hover'));
+    el.addEventListener('click', () => playSound('click'));
+});
+
+// УТИЛИТЫ STEAM
 function toSteam64(input) {
-    if (!input) return '—'; const str = input.trim();
+    if (!input) return '—'; const str = String(input).trim();
     if (/^7656\d{13}$/.test(str)) return str;
     const matchSteam = str.match(/^STEAM_(\d):(\d):(\d+)$/i);
     if (matchSteam) return (BigInt("76561197960265728") + (BigInt(matchSteam[3]) * 2n) + BigInt(matchSteam[2])).toString();
@@ -310,17 +414,14 @@ function toSteam32(steam64) {
     try { const big = BigInt(steam64) - BigInt("76561197960265728"); return `STEAM_0:${big % 2n}:${(big - (big % 2n)) / 2n}`; } catch(e) { return steam64; }
 }
 
+// ИНИЦИАЛИЗАЦИЯ
 window.onload = () => {
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         document.getElementById('auth-screen').style.display = 'flex';
     } else {
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('main-site').style.display = 'block';
-        loadProfile();
-        loadData();
-        loadReports(); 
-        loadUpdates();
-        loadNotifications();
+        loadProfile(); loadData(); loadReports(); loadUpdates(); loadNotifications();
     }
 };
 window.logout = () => { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('my_steam_id'); window.location.reload(); };
@@ -331,6 +432,7 @@ window.switchPage = (pageId, element) => {
     document.getElementById('page-' + pageId).classList.add('active');
     if (element && element.classList.contains('nav-item')) element.classList.add('active');
     if(pageId === 'reports_check') loadReports();
+    if(pageId === 'updates') loadUpdates();
     playSound('click');
 };
 
@@ -343,13 +445,14 @@ document.addEventListener('click', (e) => {
     if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
 });
 
+// ЗАГРУЗКА ПРОФИЛЯ И ДАННЫХ
 async function loadProfile() {
     const { data: staff } = await supabase.from('staff').select('*');
     const me = staff.find(s => toSteam64(s.steamid) === MY_STEAM_ID);
     
     if (me) {
         currentUser = me;
-        isAdmin = me.role === 'admin' || ['Глава следящих', 'Зам. главы следящих', 'Куратор', 'Судо-Куратор'].includes(me.rank);
+        isAdmin = me.role === 'admin' || ['Глава следящих', 'Зам. главы следящих'].includes(me.rank);
         document.getElementById('header-name').textContent = me.nick;
         document.getElementById('header-rank').textContent = me.rank;
         if (me.avatar) document.getElementById('header-avatar').src = me.avatar;
@@ -368,17 +471,27 @@ async function loadData() {
 function renderTable() {
     const tbody = document.getElementById('table-body');
     tbody.innerHTML = globalStaff.map((p) => {
-        const isBoss = p.is_boss || ['Глава следящих', 'Зам. главы следящих', 'Куратор', 'Судо-Куратор'].includes(p.rank);
-        const normSum = p.week || 0;
+        let isBoss = ['Глава следящих', 'Зам. главы следящих'].includes(p.rank);
+        let normSum = p.week || 0;
         let normClass = normSum >= 5 ? 'n-green' : (normSum >= 4 ? 'n-yellow' : 'n-red');
-        const normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
+        let normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
         
+        // СТАТУСЫ И ИКОНКИ
         let statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
         if (p.status === 'Мороз') statusHtml = `<span class="status-badge status-frozen">❄️ Мороз</span>`;
         if (p.status === 'Отпуск') statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`;
 
+        // ЦВЕТА РОЛЕЙ
+        let rankClass = 'rank-sled'; // Красный по умолчанию для активных
+        if (p.status !== 'Активен') rankClass = 'rank-sled'; // Если не активен, оставляем базовый цвет
+        if (p.rank === 'Зам. главы следящих') rankClass = 'rank-zam';
+        if (p.rank === 'Глава следящих') rankClass = 'rank-glava';
+
+        // КЛИКАБЕЛЬНЫЙ STEAMID
+        let steamLink = `<a href="https://steamcommunity.com/profiles/${toSteam64(p.steamid)}" target="_blank" class="steam-link">${toSteam32(p.steamid)}</a>`;
+
         let actionsHtml = '';
-        if (isAdmin || p.steamid === MY_STEAM_ID) {
+        if (isAdmin || toSteam64(p.steamid) === MY_STEAM_ID) {
             actionsHtml = `<div class="actions-cell">
                 <button class="btn-report" onclick="openReport('adm','${p.nick}')">Админ</button>
                 <button class="btn-report" onclick="openReport('sl','${p.nick}')">Указание</button>
@@ -389,9 +502,9 @@ function renderTable() {
 
         return `
             <div class="table-row">
-                <div class="table-cell"><div class="user-cell"><img class="t-avatar" src="${p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'}"><div class="t-name">${p.nick}<span class="t-rank">${p.rank}</span></div></div></div>
-                <div class="table-cell"><span class="rank-sled">${p.rank}</span></div>
-                <div class="table-cell">${toSteam32(p.steamid)}</div>
+                <div class="table-cell"><div class="user-cell"><img class="t-avatar" src="${p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'}"><div class="t-name">${p.nick}</div></div></div>
+                <div class="table-cell"><span class="${rankClass}">${p.rank}</span></div>
+                <div class="table-cell">${steamLink}</div>
                 <div class="table-cell">${statusHtml}</div>
                 <div class="table-cell"><span class="badge b-adm">${p.adm || 0}</span></div>
                 <div class="table-cell"><span class="badge b-sl">${p.sl || 0}</span></div>
@@ -406,7 +519,7 @@ function renderStats() {
         <div class="tool-card glass">
             <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px; border-bottom:1px solid #334155; padding-bottom:15px;">
                 <img class="t-avatar" src="${p.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'}">
-                <div><div style="font-weight:bold; color:#fff;">${p.nick}</div><div style="font-size:12px; color:#ff6600;">${p.rank}</div></div>
+                <div><div style="font-weight:bold; color:#fff;">${p.nick}</div><div style="font-size:12px; color:#ef4444;">${p.rank}</div></div>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Админы:</span><b>${p.adm || 0}</b></div>
             <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Указания:</span><b>${p.sl || 0}</b></div>
@@ -427,7 +540,7 @@ window.openReport = (type, nick) => {
 };
 
 window.editReport = (id) => {
-    const r = window.tempReports.find(x => x.id === id);
+    const r = tempReports.find(x => x.id === id);
     if(!r) return;
     document.getElementById('editReportId').value = r.id;
     document.getElementById('reportType').value = r.type;
@@ -443,7 +556,7 @@ window.editReport = (id) => {
     f.suspicious.value = r.suspicious || '';
     f.continue.value = r.continue || 'Да';
     
-    document.getElementById('image-upload-block').style.display = 'none'; // Картинку при редактировании не меняем
+    document.getElementById('image-upload-block').style.display = 'none';
     document.getElementById('reportModal').classList.add('open');
 };
 
@@ -454,38 +567,26 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
     const fileInput = document.getElementById('reportImage');
 
     const payload = {
-        p_type: String(f.type.value),
-        p_reporter: String(f.reporter.value),
-        p_adminNick: String(f.adminNick.value),
-        p_steamId: String(toSteam64(f.steamId.value)),
-        p_rank: String(f.rank.value),
-        p_time: String(f.time.value),
-        p_rule: String(f.rule.value || '—'),
-        p_suspicious: String(f.suspicious.value || '—'),
-        p_continue: String(f.continue.value)
+        p_type: String(f.type.value), p_reporter: String(f.reporter.value),
+        p_adminNick: String(f.adminNick.value), p_steamId: String(toSteam64(f.steamId.value)),
+        p_rank: String(f.rank.value), p_time: String(f.time.value),
+        p_rule: String(f.rule.value || '—'), p_suspicious: String(f.suspicious.value || '—'), p_continue: String(f.continue.value)
     };
 
     const executeSave = async (imageData) => {
         let error;
         if (editId) {
-            // Если редактируем
             const rpcFunc = isAdmin ? 'admin_update_report' : 'user_update_report';
             const res = await supabase.rpc(rpcFunc, { r_id: parseInt(editId), ...payload });
             error = res.error;
         } else {
-            // Если создаем новый
             payload.p_image = imageData ? String(imageData) : '';
             const res = await supabase.rpc('insert_report_direct', payload);
             error = res.error;
-            if(!error) {
-                await supabase.rpc('send_notification', { p_target: currentUser ? currentUser.steamid : '', p_message: 'Ваш отчет отправлен главным по отделу!' });
-            }
         }
 
         if (error) { alert("Ошибка: " + error.message); return; }
-        alert("Успешно сохранено!");
-        closeModal('reportModal');
-        loadReports();
+        alert("Успешно сохранено!"); closeModal('reportModal'); loadReports();
     };
 
     if (fileInput.files.length > 0 && !editId) {
@@ -501,22 +602,20 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
             img.src = event.target.result;
         };
         reader.readAsDataURL(fileInput.files[0]);
-    } else {
-        executeSave(null);
-    }
+    } else { executeSave(null); }
 });
 
 async function loadReports() {
     const { data: reports } = await supabase.from('reports').select('*').order('id', { ascending: false });
     if (!reports) return;
-    window.tempReports = reports;
+    tempReports = reports;
 
     const pending = reports.filter(r => r.status === 'pending');
     const history = reports.filter(r => r.status !== 'pending');
 
     document.getElementById('pending-list').innerHTML = pending.map(r => `
         <div class="report-card">
-            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'По указаниям'} <span style="color:#ff9f43;font-size:12px;">${r.status}</span></h3>
+            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'По указаниям'} <span style="color:#ef4444;font-size:12px;">${r.status}</span></h3>
             <p><b>Автор:</b> ${r.reporter}</p>
             <p><b>Нарушитель:</b> ${r.adminnick || 'Не указан'} (${toSteam32(r.steamid)}) • ${r.rank}</p>
             <p><b>Время:</b> ${r.time} | <b>Нарушение:</b> ${r.rule || '—'} | <b>Действия:</b> ${r.suspicious || '—'}</p>
@@ -595,9 +694,9 @@ async function markNotificationsRead() {
     loadNotifications();
 }
 
-// --- АДМИНКА И ИМПОРТ ---
+// --- ИНСТРУМЕНТЫ ---
 async function renderToolsSelect() {
-    document.getElementById('edit-select').innerHTML = '<option value="">Выберите...</option>' + globalStaff.map(p => `<option value="${p.id}">${p.nick}</option>`).join('');
+    document.getElementById('edit-select').innerHTML = '<option value="">Выберите следящего...</option>' + globalStaff.map(p => `<option value="${p.id}">${p.nick}</option>`).join('');
 }
 window.fillEditForm = () => {
     const id = document.getElementById('edit-select').value;
@@ -606,27 +705,92 @@ window.fillEditForm = () => {
     document.getElementById('edit-id').value = p.id;
     document.getElementById('edit-nick').value = p.nick;
     document.getElementById('edit-steamid').value = toSteam64(p.steamid);
-    document.getElementById('edit-avatar').value = p.avatar || '';
-    document.getElementById('edit-rank').value = p.rank;
+    document.getElementById('edit-rank').value = p.rank || 'Следящий';
+    document.getElementById('edit-game-rank').value = p.game_rank || 'Игрок';
+    document.getElementById('edit-status').value = p.status || 'Активен';
+    document.getElementById('edit-order').value = p.order || 10;
+    document.getElementById('edit-week').value = p.week || 0;
+    document.getElementById('edit-pay').value = p.pay || 0;
+    document.getElementById('edit-adm').value = p.adm || 0;
+    document.getElementById('edit-sl').value = p.sl || 0;
     document.getElementById('edit-admin-rights').checked = p.role === 'admin';
     document.getElementById('btn-delete-staff').style.display = 'block';
 };
+
 window.saveStaff = async () => {
     const id = document.getElementById('edit-id').value;
-    const updates = {
+    if(!id) {
+        // Создание нового
+        const updates = {
+            nick: document.getElementById('edit-nick').value,
+            steamid: toSteam64(document.getElementById('edit-steamid').value),
+            rank: document.getElementById('edit-rank').value,
+            game_rank: document.getElementById('edit-game-rank').value,
+            status: document.getElementById('edit-status').value,
+            "order": parseInt(document.getElementById('edit-order').value) || 10,
+            week: parseInt(document.getElementById('edit-week').value) || 0,
+            pay: parseInt(document.getElementById('edit-pay').value) || 0,
+            adm: parseInt(document.getElementById('edit-adm').value) || 0,
+            sl: parseInt(document.getElementById('edit-sl').value) || 0,
+            role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user'
+        };
+        await supabase.from('staff').insert([updates]);
+        alert("Создан!"); loadData(); return;
+    }
+
+    // Обновление существующего
+    const p = globalStaff.find(s => s.id == id);
+    let notifMsg = '';
+    if(p.rank !== document.getElementById('edit-rank').value) notifMsg += `Вам изменили ранг в отделе на ${document.getElementById('edit-rank').value}. `;
+    if(p.status !== document.getElementById('edit-status').value) notifMsg += `Вам изменили статус на ${document.getElementById('edit-status').value}. `;
+    if(p.week != document.getElementById('edit-week').value) notifMsg += `Вам изменили норму на ${document.getElementById('edit-week').value}. `;
+    if(p.pay != document.getElementById('edit-pay').value) notifMsg += `Вам изменили ДВ на ${document.getElementById('edit-pay').value}. `;
+    
+    const res = await supabase.rpc('admin_update_stats', {
+        p_target_id: parseInt(id),
+        p_week: parseInt(document.getElementById('edit-week').value) || 0,
+        p_pay: parseInt(document.getElementById('edit-pay').value) || 0,
+        p_adm: parseInt(document.getElementById('edit-adm').value) || 0,
+        p_sl: parseInt(document.getElementById('edit-sl').value) || 0,
+        p_order: parseInt(document.getElementById('edit-order').value) || 10,
+        p_status: document.getElementById('edit-status').value,
+        p_rank: document.getElementById('edit-rank').value,
+        p_game_rank: document.getElementById('edit-game-rank').value,
+        p_notif: notifMsg
+    });
+    
+    // Отдельно обновляем ник/стим (на случай если изменили)
+    await supabase.from('staff').update({
         nick: document.getElementById('edit-nick').value,
         steamid: toSteam64(document.getElementById('edit-steamid').value),
-        avatar: document.getElementById('edit-avatar').value || null,
-        rank: document.getElementById('edit-rank').value,
         role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user'
-    };
-    if (id) { await supabase.from('staff').update(updates).eq('id', id); } 
-    else { updates.adm = 0; updates.sl = 0; updates.week = 0; updates.pay = 0; await supabase.from('staff').insert([updates]); }
-    alert("Сохранено!"); loadData();
+    }).eq('id', id);
+
+    if(res.error) alert("Ошибка: " + res.error.message);
+    else alert("Сохранено! Уведомление отправлено."); 
+    loadData();
 };
+
 window.deleteStaff = async () => {
     const id = document.getElementById('edit-id').value;
-    if (confirm("Удалить?")) { await supabase.from('staff').delete().eq('id', id); loadData(); }
+    if (confirm("Удалить навсегда?")) { await supabase.from('staff').delete().eq('id', id); loadData(); }
+};
+
+// СБРОСЫ
+window.resetWeek = async () => {
+    if (!confirm("Сбросить НЕДЕЛЮ (Норму, Адм, Указ)? ДВ останется.")) return;
+    await supabase.from('staff').update({ week: 0, adm: 0, sl: 0 }).not('id', 'is', null);
+    alert("Неделя сброшена!"); loadData();
+};
+window.resetPay = async () => {
+    if (!confirm("Сбросить ДВ у ВСЕХ?")) return;
+    await supabase.from('staff').update({ pay: 0 }).not('id', 'is', null);
+    alert("ДВ сброшено!"); loadData();
+};
+window.resetMonth = async () => {
+    if (!confirm("ПОЛНЫЙ СБРОС МЕСЯЦА (Нормы, ДВ, Отчеты)?")) return;
+    await supabase.from('staff').update({ week: 0, adm: 0, sl: 0, pay: 0 }).not('id', 'is', null);
+    alert("Месяц обнулен!"); loadData();
 };
 
 window.importFromUnion = async () => {
@@ -642,13 +806,13 @@ window.importFromUnion = async () => {
             const { data: ext } = await supabase.from('staff').select('id').eq('steamid', p.steam.steam64_id).single();
             if (!ext) {
                 await supabase.from('staff').insert([{
-                    nick: p.server.real_name, rank: p.server.rang || "Следящий", game_rank: p.server.rang,
-                    steamid: p.steam.steam64_id, role: 'user', adm: 0, sl: 0, week: 0, pay: 0, status: "Активен", order: 99
+                    nick: p.server.real_name, rank: 'Следящий', game_rank: p.server.rang,
+                    steamid: p.steam.steam64_id, role: 'user', adm: 0, sl: 0, week: 0, pay: 0, status: "Активен", "order": 99
                 }]);
                 count++;
             }
         }
-        alert(`Добавлено ${count} человек (старые сохранены).`);
+        alert(`Добавлено ${count} человек.`);
         loadData();
     } catch (e) { alert("Ошибка JSON"); }
 };
