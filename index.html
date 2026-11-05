@@ -10,17 +10,17 @@ body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #
 .bg-slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-image: url('https://images.unsplash.com/photo-1508361001413-7a9dca21d08a?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; filter: brightness(0.4) contrast(1.1); transition: 0.3s ease; }
 .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 20%, rgba(5, 5, 10, 0.95) 100%); z-index: -1; }
 body.no-glass-mode .bg-slideshow { filter: blur(8px) brightness(0.3); }
-body.glass-mode .bg-slideshow { filter: brightness(0.4) contrast(1.1); }
 
-.glass { background: rgba(15, 19, 26, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+.glass { background: rgba(15, 19, 26, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
 .no-glass-mode .glass { background: #0f131a; backdrop-filter: none; border: 1px solid #1f2937; }
 
-.top-header { background: rgba(15, 19, 26, 0.6); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 64px; position: sticky; top: 0; z-index: 100; }
+.top-header { background: rgba(15, 19, 26, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 64px; position: sticky; top: 0; z-index: 100; }
 .logo { font-weight: 800; font-size: 18px; color: #fff; display: flex; align-items: center; gap: 10px; }
 .header-nav { display: flex; gap: 5px; height: 100%; }
-.nav-item { padding: 0 20px; display: flex; align-items: center; height: 100%; color: #ef4444; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: 1px; }
+.nav-item { padding: 0 20px; display: flex; align-items: center; height: 100%; color: #ef4444; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: 1px; position: relative; }
 .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
 .nav-item.active { color: #fff; border-bottom-color: #ef4444; background: rgba(239,68,68,0.1); }
+.nav-dot { position: absolute; top: 15px; right: 10px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: none; }
 
 .header-user { display: flex; align-items: center; gap: 15px; position: relative; }
 .user-badge { display: flex; align-items: center; gap: 10px; padding: 5px 15px; background: rgba(30, 41, 59, 0.8); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.2s; }
@@ -28,7 +28,7 @@ body.glass-mode .bg-slideshow { filter: brightness(0.4) contrast(1.1); }
 .user-avatar { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; background: #1e293b; }
 .user-name { font-weight: 700; font-size: 13px; color: #fff; }
 .user-rank { font-size: 10px; color: #ef4444; font-weight: 700; text-transform: uppercase; }
-.profile-dropdown { position: absolute; top: 55px; right: 0; width: 220px; background: rgba(15, 19, 26, 0.95); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
+.profile-dropdown { position: absolute; top: 55px; right: 0; width: 220px; background: rgba(15, 19, 26, 0.98); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
 .profile-dropdown.open { display: block; animation: fadeIn 0.2s; }
 .profile-item { padding: 12px 20px; font-size: 14px; color: #cbd5e1; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
 .profile-item:hover { background: #1e293b; color: #fff; }
@@ -36,9 +36,11 @@ body.glass-mode .bg-slideshow { filter: brightness(0.4) contrast(1.1); }
 
 .btn-icon { background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; position: relative; }
 .notify-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: none; border: 2px solid #0f131a; }
-.notify-dropdown { position: absolute; top: 55px; right: 0; width: 350px; background: rgba(15, 19, 26, 0.95); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
+.notify-dropdown { position: absolute; top: 55px; right: 0; width: 380px; background: rgba(15, 19, 26, 0.98); border: 1px solid #1f2937; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; z-index: 200; overflow: hidden; }
 .notify-dropdown.open { display: block; animation: fadeIn 0.2s; }
-.notify-header { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-weight: 700; color: #fff; }
+.notify-header { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-weight: 700; color: #fff; display: flex; justify-content: space-between; align-items: center;}
+.btn-clear-notif { background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid #ef4444; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;}
+.btn-clear-notif:hover { background: #ef4444; color: #fff; }
 .notify-list { max-height: 350px; overflow-y: auto; }
 .notify-item { padding: 15px 20px; border-bottom: 1px solid #1f2937; font-size: 13px; color: #cbd5e1; line-height: 1.4; }
 .notify-item.unread { background: rgba(239,68,68,0.1); border-left: 3px solid #ef4444; }
@@ -51,28 +53,29 @@ body.glass-mode .bg-slideshow { filter: brightness(0.4) contrast(1.1); }
 .page-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 .page-title::before { content: ''; width: 4px; height: 24px; background: #ef4444; border-radius: 2px; }
 
-/* ТАБЛИЦА */
+/* ТАБЛИЦА (Разнообразие) */
 .table-wrapper { position: relative; border-radius: 16px; padding: 3px; animation: borderGlowColor 4s linear infinite; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
 @keyframes borderGlowColor { 0% { background-color: #ef4444; } 50% { background-color: #f59e0b; } 100% { background-color: #ef4444; } }
 .table-card { border-radius: 13px; overflow: hidden; background: rgba(15, 19, 26, 0.95); }
-.table-row { display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr 0.6fr 0.8fr 0.8fr 1.8fr; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; }
-.table-row:hover { background: rgba(255, 255, 255, 0.05); }
+.table-row { display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr 0.6fr 0.8fr 0.8fr 1.8fr; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s; }
+.table-row:hover { background: linear-gradient(90deg, rgba(239,68,68,0.1) 0%, rgba(15,19,26,0) 100%); transform: scale(1.005); }
 .table-header { background: rgba(19, 25, 36, 0.9); font-size: 12px; text-transform: uppercase; color: #cbd5e1; font-weight: 800; padding: 16px 10px; letter-spacing: 1px; }
 .table-header > div { text-align: center; }
 .table-header > div:nth-child(1) { text-align: left; padding-left: 20px; }
 .table-cell { padding: 16px 10px; font-size: 14px; display: flex; align-items: center; justify-content: center; letter-spacing: 0.5px; }
 .table-cell:nth-child(1) { justify-content: flex-start; padding-left: 20px; }
 .user-cell { display: flex; align-items: center; gap: 12px; }
-.t-avatar { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+.t-avatar { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; border: 1px solid #334155;}
 .t-name { font-weight: 700; color: #fff; display: flex; flex-direction: column; text-align: left; }
 .game-rank-text { font-size: 11px; color: #94a3b8; font-weight: normal; text-transform: capitalize; margin-top: 2px;}
 
-/* РАНГИ И СТАТУСЫ */
+/* РАНГИ */
 .rank-sled { color: #ef4444; font-weight: 700; } 
 .rank-zam { color: #ff0000; font-weight: 900; text-shadow: 0 0 5px rgba(255,0,0,0.5); } 
 .rank-glava { color: #fbbf24; font-weight: 900; text-shadow: 0 0 10px rgba(251,191,36,0.8); } 
 .rank-glava::before { content: '👑 '; font-size: 14px; }
 
+/* СТАТУСЫ */
 .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; width: 100%; max-width: 100px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;}
 .status-active { color: #22c55e; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); }
 .status-frozen { color: #3b82f6; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); }
@@ -95,14 +98,14 @@ a.steam-link:hover { color: #ef4444; border-bottom-style: solid; }
 .n-none { color: #64748b; font-style: italic; }
 
 .actions-cell { display: flex; justify-content: center; gap: 5px; width: 100%; flex-wrap: wrap; }
-.btn-report { padding: 6px 8px; background: rgba(239,68,68,0.1); border: 1px solid #ef4444; color: #ef4444; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; transition: 0.2s;}
+.btn-report { padding: 6px 10px; background: rgba(239,68,68,0.1); border: 1px solid #ef4444; color: #ef4444; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; transition: 0.2s;}
 .btn-report:hover { background: #ef4444; color: #fff; }
 
 /* ИНСТРУМЕНТЫ */
 .tool-card { border-radius: 16px; padding: 24px; margin-bottom: 20px; }
 .tool-card h3 { color: #fff; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
 .tool-card label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; margin-top: 10px; }
-.tool-card input, .tool-card select, .tool-card textarea { width: 100%; padding: 10px; background: rgba(11, 14, 20, 0.6); border: 1px solid #334155; border-radius: 8px; color: #fff; margin-bottom: 10px; font-family: inherit; }
+.tool-card input, .tool-card select, .tool-card textarea { width: 100%; padding: 10px; background: rgba(11, 14, 20, 0.8); border: 1px solid #334155; border-radius: 8px; color: #fff; margin-bottom: 10px; font-family: inherit; }
 .tool-card input:focus, .tool-card select:focus { outline: none; border-color: #ef4444; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
@@ -115,24 +118,23 @@ a.steam-link:hover { color: #ef4444; border-bottom-style: solid; }
 .btn-blue { background: #3b82f6; }
 .btn-blue:hover { background: #2563eb; }
 
-/* ОТЧЕТЫ И ОБНОВЛЕНИЯ */
-.report-card, .update-card { background: rgba(15, 19, 26, 0.8); border: 1px solid #1f2937; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #ef4444; position: relative;}
-.update-card { border-left-color: #3b82f6; }
-.report-card.approved { border-left-color: #22c55e; opacity: 0.7; }
-.report-card h3, .update-card h3 { color: #fff; margin-bottom: 10px; font-size: 16px; display: flex; justify-content: space-between; align-items: center;}
+/* ОТЧЕТЫ (Разворачивающиеся) */
+.report-card { background: rgba(15, 19, 26, 0.8); border: 1px solid #1f2937; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #ef4444; overflow: hidden; }
+.report-card.approved { border-left-color: #22c55e; opacity: 0.8; }
+.report-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+.report-header:hover { background: rgba(255,255,255,0.05); }
+.report-header h3 { color: #fff; font-size: 15px; margin: 0; }
+.report-content { display: none; padding: 0 20px 20px 20px; border-top: 1px solid #1f2937; background: rgba(0,0,0,0.2); }
+.report-card.expanded .report-content { display: block; animation: fadeIn 0.3s; }
+.report-content p { font-size: 14px; color: #cbd5e1; margin-top: 10px; line-height: 1.5; }
+.report-content b { color: #fff; }
+
+.update-card { background: rgba(15, 19, 26, 0.8); border: 1px solid #1f2937; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #3b82f6; position: relative;}
+.update-card h3 { color: #fff; margin-bottom: 10px; font-size: 16px; }
 .update-card .date { color: #64748b; font-size: 12px; margin-bottom: 10px; display: block; }
-.report-card p, .update-card p { font-size: 14px; color: #cbd5e1; margin-bottom: 5px; line-height: 1.5; }
-.report-card b { color: #fff; }
-.btn-approve { background: rgba(34,197,94,0.2); border: 1px solid #22c55e; color: #22c55e; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px; }
-.btn-approve:hover { background: #22c55e; color: #000; }
-.btn-reject { background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #ef4444; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-.btn-reject:hover { background: #ef4444; color: #fff; }
-.img-preview { max-width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #232a36; }
+.update-card p { font-size: 14px; color: #cbd5e1; line-height: 1.5; }
 
-.btn-del-update { position: absolute; top: 15px; right: 15px; background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid #ef4444; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;}
-.btn-del-update:hover { background: #ef4444; color: #fff; }
-
-/* НАСТРОЙКИ (Ползунки) */
+/* НАСТРОЙКИ */
 .settings-card { border-radius: 16px; padding: 30px; max-width: 600px; }
 .settings-card h3 { color: #fff; margin-bottom: 20px; font-size: 18px; }
 .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
@@ -172,13 +174,13 @@ input:checked + .slider:before { transform: translateX(24px); }
             <div class="nav-item nav-sound active" onclick="switchPage('table', this)">Состав</div>
             <div class="nav-item nav-sound" onclick="switchPage('stats', this)">Статистика</div>
             <div class="nav-item nav-sound" onclick="switchPage('reports_check', this)">Отчеты</div>
-            <div class="nav-item nav-sound" onclick="switchPage('updates', this)">Обновления</div>
+            <div class="nav-item nav-sound" onclick="switchPage('updates', this)" id="nav-updates">Обновления <div class="nav-dot" id="updates-dot"></div></div>
             <div class="nav-item nav-sound" onclick="switchPage('tools', this)" id="nav-tools" style="display:none;">Инструменты</div>
         </nav>
         <div class="header-user">
             <button class="btn-icon btn-sound" onclick="toggleNotifications()">🔔 <div class="notify-dot" id="notify-dot"></div></button>
             <div class="notify-dropdown" id="notify-dropdown">
-                <div class="notify-header">Уведомления</div>
+                <div class="notify-header">Уведомления <button class="btn-clear-notif" onclick="clearNotifications()">Очистить</button></div>
                 <div class="notify-list" id="notify-list"></div>
             </div>
             
@@ -238,7 +240,7 @@ input:checked + .slider:before { transform: translateX(24px); }
                 <input type="text" id="update-title" placeholder="Например: Обновление 4.0">
                 <label>Что изменилось?</label>
                 <textarea id="update-content" rows="4" placeholder="Описание обновления..."></textarea>
-                <button class="btn btn-blue" onclick="publishUpdate()" style="margin-top:10px;">Опубликовать (с уведомлением всем)</button>
+                <button class="btn btn-blue" onclick="publishUpdate()" style="margin-top:10px;">Опубликовать (с уведомлением)</button>
             </div>
 
             <div id="updates-list"></div>
@@ -251,7 +253,7 @@ input:checked + .slider:before { transform: translateX(24px); }
             <div class="tool-card glass">
                 <h3>Импорт из Union Teams</h3>
                 <textarea id="import-json" rows="3" placeholder='[{"steam": {"steam64_id": "..."}, "server": {"real_name": "...", "department": "Следящие", "rang": "..."}}]'></textarea>
-                <button class="btn btn-green btn-sound" onclick="importFromUnion()" style="width:100%;">Импортировать (старые сохраняются)</button>
+                <button class="btn btn-green btn-sound" onclick="importFromUnion()" style="width:100%;">Импортировать</button>
             </div>
 
             <div class="tool-card glass">
@@ -299,10 +301,10 @@ input:checked + .slider:before { transform: translateX(24px); }
 
                 <h4 style="color:#ef4444; margin-top:20px; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:5px;">Изменение статов</h4>
                 <div class="grid-2">
-                    <div><label>Норма (Отчеты)</label><input type="number" id="edit-week" value="0"></div>
+                    <div><label>Норма</label><input type="number" id="edit-week" value="0"></div>
                     <div><label>ДВ (ЗП)</label><input type="number" id="edit-pay" value="0"></div>
-                    <div><label>Слежка за админами</label><input type="number" id="edit-adm" value="0"></div>
-                    <div><label>По указаниям</label><input type="number" id="edit-sl" value="0"></div>
+                    <div><label>Админы</label><input type="number" id="edit-adm" value="0"></div>
+                    <div><label>Указания</label><input type="number" id="edit-sl" value="0"></div>
                 </div>
 
                 <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
@@ -315,7 +317,7 @@ input:checked + .slider:before { transform: translateX(24px); }
                 </div>
 
                 <div style="display:flex; gap:10px; margin-top:20px;">
-                    <button class="btn btn-sound" onclick="saveStaff()">Сохранить изменения</button>
+                    <button class="btn btn-sound" onclick="saveStaff()">Сохранить</button>
                     <button class="btn btn-red btn-sound" onclick="deleteStaff()" id="btn-delete-staff" style="display:none;">Удалить</button>
                 </div>
             </div>
@@ -323,9 +325,9 @@ input:checked + .slider:before { transform: translateX(24px); }
             <div class="tool-card glass">
                 <h3>Глобальные сбросы</h3>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <button class="btn btn-orange btn-sound" onclick="resetWeek()">Сбросить НЕДЕЛЮ (Норму, Адм, Указ) — ДВ не трогает</button>
-                    <button class="btn btn-blue btn-sound" onclick="resetPay()">Сбросить ДВ (Донат Валюту) — Неделю не трогает</button>
-                    <button class="btn btn-red btn-sound" onclick="resetMonth()">Сбросить ВСЁ (Месяц, ДВ, Норму) — Полный ноль</button>
+                    <button class="btn btn-orange btn-sound" onclick="resetWeek()">Сбросить НЕДЕЛЮ</button>
+                    <button class="btn btn-blue btn-sound" onclick="resetPay()">Сбросить ДВ</button>
+                    <button class="btn btn-red btn-sound" onclick="resetMonth()">Сбросить ВСЁ</button>
                 </div>
             </div>
         </div>
@@ -336,7 +338,7 @@ input:checked + .slider:before { transform: translateX(24px); }
             <div class="settings-card glass">
                 <h3>Внешний вид и звук</h3>
                 <div class="setting-row">
-                    <span class="setting-label">Прозрачность интерфейса (замыливание фона)</span>
+                    <span class="setting-label">Прозрачность интерфейса</span>
                     <label class="toggle-switch">
                         <input type="checkbox" id="toggle-glass" checked onchange="toggleGlassMode(this)">
                         <span class="slider"></span>
@@ -392,19 +394,42 @@ if (window.location.hash.startsWith('#steamid=')) {
     localStorage.setItem('isLoggedIn', 'true');
     window.history.replaceState(null, null, window.location.pathname); 
 }
-// Принудительно приводим MY_STEAM_ID к 64-битному формату (17 цифр)
+
+// УЛУЧШЕННАЯ ФУНКЦИЯ КОНВЕРТАЦИИ СТИМА (ФИКС STEAM_0:0:0)
+function toSteam64(input) {
+    if (!input || input === '—') return '00000000000000000'; 
+    const str = String(input).trim();
+    if (/^7656\d{13}$/.test(str)) return str;
+    const matchSteam = str.match(/^STEAM_(\d):(\d):(\d+)$/i);
+    if (matchSteam) return (BigInt("76561197960265728") + (BigInt(matchSteam[3]) * 2n) + BigInt(matchSteam[2])).toString();
+    const matchU = str.match(/^\[U:(\d):(\d+)\]$/i);
+    if (matchU) return (BigInt("76561197960265728") + BigInt(matchU[2])).toString();
+    if (/^\d+$/.test(str)) return str; 
+    return "00000000000000000";
+}
+
+function toSteam32(steam64) {
+    if (!steam64 || steam64 === '—' || !/^\d+$/.test(steam64) || steam64 === '00000000000000000') return '—';
+    try { const big = BigInt(steam64) - BigInt("76561197960265728"); return `STEAM_0:${big % 2n}:${(big - (big % 2n)) / 2n}`; } catch(e) { return steam64; }
+}
+
 MY_STEAM_ID = toSteam64(MY_STEAM_ID);
-if (!MY_STEAM_ID) MY_STEAM_ID = "00000000000000000";
 
 let globalStaff = [];
 let currentUser = null;
 let isAdmin = false;
 let tempReports = [];
 
-const sounds = { hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3' };
+// МЯГКИЙ ЗВУК УВЕДОМЛЕНИЯ
+const sounds = { hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' };
 let isMuted = localStorage.getItem('isMuted') === 'true';
 document.getElementById('toggle-mute').checked = isMuted;
-function playSound(type) { if (isMuted) return; const audio = new Audio(sounds[type]); audio.volume = 0.3; audio.play().catch(() => {}); }
+function playSound(type) { 
+    if (isMuted) return; 
+    const audio = new Audio(sounds[type]); 
+    audio.volume = type === 'notify' ? 0.15 : 0.2; // Тихий звук для уведомлений
+    audio.play().catch(() => {}); 
+}
 window.toggleMute = (cb) => { isMuted = cb.checked; localStorage.setItem('isMuted', isMuted); };
 
 window.toggleGlassMode = (cb) => {
@@ -419,28 +444,6 @@ document.querySelectorAll('.nav-sound, .btn, .btn-report').forEach(el => {
     el.addEventListener('mouseenter', () => playSound('hover'));
     el.addEventListener('click', () => playSound('click'));
 });
-
-// УЛУЧШЕННАЯ ФУНКЦИЯ КОНВЕРТАЦИИ СТИМА
-function toSteam64(input) {
-    if (!input) return '00000000000000000'; 
-    const str = String(input).trim();
-    // Если уже 17 цифр (7656...)
-    if (/^7656\d{13}$/.test(str)) return str;
-    // Если формат STEAM_0:X:XXXXX
-    const matchSteam = str.match(/^STEAM_(\d):(\d):(\d+)$/i);
-    if (matchSteam) return (BigInt("76561197960265728") + (BigInt(matchSteam[3]) * 2n) + BigInt(matchSteam[2])).toString();
-    // Если формат [U:1:XXXXX]
-    const matchU = str.match(/^\[U:(\d):(\d+)\]$/i);
-    if (matchU) return (BigInt("76561197960265728") + BigInt(matchU[2])).toString();
-    // Если просто цифры
-    if (/^\d+$/.test(str)) return str; 
-    return "00000000000000000";
-}
-
-function toSteam32(steam64) {
-    if (!steam64 || steam64 === '—' || !/^\d+$/.test(steam64)) return '—';
-    try { const big = BigInt(steam64) - BigInt("76561197960265728"); return `STEAM_0:${big % 2n}:${(big - (big % 2n)) / 2n}`; } catch(e) { return steam64; }
-}
 
 window.onload = async () => {
     if (localStorage.getItem('isLoggedIn') !== 'true') {
@@ -474,7 +477,10 @@ window.switchPage = (pageId, element) => {
     document.getElementById('page-' + pageId).classList.add('active');
     if (element && element.classList.contains('nav-item')) element.classList.add('active');
     if(pageId === 'reports_check') loadReports();
-    if(pageId === 'updates') loadUpdates();
+    if(pageId === 'updates') {
+        document.getElementById('updates-dot').style.display = 'none'; // Скрываем красный кружок
+        loadUpdates();
+    }
     playSound('click');
 };
 
@@ -487,10 +493,14 @@ document.addEventListener('click', (e) => {
     if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
 });
 
+// ПЕРЕКЛЮЧЕНИЕ ОТЧЕТА (Развернуть/Свернуть)
+window.toggleReport = (id) => {
+    const card = document.getElementById('report-card-' + id);
+    if(card) card.classList.toggle('expanded');
+};
+
 async function loadProfile() {
     const { data: staff } = await supabase.from('staff').select('*');
-    
-    // ЖЕСТКАЯ ПРОВЕРКА: Конвертируем и мой ID, и ID из базы в 17 цифр перед сравнением
     const me = staff.find(s => toSteam64(s.steamid) === MY_STEAM_ID);
     
     if (me) {
@@ -505,21 +515,10 @@ async function loadProfile() {
             document.getElementById('nav-tools').style.display = 'flex';
             document.getElementById('add-update-block').style.display = 'block';
         }
-
-        // ПРИВЕТСТВЕННОЕ УВЕДОМЛЕНИЕ ПРИ ВХОДЕ
-        const { data: existingNotifs } = await supabase.from('notifications').select('*').eq('target_steamid', MY_STEAM_ID);
-        const hasGreeting = existingNotifs && existingNotifs.some(n => n.message.includes('Здравствуйте, вы были добавлены'));
-        
-        if (!hasGreeting) {
-            const greetingText = `Здравствуйте! Вы были добавлены в таблицу состава Администратором Дед в чешках. Вы успешно вошли в свой аккаунт, ознакомьтесь с сайтом. Об ошибках сайта пишите в дискорд: ded_v_trusah_0681`;
-            await supabase.rpc('send_notification', { p_target: MY_STEAM_ID, p_message: greetingText });
-            loadNotifications();
-        }
     } else {
         document.getElementById('header-name').textContent = "Гость";
     }
-    
-    renderTable(); // Перерисовываем таблицу ТОЛЬКО когда точно знаем, кто мы
+    renderTable(); 
 }
 
 async function loadData() {
@@ -550,27 +549,20 @@ function renderTable() {
 
         let actionsHtml = '';
         
-        // ЛОГИКА КНОПОК:
-        // Если это Начальство (без отчетов) - кнопок нет.
+        // СТРОГАЯ ЛОГИКА: Только для админов или для себя
         if (isBoss) {
              actionsHtml = `<span style="color:#64748b;font-size:12px;">—</span>`;
-        } 
-        // Если ты Админ - ты видишь кнопки у всех.
-        else if (isAdmin) {
+        } else if (isAdmin) {
             actionsHtml = `<div class="actions-cell">
                 <button class="btn-report" onclick="openReport('adm','${p.nick}')">Админ</button>
                 <button class="btn-report" onclick="openReport('sl','${p.nick}')">Указание</button>
             </div>`;
-        } 
-        // Если ты НЕ Админ, ты видишь кнопки ТОЛЬКО у себя.
-        else if (toSteam64(p.steamid) === MY_STEAM_ID) {
+        } else if (toSteam64(p.steamid) === MY_STEAM_ID) {
             actionsHtml = `<div class="actions-cell">
                 <button class="btn-report" onclick="openReport('adm','${p.nick}')">Админ</button>
                 <button class="btn-report" onclick="openReport('sl','${p.nick}')">Указание</button>
             </div>`;
-        } 
-        // У остальных кнопок нет.
-        else {
+        } else {
              actionsHtml = `<span style="color:#64748b;font-size:12px;">—</span>`;
         }
 
@@ -662,30 +654,20 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
             const rpcFunc = isAdmin ? 'admin_update_report' : 'user_update_report';
             const res = await supabase.rpc(rpcFunc, { 
                 r_id: parseInt(editId), 
-                p_type: payload.p_type, 
-                p_reporter: payload.p_reporter, 
-                p_adminnick: payload.p_adminNick, 
-                p_steamid: payload.p_steamId, 
-                p_rank: payload.p_rank, 
-                p_time: payload.p_time, 
-                p_rule: payload.p_rule, 
-                p_suspicious: payload.p_suspicious, 
-                p_continue: payload.p_continue 
+                p_type: payload.p_type, p_reporter: payload.p_reporter, 
+                p_adminnick: payload.p_adminNick, p_steamid: payload.p_steamId, 
+                p_rank: payload.p_rank, p_time: payload.p_time, 
+                p_rule: payload.p_rule, p_suspicious: payload.p_suspicious, p_continue: payload.p_continue 
             });
             error = res.error;
         } else {
             payload.p_image = imageData ? String(imageData) : '';
             const res = await supabase.rpc('insert_report_direct', {
-                p_type: payload.p_type,
-                p_reporter: payload.p_reporter,
-                p_adminnick: payload.p_adminNick,
-                p_steamid: payload.p_steamId,
-                p_rank: payload.p_rank,
-                p_time: payload.p_time,
-                p_rule: payload.p_rule,
-                p_suspicious: payload.p_suspicious,
-                p_continue: payload.p_continue,
-                p_image: payload.p_image
+                p_type: payload.p_type, p_reporter: payload.p_reporter,
+                p_adminnick: payload.p_adminNick, p_steamid: payload.p_steamId,
+                p_rank: payload.p_rank, p_time: payload.p_time,
+                p_rule: payload.p_rule, p_suspicious: payload.p_suspicious, 
+                p_continue: payload.p_continue, p_image: payload.p_image
             });
             error = res.error;
         }
@@ -710,6 +692,7 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
     } else { executeSave(null); }
 });
 
+// РАЗВОРАЧИВАЮЩИЕСЯ ОТЧЕТЫ
 async function loadReports() {
     const { data: reports } = await supabase.from('reports').select('*').order('id', { ascending: false });
     if (!reports) return;
@@ -719,30 +702,50 @@ async function loadReports() {
     const history = reports.filter(r => r.status !== 'pending');
 
     document.getElementById('pending-list').innerHTML = pending.map(r => `
-        <div class="report-card">
-            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'По указаниям'} <span style="color:#ef4444;font-size:12px;">${r.status}</span></h3>
-            <p><b>Автор:</b> ${r.reporter}</p>
-            <p><b>Нарушитель:</b> ${r.adminnick || 'Не указан'} (${toSteam32(r.steamid)}) • ${r.rank}</p>
-            <p><b>Время:</b> ${r.time} | <b>Нарушение:</b> ${r.rule || '—'} | <b>Действия:</b> ${r.suspicious || '—'}</p>
-            ${r.image ? `<img src="${r.image}" class="img-preview">` : ''}
-            <div style="margin-top:15px; display:flex; gap:10px;">
-                ${isAdmin ? `
-                    <button class="btn-approve" onclick="approveReport(${r.id}, '${r.reporter}', '${r.type}', '${r.steamid}')">Принять (+10 ДВ)</button>
-                    <button class="btn-reject" onclick="rejectReport(${r.id}, '${r.steamid}')">Отклонить</button>
-                    <button class="btn btn-orange" style="padding:8px 16px;" onclick="editReport(${r.id})">Редактировать</button>
-                ` : `
-                    ${currentUser && toSteam64(currentUser.steamid) === MY_STEAM_ID ? `<button class="btn btn-orange" style="padding:8px 16px;" onclick="editReport(${r.id})">Редактировать мой отчет</button>` : ''}
-                `}
+        <div class="report-card" id="report-card-${r.id}">
+            <div class="report-header" onclick="toggleReport(${r.id})">
+                <h3>${r.type === 'adm' ? 'Слежка за админом' : 'По указаниям'} <span style="color:#ef4444;font-size:12px;margin-left:10px;">${r.status}</span></h3>
+                <span style="color:#64748b; font-size:12px;">▼ Нажми, чтобы раскрыть</span>
+            </div>
+            <div class="report-content">
+                <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
+                <p><b>Нарушитель:</b> ${r.adminnick || 'Не указан'} (${toSteam32(r.steamid)}) • ${r.rank}</p>
+                <p><b>Время:</b> ${r.time}</p>
+                <p><b>Нарушенный пункт:</b> ${r.rule || '—'}</p>
+                <p><b>Сомнительные действия:</b> ${r.suspicious || '—'}</p>
+                <p><b>Продолжать слежку:</b> ${r.continue}</p>
+                ${r.image ? `<img src="${r.image}" class="img-preview">` : ''}
+                <div style="margin-top:15px; display:flex; gap:10px;">
+                    ${isAdmin ? `
+                        <button class="btn-approve" onclick="approveReport(${r.id}, '${r.reporter}', '${r.type}', '${r.steamid}')">Принять (+10 ДВ)</button>
+                        <button class="btn-reject" onclick="rejectReport(${r.id}, '${r.steamid}')">Отклонить</button>
+                        <button class="btn btn-orange" style="padding:8px 16px;" onclick="editReport(${r.id})">Редактировать</button>
+                        <button class="btn btn-red" style="padding:8px 16px;" onclick="deleteReport(${r.id})">Удалить</button>
+                    ` : `
+                        ${currentUser && toSteam64(currentUser.steamid) === MY_STEAM_ID ? `<button class="btn btn-orange" style="padding:8px 16px;" onclick="editReport(${r.id})">Редактировать мой отчет</button>` : ''}
+                    `}
+                </div>
             </div>
         </div>
     `).join('') || '<p style="color:#64748b;">Нет отчетов на проверке.</p>';
 
     document.getElementById('history-list').innerHTML = history.map(r => `
-        <div class="report-card approved">
-            <h3>${r.type === 'adm' ? 'Слежка за админом' : 'По указаниям'} <span style="color:${r.status === 'approved' ? '#22c55e' : '#ef4444'};font-size:12px;">${r.status}</span></h3>
-            <p><b>Автор:</b> ${r.reporter}</p>
-            <p><b>Нарушитель:</b> ${r.adminnick || 'Не указан'} (${toSteam32(r.steamid)})</p>
-            ${isAdmin ? `<button class="btn btn-orange" style="padding:6px 12px; margin-top:10px; font-size:12px;" onclick="editReport(${r.id})">Редактировать</button>` : ''}
+        <div class="report-card approved" id="report-card-${r.id}">
+            <div class="report-header" onclick="toggleReport(${r.id})">
+                <h3>${r.type === 'adm' ? 'Слежка за админом' : 'По указаниям'} <span style="color:${r.status === 'approved' ? '#22c55e' : '#ef4444'};font-size:12px;margin-left:10px;">${r.status}</span></h3>
+                <span style="color:#64748b; font-size:12px;">▼ Нажми, чтобы раскрыть</span>
+            </div>
+            <div class="report-content">
+                <p><b>Автор:</b> ${r.reporter} • ${r.date}</p>
+                <p><b>Нарушитель:</b> ${r.adminnick || 'Не указан'} (${toSteam32(r.steamid)})</p>
+                ${r.image ? `<img src="${r.image}" class="img-preview">` : ''}
+                <div style="margin-top:15px; display:flex; gap:10px;">
+                    ${isAdmin ? `
+                        <button class="btn btn-orange" style="padding:8px 16px;" onclick="editReport(${r.id})">Редактировать</button>
+                        <button class="btn btn-red" style="padding:8px 16px;" onclick="deleteReport(${r.id})">Удалить</button>
+                    ` : ''}
+                </div>
+            </div>
         </div>
     `).join('') || '<p style="color:#64748b;">История пуста.</p>';
 }
@@ -756,20 +759,32 @@ window.approveReport = async (id, reporterNick, type, reporterSteam) => {
         await supabase.from('staff').update(updates).eq('id', staff.id);
     }
     await supabase.rpc('send_notification', { p_target: toSteam64(reporterSteam), p_message: 'Ваш отчет был ПРИНЯТ! Начислено +10 ДВ.' });
-    alert("Принято!"); loadData(); loadReports();
+    playSound('notify'); alert("Принято!"); loadData(); loadReports();
 };
 
 window.rejectReport = async (id, reporterSteam) => {
     await supabase.from('reports').update({ status: 'rejected' }).eq('id', id);
     await supabase.rpc('send_notification', { p_target: toSteam64(reporterSteam), p_message: 'Ваш отчет был ОТКЛОНЕН.' });
-    alert("Отклонено."); loadReports();
+    playSound('notify'); alert("Отклонено."); loadReports();
 };
 
-// --- ОБНОВЛЕНИЯ ---
+window.deleteReport = async (id) => {
+    if (!confirm("Удалить этот отчет навсегда?")) return;
+    await supabase.rpc('delete_report', { r_id: id });
+    playSound('notify'); alert("Отчет удален."); loadReports();
+};
+
+// --- ОБНОВЛЕНИЯ (С КРАСНЫМ КРУЖКОМ) ---
 async function loadUpdates() {
     const { data: updates } = await supabase.from('updates').select('*').order('id', { ascending: false });
     if (!updates) return;
     
+    // Показываем кружок на вкладке, если есть обновления (проверяем localStorage)
+    const lastSeenUpdate = localStorage.getItem('lastSeenUpdate');
+    if (updates.length > 0 && lastSeenUpdate != updates[0].id) {
+        document.getElementById('updates-dot').style.display = 'block';
+    }
+
     document.getElementById('updates-list').innerHTML = updates.map(u => `
         <div class="update-card">
             ${isAdmin ? `<button class="btn-del-update" onclick="deleteUpdate(${u.id})">Удалить</button>` : ''}
@@ -790,6 +805,7 @@ window.publishUpdate = async () => {
     
     document.getElementById('update-title').value = '';
     document.getElementById('update-content').value = '';
+    playSound('notify');
     alert("Обновление опубликовано! Всем отправлены уведомления.");
     loadUpdates();
 };
@@ -797,11 +813,10 @@ window.publishUpdate = async () => {
 window.deleteUpdate = async (id) => {
     if (!confirm("Удалить это обновление?")) return;
     await supabase.rpc('admin_delete_update', { p_id: id });
-    alert("Удалено.");
     loadUpdates();
 };
 
-// --- УВЕДОМЛЕНИЯ ---
+// --- УВЕДОМЛЕНИЯ (С ОЧИСТКОЙ) ---
 async function loadNotifications() {
     if (!MY_STEAM_ID) return;
     const { data: notifs } = await supabase.from('notifications').select('*').eq('target_steamid', MY_STEAM_ID).order('id', { ascending: false }).limit(20);
@@ -809,6 +824,7 @@ async function loadNotifications() {
 
     const hasUnread = notifs.some(n => !n.is_read);
     document.getElementById('notify-dot').style.display = hasUnread ? 'block' : 'none';
+    if (hasUnread) playSound('notify');
 
     document.getElementById('notify-list').innerHTML = notifs.length > 0 ? notifs.map(n => `
         <div class="notify-item ${n.is_read ? '' : 'unread'}">
@@ -816,11 +832,19 @@ async function loadNotifications() {
         </div>
     `).join('') : '<div class="notify-item">У вас нет уведомлений.</div>';
 }
+
 async function markNotificationsRead() {
     await supabase.from('notifications').update({ is_read: true }).eq('target_steamid', MY_STEAM_ID);
     document.getElementById('notify-dot').style.display = 'none';
     loadNotifications();
 }
+
+window.clearNotifications = async () => {
+    if (!confirm("Очистить историю уведомлений?")) return;
+    await supabase.rpc('clear_notifications', { p_target: MY_STEAM_ID });
+    alert("Уведомления очищены.");
+    loadNotifications();
+};
 
 // --- ИНСТРУМЕНТЫ ---
 async function renderToolsSelect() {
