@@ -232,7 +232,6 @@ input:checked + .slider:before { transform: translateX(24px); }
         <div id="page-updates" class="tab-page">
             <h1 class="page-title">История обновлений</h1>
             
-            <!-- Форма добавления (Видна только админам) -->
             <div class="tool-card glass" id="add-update-block" style="display:none; margin-bottom: 30px; border-left: 4px solid #3b82f6;">
                 <h3>Добавить обновление</h3>
                 <label>Заголовок</label>
@@ -431,13 +430,20 @@ function toSteam32(steam64) {
     try { const big = BigInt(steam64) - BigInt("76561197960265728"); return `STEAM_0:${big % 2n}:${(big - (big % 2n)) / 2n}`; } catch(e) { return steam64; }
 }
 
-window.onload = () => {
+window.onload = async () => {
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         document.getElementById('auth-screen').style.display = 'flex';
     } else {
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('main-site').style.display = 'block';
-        loadProfile(); loadData(); loadReports(); loadUpdates(); loadNotifications();
+        
+        // Сначала грузим профиль (узнаем права), чтобы таблица не "прыгала"
+        await loadProfile(); 
+        
+        loadData(); 
+        loadReports(); 
+        loadUpdates(); 
+        loadNotifications();
     }
 };
 window.logout = () => { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('my_steam_id'); window.location.reload(); };
@@ -493,11 +499,14 @@ async function loadProfile() {
         if (!hasGreeting) {
             const greetingText = `Здравствуйте! Вы были добавлены в таблицу состава Администратором Дед в чешках. Вы успешно вошли в свой аккаунт, ознакомьтесь с сайтом. Об ошибках сайта пишите в дискорд: ded_v_trusah_0681`;
             await supabase.rpc('send_notification', { p_target: MY_STEAM_ID, p_message: greetingText });
-            loadNotifications(); // Обновляем колокольчик, чтобы точка загорелась
+            loadNotifications();
         }
     } else {
         document.getElementById('header-name').textContent = "Гость";
     }
+    
+    // Перерисовываем таблицу ТОЛЬКО когда точно знаем, кто мы
+    renderTable(); 
 }
 
 async function loadData() {
