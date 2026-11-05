@@ -699,16 +699,23 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
     const fileInput = document.getElementById('reportImage');
     
     const processReport = async (imageData) => {
+        // ПРИНУДИТЕЛЬНОЕ ПРИВЕДЕНИЕ К СТРОКАМ (чтобы Supabase не выдавал PGRST202)
         const data = {
-            type: f.type.value, reporter: f.reporter.value, adminNick: f.adminNick.value,
-            steamId: toSteam64(f.steamId.value), 
-            rank: f.rank.value, time: f.time.value,
-            rule: f.rule.value || '—', suspicious: f.suspicious.value || '—', continue: f.continue.value || '—',
-            status: 'pending', date: new Date().toLocaleString('ru-RU'),
-            image: imageData
+            type: String(f.type.value || ''),
+            reporter: String(f.reporter.value || ''),
+            adminNick: String(f.adminNick.value || ''),
+            steamId: String(toSteam64(f.steamId.value) || ''),
+            rank: String(f.rank.value || ''),
+            time: String(f.time.value || ''),
+            rule: String(f.rule.value || '—'),
+            suspicious: String(f.suspicious.value || '—'),
+            continue: String(f.continue.value || '—'),
+            status: 'pending',
+            date: new Date().toLocaleString('ru-RU'),
+            image: imageData ? String(imageData) : '' 
         };
         
-        // ИЗМЕНЕНИЕ ЗДЕСЬ: Используем RPC-функцию вместо прямого insert
+        // Вызов функции в Supabase
         const { error } = await supabase.rpc('insert_report_direct', {
             p_type: data.type,
             p_reporter: data.reporter,
@@ -725,7 +732,7 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
         if (error) {
             console.error("Ошибка БД:", error);
             alert("Ошибка при отправке отчета: " + error.message);
-            return; // Прерываем выполнение, если ошибка
+            return;
         }
         
         const pendingList = document.getElementById('pending-list');
