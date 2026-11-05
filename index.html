@@ -485,6 +485,16 @@ async function loadProfile() {
             document.getElementById('nav-tools').style.display = 'flex';
             document.getElementById('add-update-block').style.display = 'block';
         }
+
+        // ПРИВЕТСТВЕННОЕ УВЕДОМЛЕНИЕ ПРИ ВХОДЕ (Если его еще нет)
+        const { data: existingNotifs } = await supabase.from('notifications').select('*').eq('target_steamid', MY_STEAM_ID);
+        const hasGreeting = existingNotifs && existingNotifs.some(n => n.message.includes('Здравствуйте, вы были добавлены'));
+        
+        if (!hasGreeting) {
+            const greetingText = `Здравствуйте! Вы были добавлены в таблицу состава Администратором Дед в чешках. Вы успешно вошли в свой аккаунт, ознакомьтесь с сайтом. Об ошибках сайта пишите в дискорд: ded_v_trusah_0681`;
+            await supabase.rpc('send_notification', { p_target: MY_STEAM_ID, p_message: greetingText });
+            loadNotifications(); // Обновляем колокольчик, чтобы точка загорелась
+        }
     } else {
         document.getElementById('header-name').textContent = "Гость";
     }
@@ -613,7 +623,6 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
     const executeSave = async (imageData) => {
         let error;
         if (editId) {
-            // ИСПРАВЛЕНИЕ ДЛЯ РЕДАКТИРОВАНИЯ (маленькие n и i)
             const rpcFunc = isAdmin ? 'admin_update_report' : 'user_update_report';
             const res = await supabase.rpc(rpcFunc, { 
                 r_id: parseInt(editId), 
@@ -629,7 +638,6 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
             });
             error = res.error;
         } else {
-            // ИСПРАВЛЕНИЕ ДЛЯ СОЗДАНИЯ (маленькие n и i)
             payload.p_image = imageData ? String(imageData) : '';
             const res = await supabase.rpc('insert_report_direct', {
                 p_type: payload.p_type,
