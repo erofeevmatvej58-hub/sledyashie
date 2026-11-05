@@ -613,17 +613,29 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
     const executeSave = async (imageData) => {
         let error;
         if (editId) {
+            // ИСПРАВЛЕНИЕ ДЛЯ РЕДАКТИРОВАНИЯ (маленькие n и i)
             const rpcFunc = isAdmin ? 'admin_update_report' : 'user_update_report';
-            const res = await supabase.rpc(rpcFunc, { r_id: parseInt(editId), ...payload });
+            const res = await supabase.rpc(rpcFunc, { 
+                r_id: parseInt(editId), 
+                p_type: payload.p_type, 
+                p_reporter: payload.p_reporter, 
+                p_adminnick: payload.p_adminNick, 
+                p_steamid: payload.p_steamId, 
+                p_rank: payload.p_rank, 
+                p_time: payload.p_time, 
+                p_rule: payload.p_rule, 
+                p_suspicious: payload.p_suspicious, 
+                p_continue: payload.p_continue 
+            });
             error = res.error;
         } else {
-            // ВАЖНО: ТУТ ИСПРАВЛЕНЫ ИМЕНА ПОД БАЗУ ДАННЫХ
+            // ИСПРАВЛЕНИЕ ДЛЯ СОЗДАНИЯ (маленькие n и i)
             payload.p_image = imageData ? String(imageData) : '';
             const res = await supabase.rpc('insert_report_direct', {
                 p_type: payload.p_type,
                 p_reporter: payload.p_reporter,
-                p_adminnick: payload.p_adminNick, // маленькая n
-                p_steamid: payload.p_steamId,     // маленькая i
+                p_adminnick: payload.p_adminNick,
+                p_steamid: payload.p_steamId,
                 p_rank: payload.p_rank,
                 p_time: payload.p_time,
                 p_rule: payload.p_rule,
