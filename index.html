@@ -442,7 +442,6 @@ window.onload = () => {
 };
 window.logout = () => { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('my_steam_id'); window.location.reload(); };
 
-// БАГ ФИКС: Кнопка мой профиль
 document.getElementById('btn-my-profile').addEventListener('click', () => {
     if (MY_STEAM_ID && MY_STEAM_ID.length > 10) {
         window.open('https://steamcommunity.com/profiles/' + toSteam64(MY_STEAM_ID), '_blank');
@@ -500,30 +499,24 @@ async function loadData() {
 function renderTable() {
     const tbody = document.getElementById('table-body');
     tbody.innerHTML = globalStaff.map((p) => {
-        // Проверка на начальство (ручное или по рангу)
         let isBoss = p.is_boss || ['Глава следящих', 'Зам. главы следящих'].includes(p.rank);
         
         let normSum = p.week || 0;
         let normClass = normSum >= 5 ? 'n-green' : (normSum >= 4 ? 'n-yellow' : 'n-red');
         let normHtml = isBoss ? '<span class="n-none">—</span>' : `<span class="norm ${normClass}">${normSum} / 5</span>`;
         
-        // СТАТУСЫ
         let statusHtml = `<span class="status-badge status-active"><span class="dot blink"></span> Активен</span>`;
         if (p.status === 'Мороз') statusHtml = `<span class="status-badge status-frozen">❄️ Мороз</span>`;
         if (p.status === 'Отпуск') statusHtml = `<span class="status-badge status-vacation">📅 Отпуск</span>`;
 
-        // ЦВЕТА РОЛЕЙ
         let rankClass = 'rank-sled'; 
         if (p.rank === 'Зам. главы следящих') rankClass = 'rank-zam';
         if (p.rank === 'Глава следящих') rankClass = 'rank-glava';
 
-        // РАНГ В ИГРЕ (ПОД РАНГОМ В ОТДЕЛЕ)
         let gameRankHtml = p.game_rank ? `<span class="game-rank-text">${p.game_rank}</span>` : '';
-
         let steamLink = `<a href="https://steamcommunity.com/profiles/${toSteam64(p.steamid)}" target="_blank" class="steam-link">${toSteam32(p.steamid)}</a>`;
 
         let actionsHtml = '';
-        // Если начальство - нет кнопок
         if (isBoss) {
              actionsHtml = `<span style="color:#64748b;font-size:12px;">—</span>`;
         } else if (isAdmin || toSteam64(p.steamid) === MY_STEAM_ID) {
@@ -624,8 +617,20 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
             const res = await supabase.rpc(rpcFunc, { r_id: parseInt(editId), ...payload });
             error = res.error;
         } else {
+            // ВАЖНО: ТУТ ИСПРАВЛЕНЫ ИМЕНА ПОД БАЗУ ДАННЫХ
             payload.p_image = imageData ? String(imageData) : '';
-            const res = await supabase.rpc('insert_report_direct', payload);
+            const res = await supabase.rpc('insert_report_direct', {
+                p_type: payload.p_type,
+                p_reporter: payload.p_reporter,
+                p_adminnick: payload.p_adminNick, // маленькая n
+                p_steamid: payload.p_steamId,     // маленькая i
+                p_rank: payload.p_rank,
+                p_time: payload.p_time,
+                p_rule: payload.p_rule,
+                p_suspicious: payload.p_suspicious,
+                p_continue: payload.p_continue,
+                p_image: payload.p_image
+            });
             error = res.error;
         }
 
