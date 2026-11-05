@@ -731,7 +731,20 @@ const rpcPayload = {
 
 console.log("ОТПРАВЛЯЕМ В SUPABASE:", rpcPayload); // Посмотри в консоль, что уходит!
 
-const { error } = await supabase.rpc('submit_report_final', rpcPayload);
+const { error } = await supabase.from('reports').insert([{
+    type: rpcPayload.p_type,
+    reporter: rpcPayload.p_reporter,
+    adminNick: rpcPayload.p_adminNick,
+    steamId: rpcPayload.p_steamId,
+    rank: rpcPayload.p_rank,
+    time: rpcPayload.p_time,
+    rule: rpcPayload.p_rule,
+    suspicious: rpcPayload.p_suspicious,
+    continue: rpcPayload.p_continue,
+    status: 'pending',
+    date: new Date().toLocaleString('ru-RU'),
+    image: rpcPayload.p_image
+}]);
 
 if (error) {
     console.error("Ошибка БД:", error);
