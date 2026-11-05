@@ -715,26 +715,29 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
             image: imageData ? String(imageData) : '' 
         };
         
-        // Вызов функции в Supabase
-        const { error } = await supabase.rpc('submit_admin_report', {
-            p_type: data.type,
-            p_reporter: data.reporter,
-            p_adminNick: data.adminNick,
-            p_steamId: data.steamId,
-            p_rank: data.rank,
-            p_time: data.time,
-            p_rule: data.rule,
-            p_suspicious: data.suspicious,
-            p_continue: data.continue,
-            p_image: data.image
-        });
+        // ГАРАНТИРУЕМ, ЧТО ВСЕ ПАРАМЕТРЫ — ЭТО СТРОКИ (не null, не undefined)
+const rpcPayload = {
+    p_type: String(f.type.value || ''),
+    p_reporter: String(f.reporter.value || ''),
+    p_adminNick: String(f.adminNick.value || ''),
+    p_steamId: String(toSteam64(f.steamId.value) || ''),
+    p_rank: String(f.rank.value || ''),
+    p_time: String(f.time.value || ''),
+    p_rule: String(f.rule.value || ''),
+    p_suspicious: String(f.suspicious.value || ''),
+    p_continue: String(f.continue.value || ''),
+    p_image: imageData ? String(imageData) : '' // Если картинки нет — пустая строка
+};
 
-        if (error) {
-            console.error("Ошибка БД:", error);
-            alert("Ошибка при отправке отчета: " + error.message);
-            return;
-        }
-        
+console.log("ОТПРАВЛЯЕМ В SUPABASE:", rpcPayload); // Посмотри в консоль, что уходит!
+
+const { error } = await supabase.rpc('submit_report_final', rpcPayload);
+
+if (error) {
+    console.error("Ошибка БД:", error);
+    alert("Ошибка при отправке отчета: " + error.message);
+    return;
+}        
         const pendingList = document.getElementById('pending-list');
         const tempId = 'temp_' + Date.now();
         
