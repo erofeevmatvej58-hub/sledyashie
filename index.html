@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Отдел Следящих | Garry's Mod</title>
+<!-- Иконка сайта (Глаз) -->
+<link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/8618/8618199.png">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; background-color: #0b0e14; color: #e2e8f0; min-height: 100vh; position: relative; overflow-x: hidden; }
@@ -53,7 +55,7 @@ body.no-glass-mode .bg-slideshow { filter: blur(8px) brightness(0.3); }
 .page-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 .page-title::before { content: ''; width: 4px; height: 24px; background: #ef4444; border-radius: 2px; }
 
-/* ТАБЛИЦА (Разнообразие) */
+/* ТАБЛИЦА */
 .table-wrapper { position: relative; border-radius: 16px; padding: 3px; animation: borderGlowColor 4s linear infinite; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
 @keyframes borderGlowColor { 0% { background-color: #ef4444; } 50% { background-color: #f59e0b; } 100% { background-color: #ef4444; } }
 .table-card { border-radius: 13px; overflow: hidden; background: rgba(15, 19, 26, 0.95); }
@@ -265,6 +267,10 @@ input:checked + .slider:before { transform: translateX(24px); }
                     <div><label>Ник</label><input type="text" id="edit-nick"></div>
                     <div><label>SteamID (64)</label><input type="text" id="edit-steamid"></div>
                 </div>
+
+                <label>Ссылка на аватарку (URL)</label>
+                <input type="text" id="edit-avatar" placeholder="https://i.imgur.com/...">
+                <small style="color:#64748b; font-size:11px; display:block; margin-bottom:10px;">Вставь прямую ссылку на картинку (заканчивается на .jpg, .png или .gif)</small>
                 
                 <div class="grid-2">
                     <div><label>Ранг в отделе</label>
@@ -395,7 +401,6 @@ if (window.location.hash.startsWith('#steamid=')) {
     window.history.replaceState(null, null, window.location.pathname); 
 }
 
-// УЛУЧШЕННАЯ ФУНКЦИЯ КОНВЕРТАЦИИ СТИМА (ФИКС STEAM_0:0:0)
 function toSteam64(input) {
     if (!input || input === '—') return '00000000000000000'; 
     const str = String(input).trim();
@@ -420,14 +425,13 @@ let currentUser = null;
 let isAdmin = false;
 let tempReports = [];
 
-// МЯГКИЙ ЗВУК УВЕДОМЛЕНИЯ
 const sounds = { hover: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' };
 let isMuted = localStorage.getItem('isMuted') === 'true';
 document.getElementById('toggle-mute').checked = isMuted;
 function playSound(type) { 
     if (isMuted) return; 
     const audio = new Audio(sounds[type]); 
-    audio.volume = type === 'notify' ? 0.15 : 0.2; // Тихий звук для уведомлений
+    audio.volume = type === 'notify' ? 0.15 : 0.2; 
     audio.play().catch(() => {}); 
 }
 window.toggleMute = (cb) => { isMuted = cb.checked; localStorage.setItem('isMuted', isMuted); };
@@ -478,7 +482,7 @@ window.switchPage = (pageId, element) => {
     if (element && element.classList.contains('nav-item')) element.classList.add('active');
     if(pageId === 'reports_check') loadReports();
     if(pageId === 'updates') {
-        document.getElementById('updates-dot').style.display = 'none'; // Скрываем красный кружок
+        document.getElementById('updates-dot').style.display = 'none';
         loadUpdates();
     }
     playSound('click');
@@ -493,7 +497,6 @@ document.addEventListener('click', (e) => {
     if (!e.target.closest('.btn-icon') && !e.target.closest('.notify-dropdown')) document.getElementById('notify-dropdown').classList.remove('open');
 });
 
-// ПЕРЕКЛЮЧЕНИЕ ОТЧЕТА (Развернуть/Свернуть)
 window.toggleReport = (id) => {
     const card = document.getElementById('report-card-' + id);
     if(card) card.classList.toggle('expanded');
@@ -548,8 +551,6 @@ function renderTable() {
         let steamLink = `<a href="https://steamcommunity.com/profiles/${toSteam64(p.steamid)}" target="_blank" class="steam-link">${toSteam32(p.steamid)}</a>`;
 
         let actionsHtml = '';
-        
-        // СТРОГАЯ ЛОГИКА: Только для админов или для себя
         if (isBoss) {
              actionsHtml = `<span style="color:#64748b;font-size:12px;">—</span>`;
         } else if (isAdmin) {
@@ -692,7 +693,6 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
     } else { executeSave(null); }
 });
 
-// РАЗВОРАЧИВАЮЩИЕСЯ ОТЧЕТЫ
 async function loadReports() {
     const { data: reports } = await supabase.from('reports').select('*').order('id', { ascending: false });
     if (!reports) return;
@@ -774,12 +774,10 @@ window.deleteReport = async (id) => {
     playSound('notify'); alert("Отчет удален."); loadReports();
 };
 
-// --- ОБНОВЛЕНИЯ (С КРАСНЫМ КРУЖКОМ) ---
 async function loadUpdates() {
     const { data: updates } = await supabase.from('updates').select('*').order('id', { ascending: false });
     if (!updates) return;
     
-    // Показываем кружок на вкладке, если есть обновления (проверяем localStorage)
     const lastSeenUpdate = localStorage.getItem('lastSeenUpdate');
     if (updates.length > 0 && lastSeenUpdate != updates[0].id) {
         document.getElementById('updates-dot').style.display = 'block';
@@ -816,7 +814,6 @@ window.deleteUpdate = async (id) => {
     loadUpdates();
 };
 
-// --- УВЕДОМЛЕНИЯ (С ОЧИСТКОЙ) ---
 async function loadNotifications() {
     if (!MY_STEAM_ID) return;
     const { data: notifs } = await supabase.from('notifications').select('*').eq('target_steamid', MY_STEAM_ID).order('id', { ascending: false }).limit(20);
@@ -846,7 +843,6 @@ window.clearNotifications = async () => {
     loadNotifications();
 };
 
-// --- ИНСТРУМЕНТЫ ---
 async function renderToolsSelect() {
     document.getElementById('edit-select').innerHTML = '<option value="">Выберите следящего...</option>' + globalStaff.map(p => `<option value="${p.id}">${p.nick}</option>`).join('');
 }
@@ -857,6 +853,7 @@ window.fillEditForm = () => {
     document.getElementById('edit-id').value = p.id;
     document.getElementById('edit-nick').value = p.nick;
     document.getElementById('edit-steamid').value = toSteam64(p.steamid);
+    document.getElementById('edit-avatar').value = p.avatar || '';
     document.getElementById('edit-rank').value = p.rank || 'Следящий';
     document.getElementById('edit-game-rank').value = p.game_rank || 'Игрок';
     document.getElementById('edit-status').value = p.status || 'Активен';
@@ -876,6 +873,7 @@ window.saveStaff = async () => {
         const updates = {
             nick: document.getElementById('edit-nick').value,
             steamid: toSteam64(document.getElementById('edit-steamid').value),
+            avatar: document.getElementById('edit-avatar').value || null,
             rank: document.getElementById('edit-rank').value,
             game_rank: document.getElementById('edit-game-rank').value,
             status: document.getElementById('edit-status').value,
@@ -915,6 +913,7 @@ window.saveStaff = async () => {
     await supabase.from('staff').update({
         nick: document.getElementById('edit-nick').value,
         steamid: toSteam64(document.getElementById('edit-steamid').value),
+        avatar: document.getElementById('edit-avatar').value || null,
         role: document.getElementById('edit-admin-rights').checked ? 'admin' : 'user'
     }).eq('id', id);
 
