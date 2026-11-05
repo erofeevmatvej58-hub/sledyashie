@@ -716,7 +716,7 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
         };
         
         // Вызов функции в Supabase
-        const { error } = await supabase.rpc('insert_report_direct', {
+        const { error } = await supabase.rpc('submit_admin_report', {
             p_type: data.type,
             p_reporter: data.reporter,
             p_adminNick: data.adminNick,
