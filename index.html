@@ -449,7 +449,6 @@ window.onload = async () => {
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('main-site').style.display = 'block';
         
-        // Сначала грузим профиль (узнаем права), чтобы таблица не "прыгала"
         await loadProfile(); 
         
         loadData(); 
@@ -550,15 +549,28 @@ function renderTable() {
         let steamLink = `<a href="https://steamcommunity.com/profiles/${toSteam64(p.steamid)}" target="_blank" class="steam-link">${toSteam32(p.steamid)}</a>`;
 
         let actionsHtml = '';
-        // Проверка с конвертацией
+        
+        // ЛОГИКА КНОПОК:
+        // Если это Начальство (без отчетов) - кнопок нет.
         if (isBoss) {
              actionsHtml = `<span style="color:#64748b;font-size:12px;">—</span>`;
-        } else if (isAdmin || toSteam64(p.steamid) === MY_STEAM_ID) {
+        } 
+        // Если ты Админ - ты видишь кнопки у всех.
+        else if (isAdmin) {
             actionsHtml = `<div class="actions-cell">
                 <button class="btn-report" onclick="openReport('adm','${p.nick}')">Админ</button>
                 <button class="btn-report" onclick="openReport('sl','${p.nick}')">Указание</button>
             </div>`;
-        } else {
+        } 
+        // Если ты НЕ Админ, ты видишь кнопки ТОЛЬКО у себя.
+        else if (toSteam64(p.steamid) === MY_STEAM_ID) {
+            actionsHtml = `<div class="actions-cell">
+                <button class="btn-report" onclick="openReport('adm','${p.nick}')">Админ</button>
+                <button class="btn-report" onclick="openReport('sl','${p.nick}')">Указание</button>
+            </div>`;
+        } 
+        // У остальных кнопок нет.
+        else {
              actionsHtml = `<span style="color:#64748b;font-size:12px;">—</span>`;
         }
 
